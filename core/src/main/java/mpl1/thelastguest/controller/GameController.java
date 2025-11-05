@@ -13,7 +13,6 @@ public class GameController {
         this.game = game;
     }
 
-
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new MenuScreen(game));

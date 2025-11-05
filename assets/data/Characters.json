@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Red",
+    "stats": {
+      "str": 8,
+      "per": 6,
+      "lck": 4,
+      "ap": 9,
+      "in": 2
+    }
+  },
+  {
+    "name": "Blue",
+    "stats": {
+      "str": 5,
+      "per": 9,
+      "lck": 4,
+      "ap": 4,
+      "in": 2
+    }
+  },
+  {
+    "name": "Green",
+    "stats": {
+      "str": 6,
+      "per": 7,
+      "lck": 5,
+      "ap": 6,
+      "in": 3
+    }
+  },
+  {
+    "name": "Yellow",
+    "stats": {
+      "str": 4,
+      "per": 8,
+      "lck": 6,
+      "ap": 5,
+      "in": 4
+    }
+  },
+  {
+    "name": "Purple",
+    "stats": {
+      "str": 7,
+      "per": 5,
+      "lck": 3,
+      "ap": 8,
+      "in": 6
+    }
+  },
+  {
+    "name": "Orange",
+    "stats": {
+      "str": 5,
+      "per": 6,
+      "lck": 7,
+      "ap": 4,
+      "in": 5
+    }
+  }
+]
