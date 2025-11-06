@@ -1,6 +1,7 @@
 package mpl1.thelastguest.view;
 
 // Import des composants du jeu
+import com.badlogic.gdx.graphics.g2d.Batch;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.GameController;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import mpl1.thelastguest.model.Map;
 
 public class GameScreen implements Screen {
     private final Main game;
@@ -25,6 +27,8 @@ public class GameScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+    private Map myMap;
+    private Batch batch;
 
 
 
@@ -34,6 +38,9 @@ public class GameScreen implements Screen {
         this.game = game;
         this.font = new BitmapFont();
         this.controller = new GameController(game, this);
+        this.myMap = new mpl1.thelastguest.model.Map();
+        this.batch = new SpriteBatch();
+        this.camera = new OrthographicCamera();
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -44,6 +51,7 @@ public class GameScreen implements Screen {
         camera.update();
         renderer.setView(camera);
         renderer.render();
+        myMap.displayAllSprites(batch);
         controller.update(delta);
 
     }
@@ -51,7 +59,7 @@ public class GameScreen implements Screen {
     //C'est ici on initialise les élements
     @Override
     public void show() {
-        this.map =  new TmxMapLoader().load("maps/sans titre.tmx");
+        this.map =  new TmxMapLoader().load("maps/map.tmx");
         if (map == null) {
             Gdx.app.log("MAP", "Erreur : la carte n'a pas été chargée !");
         } else {

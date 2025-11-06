@@ -19,28 +19,19 @@
   <image source="/nex.png" width="256" height="256"/>
  </tileset>
  <tileset firstgid="1553" name="22bee500-19e9-4a6f-8736-e9bfe4bf2263" tilewidth="32" tileheight="32" tilecount="117" columns="9">
-  <image source="/car_fichiers/22bee500-19e9-4a6f-8736-e9bfe4bf2263.png" width="288" height="432"/>
+  <image source="/22bee500-19e9-4a6f-8736-e9bfe4bf2263.png" width="288" height="432"/>
  </tileset>
  <tileset firstgid="1670" name="Tilelist3" tilewidth="32" tileheight="32" tilecount="1520" columns="40">
-  <image source="/craftpix-551899-free-zombie-tds-tilesets-buildings-and-furniture/Tilelists/Tilelist3.png" width="1295" height="1225"/>
+  <image source="/Tilelist3.png" width="1295" height="1225"/>
  </tileset>
  <tileset firstgid="3190" name="Interior" tilewidth="16" tileheight="16" tilecount="1512" columns="28">
-  <image source="/craftpix-net-654184-main-characters-home-free-top-down-pixel-art-asset/Tiled_files/Interior.png" width="448" height="864"/>
+  <image source="/Interior.png" width="448" height="864"/>
  </tileset>
  <tileset firstgid="4702" name="Interior" tilewidth="32" tileheight="32" tilecount="378" columns="14">
-  <image source="/craftpix-net-654184-main-characters-home-free-top-down-pixel-art-asset/Tiled_files/Interior.png" width="448" height="864"/>
+  <image source="/Interior.png" width="448" height="864"/>
  </tileset>
  <tileset firstgid="5080" name="vector-hand-drawn-illustration-grand-260nw-1693544869-removebg-preview" tilewidth="32" tileheight="32" tilecount="6" columns="3">
-  <image source="/vector-hand-drawn-illustration-grand-260nw-1693544869-removebg-preview.png" width="96" height="79"/>
- </tileset>
- <tileset firstgid="5086" name="Interior" tilewidth="32" tileheight="32" tilecount="0" columns="14">
-  <image source="/craftpix-net-654184-main-characters-home-free-top-down-pixel-art-asset/Tiled_files/Interior.png" width="448" height="864"/>
- </tileset>
- <tileset firstgid="5388" name="Interior" tilewidth="32" tileheight="32" tilecount="0" columns="14">
-  <image source="/craftpix-net-654184-main-characters-home-free-top-down-pixel-art-asset/Tiled_files/Interior.png" width="448" height="864"/>
- </tileset>
- <tileset firstgid="5690" name="Interior" tilewidth="16" tileheight="16" tilecount="0" columns="28">
-  <image source="/craftpix-net-654184-main-characters-home-free-top-down-pixel-art-asset/Tiled_files/Interior.png" width="448" height="864"/>
+  <image source="vector-hand-drawn-illustration-grand-260nw-1693544869-removebg-preview.png" width="96" height="79"/>
  </tileset>
  <layer id="1" name="Fond" width="50" height="50">
   <data encoding="csv">
@@ -312,7 +303,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="13" name="objet2" width="50" height="50" visible="0">
+ <layer id="13" name="objet2" width="50" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -366,7 +357,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="11" name="objet3" width="50" height="50" visible="0">
+ <layer id="11" name="objet3" width="50" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
