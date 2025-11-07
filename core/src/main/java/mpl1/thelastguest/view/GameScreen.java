@@ -4,11 +4,8 @@ package mpl1.thelastguest.view;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.GameController;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -18,7 +15,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import mpl1.thelastguest.model.Map;
+import mpl1.thelastguest.model.Board;
 
 public class GameScreen implements Screen {
     private final Main game;
@@ -27,7 +24,7 @@ public class GameScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
-    private Map myMap;
+    private Board board;
     private Batch batch;
 
 
@@ -37,8 +34,8 @@ public class GameScreen implements Screen {
     public GameScreen(Main game) {
         this.game = game;
         this.font = new BitmapFont();
+        this.board = new Board();
         this.controller = new GameController(game, this);
-        this.myMap = new mpl1.thelastguest.model.Map();
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
     }
@@ -51,7 +48,7 @@ public class GameScreen implements Screen {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-        myMap.displayAllSprites(batch);
+        board.displayAllSprites(batch);
         controller.update(delta);
 
     }
@@ -71,11 +68,34 @@ public class GameScreen implements Screen {
     }
 
     // Permet de gérer le comportement du jeu lors du resize
-    @Override public void resize(int w, int h) {
+    @Override
+    public void resize(int width, int height) {
+        float mapSize = 1600f;
+        float ratioScreen = (float) width / (float) height;
+        if (ratioScreen >= 1f) {
+            camera.setToOrtho(false, mapSize * ratioScreen, mapSize);
+        } else {
+            camera.setToOrtho(false, mapSize, mapSize / ratioScreen);
+        }
+        board.displayAllSprites(batch);
+        board.setSize(width / 50, height / 50);
+        camera.position.set(mapSize / 2f, mapSize / 2f, 0);
+        camera.update();
+        renderer.setView(camera);
     }
+
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}
     @Override public void dispose() {
+
+    }
+
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public TiledMap getMap() {
+        return this.map;
     }
 }

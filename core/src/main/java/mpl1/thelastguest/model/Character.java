@@ -3,30 +3,32 @@ package mpl1.thelastguest.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g3d.Model;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Character {
-    private String name;
+public abstract class Character implements Movable{
+    private final String name;
     private Map<String, Integer> stats; //str, per, lck, ap, inv
     private Map<String, Integer> position; // x, y
     private List<String> items;
     private boolean alive;
-    private Sprite sprite;
+    private final Sprite sprite;
 
-    public Character(String name, Map<String, Integer> stats, Integer positionx, Integer positiony) {
+    public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName) {
         this.name = name;
         this.stats = stats;
 
         Map<String, Integer> position = new HashMap<>();
-        position.put("x", 0);
-        position.put("y", 0);
+        position.put("x", posX);
+        position.put("y", posY);
         this.position = position;
-        Texture texture = new Texture(Gdx.files.internal("pion.png"));
+        Texture texture = new Texture(Gdx.files.internal(spriteName));
         this.sprite = new Sprite(texture);
-        this.sprite.setPosition(positionx, positiony);
+        this.sprite.setSize(14, 14);
+        this.sprite.setPosition(posX, posY);
         this.alive = true;
     }
 
@@ -69,11 +71,11 @@ public abstract class Character {
         return position;
     }
 
-    public int getPositionX(){
+    public Integer getPositionX(){
         return this.position.get("x");
     }
 
-    public int getPositionY(){
+    public Integer getPositionY(){
         return this.position.get("y");
     }
 
@@ -120,11 +122,37 @@ public abstract class Character {
         this.position = position;
     }
 
+    public void setPosition(Integer x, Integer y) {
+        this.position.put("x", x);
+        this.position.put("y", y);
+        sprite.setPosition(x, y);
+    }
+
     public void setItems(List<String> items) {
         this.items = items;
     }
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public void moveRight(int step) {
+        this.sprite.setPosition(this.sprite.getX() + step, this.sprite.getY());
+        position.put("x", position.get("x") + step);
+    }
+
+    public void moveLeft(int step) {
+        this.sprite.setPosition(this.sprite.getX() - step, this.sprite.getY());
+        position.put("x", position.get("x") - step);
+    }
+
+    public void moveUp(int step) {
+        this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + step);
+        position.put("y", position.get("y") + step);
+    }
+
+    public void moveDown(int step) {
+        this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - step);
+        position.put("y", position.get("y") - step);
     }
 }

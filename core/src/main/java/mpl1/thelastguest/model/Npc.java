@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Npc extends Character{
 
-    public Npc(String name, Map<String, Integer> stats, Integer x, Integer y) {
-        super(name, stats,  x, y);
+    public Npc(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName) {
+        super(name, stats,  posX, posY, spriteName);
     }
 }

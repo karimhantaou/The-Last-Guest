@@ -1,6 +1,9 @@
 package mpl1.thelastguest.model;
 
-public class Player{
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.math.Rectangle;
+
+public class Player {
     private String username;
     private Character playerCharacter;
 
@@ -8,7 +11,6 @@ public class Player{
         this.username = username;
         this.playerCharacter = playerCharacter;
     }
-
     public String getUsername() {
         return username;
     }
