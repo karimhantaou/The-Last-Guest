@@ -6,8 +6,9 @@
       "per": 6,
       "lck": 4,
       "ap": 9,
-      "in": 2
-    }
+      "inv": 2
+    },
+    "texturePath": "pawns/redPawn.png"
   },
   {
     "name": "Blue",
@@ -16,8 +17,9 @@
       "per": 9,
       "lck": 4,
       "ap": 4,
-      "in": 2
-    }
+      "inv": 2
+    },
+    "texturePath": "pawns/bluePawn.png"
   },
   {
     "name": "Green",
@@ -26,8 +28,9 @@
       "per": 7,
       "lck": 5,
       "ap": 6,
-      "in": 3
-    }
+      "inv": 3
+    },
+    "texturePath": "placeholder.png"
   },
   {
     "name": "Yellow",
@@ -36,8 +39,9 @@
       "per": 8,
       "lck": 6,
       "ap": 5,
-      "in": 4
-    }
+      "inv": 4
+    },
+    "texturePath": "placeholder.png"
   },
   {
     "name": "Purple",
@@ -46,8 +50,9 @@
       "per": 5,
       "lck": 3,
       "ap": 8,
-      "in": 6
-    }
+      "inv": 6
+    },
+    "texturePath": "placeholder.png"
   },
   {
     "name": "Orange",
@@ -56,7 +61,8 @@
       "per": 6,
       "lck": 7,
       "ap": 4,
-      "in": 5
-    }
+      "inv": 5
+    },
+    "texturePath": "placeholder.png"
   }
 ]

@@ -11,6 +11,6 @@ public class MenuController {
     }
 
     public void play(){
-        game.screenManager.showGame();
+        game.screenManager.showCharacterSelection();
     }
 }

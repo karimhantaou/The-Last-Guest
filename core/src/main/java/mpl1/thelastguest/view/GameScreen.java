@@ -9,6 +9,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import mpl1.thelastguest.model.Murderer;
+import mpl1.thelastguest.model.Npc;
+import mpl1.thelastguest.model.Player;
+
+import java.util.List;
 
 public class GameScreen implements Screen {
     private final Main game;
@@ -17,10 +22,10 @@ public class GameScreen implements Screen {
 
 
     // Constructeur de salopard
-    public GameScreen(Main game) {
+    public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer) {
         this.game = game;
         this.font = new BitmapFont();
-        this.controller = new GameController(game, this);
+        this.controller = new GameController(game, this, player, npcs, murderer);
     }
 
     // Boucle principal de la vue (pour afficher les élements)

@@ -1,5 +1,8 @@
 package mpl1.thelastguest.model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,18 +12,20 @@ public abstract class Character {
     private Map<String, Integer> stats; //str, per, lck, ap, inv
     private Map<String, Integer> position; // x, y
     private List<String> items;
-    private boolean alive;
+    private boolean alive = true;
 
-    public Character(String name, Map<String, Integer> stats) {
+    private String texturePath;
+
+    public Character(String name, Map<String, Integer> stats, String texturePath) {
         this.name = name;
         this.stats = stats;
+        this.texturePath = texturePath;
 
         Map<String, Integer> position = new HashMap<>();
         position.put("x", 0);
         position.put("y", 0);
         this.position = position;
 
-        this.alive = true;
     }
 
     // GETTERS
@@ -77,6 +82,10 @@ public abstract class Character {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public String getTexturePath() {
+        return texturePath;
     }
 
     // SETTERS

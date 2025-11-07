@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Murderer extends Character{
 
-    public Murderer(String name, Map<String, Integer> stats) {
-        super(name, stats);
+    public Murderer(Npc npc) {
+        super(npc.getName(), npc.getStats(), npc.getTexturePath());
     }
 }

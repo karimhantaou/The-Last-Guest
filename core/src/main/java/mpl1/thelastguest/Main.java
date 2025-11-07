@@ -6,7 +6,6 @@ import mpl1.thelastguest.view.MenuScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import mpl1.thelastguest.view.TestScreen;
 
 public class Main extends Game {
     public SpriteBatch batch;
@@ -16,8 +15,7 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         screenManager = new ScreenManager(this);
-        setScreen(new TestScreen(this));
-
+        setScreen(new MenuScreen(this));
     }
 
     @Override
