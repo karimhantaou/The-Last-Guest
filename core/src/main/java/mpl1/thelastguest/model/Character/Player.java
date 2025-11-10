@@ -24,7 +24,7 @@ public class Player{
         return playerCharacter;
     }
 
-    // Itemsss
+    // Items
 
     private void addStats(StatItem item){
         playerCharacter.setStr(playerCharacter.getStr() + item.getStr());
