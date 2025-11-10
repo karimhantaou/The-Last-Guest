@@ -14,6 +14,7 @@ public class StatItem extends Item {
 
     // GETTER
 
+    @Override
     public Map<String, Integer> getStats(){
         return this.stats;
     }

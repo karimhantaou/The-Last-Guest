@@ -29,10 +29,17 @@ public class SelectCharacterController {
     private Murderer murderer;
     private Player player;
 
+    private List<Item> items;
+
     public SelectCharacterController(Main game, SelectCharacterScreen view) {
         this.game = game;
         this.characters = createCharacters();
         this.selectedCharacter = 0;
+        this.items = createItems();
+        for(Item item : this.items){
+            System.out.println(item.getName());
+            System.out.println(item.getStats());
+        }
     }
 
     public void update(float delta) {
@@ -57,6 +64,36 @@ public class SelectCharacterController {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    public List<Item> createItems(){
+        List<Item> items =  new ArrayList<>();
+        try{
+            Gson gson = new Gson();
+
+            FileHandle file = Gdx.files.internal("data/StatsItems.json");
+            String json = file.readString();
+
+            List<Item> statItems = gson.fromJson(json, new TypeToken<List<StatItem>>(){}.getType());
+            items.addAll(statItems);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        try{
+            Gson gson = new Gson();
+
+            FileHandle file = Gdx.files.internal("data/ActionItems.json");
+            String json = file.readString();
+
+            List<Item> actionItems = gson.fromJson(json, new TypeToken<List<ActionItem>>(){}.getType());
+            items.addAll(actionItems);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return items;
     }
 
     public Npc getSelectedCharacter(){
@@ -118,10 +155,5 @@ public class SelectCharacterController {
 
         Npc character = characters.get(0);
         Player player = new Player("username", character);
-        player.pickItem(item2);
-        System.out.println(player.getPlayerCharacter().getStats());
-        player.dropItem(item2);
-        System.out.println(player.getPlayerCharacter().getStats());
-        player.displayActions();
     }
 }

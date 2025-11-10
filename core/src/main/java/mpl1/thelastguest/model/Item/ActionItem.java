@@ -11,6 +11,7 @@ public class ActionItem extends Item {
 
     // GETTER
 
+    @Override
     public String getAction() {
         return this.action;
     }

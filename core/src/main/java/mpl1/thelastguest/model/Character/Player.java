@@ -43,11 +43,16 @@ public class Player{
     }
 
     public void pickItem(Item item){
-        if(item.getClass() == StatItem.class){
-            StatItem statItem = (StatItem)item;
-            addStats(statItem);
+        if(this.playerCharacter.getItems().size() < playerCharacter.getInv()){
+            if(item.getClass() == StatItem.class){
+                StatItem statItem = (StatItem)item;
+                addStats(statItem);
+            }
+            this.playerCharacter.setItem(item);
+            System.out.println(item.getName() + " added to the inventory.");
+        } else{
+            System.out.println("Inventory full !");
         }
-        this.playerCharacter.setItem(item);
     }
 
     public void dropItem(Item item){
@@ -56,6 +61,7 @@ public class Player{
             removeStats(statItem);
         }
         this.playerCharacter.dropItem(item);
+        System.out.println(item.getName() + " dropped from the inventory.");
     }
 
     // Actions
