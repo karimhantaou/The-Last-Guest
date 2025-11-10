@@ -141,20 +141,51 @@ public abstract class Character implements Movable{
     public void moveRight() {
         this.sprite.setPosition((getPositionX() + 1) * this.step, getPositionY() * this.step);
         this.position.put("x", this.position.get("x") + 1);
+        hiddenPassage();
     }
 
     public void moveLeft() {
         this.sprite.setPosition((getPositionX() - 1) * this.step, getPositionY() * this.step);
         this.position.put("x", this.position.get("x") - 1);
+        hiddenPassage();
     }
 
     public void moveUp() {
         this.sprite.setPosition(getPositionX() * this.step, (getPositionY() + 1) * this.step);
         this.position.put("y", this.position.get("y") + 1);
+        hiddenPassage();
     }
 
     public void moveDown() {
         this.sprite.setPosition(getPositionX() * this.step, (getPositionY() - 1) * this.step);
         this.position.put("y", this.position.get("y") - 1);
+        hiddenPassage();
+    }
+
+    public void hiddenPassage(){
+        if (getPositionY() == 42 || getPositionY() == 43) {
+            if (getPositionX() == 14 || getPositionX() == 15) {
+                this.position.put("y", 6);
+                this.position.put("x", 32);
+                this.sprite.setPosition(getPositionX() * this.step, getPositionY() * this.step);
+            }
+        }
+        if (getPositionY() == 6 || getPositionY() == 5) {
+            if (getPositionX() == 33 || getPositionX() == 34) {
+                this.position.put("y", 41);
+                this.position.put("x", 15);
+                this.sprite.setPosition(getPositionX() * this.step, getPositionY() * this.step);
+            }
+        }
+        if (getPositionX() == 7 && (getPositionY() == 30 || getPositionY() == 31)) {
+            this.position.put("y", 45);
+            this.position.put("x", 40);
+            this.sprite.setPosition(getPositionX() * this.step, getPositionY() * this.step);
+        }
+        if (getPositionY() == 46 && (getPositionX() == 40 || getPositionX() == 41)) {
+            this.position.put("y", 30);
+            this.position.put("x", 8);
+            this.sprite.setPosition(getPositionX() * this.step, getPositionY() * this.step);
+        }
     }
 }
