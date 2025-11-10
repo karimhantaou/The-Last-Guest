@@ -18,5 +18,9 @@
   {
     "name": "Lies detector",
     "action": "detect_lie"
+  },
+  {
+    "name": "Fingerprints spoofer",
+    "action": "spoof_fingerprint"
   }
 ]

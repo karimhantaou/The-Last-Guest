@@ -36,10 +36,6 @@ public class SelectCharacterController {
         this.characters = createCharacters();
         this.selectedCharacter = 0;
         this.items = createItems();
-        for(Item item : this.items){
-            System.out.println(item.getName());
-            System.out.println(item.getStats());
-        }
     }
 
     public void update(float delta) {
@@ -58,8 +54,7 @@ public class SelectCharacterController {
             FileHandle file = Gdx.files.internal("data/Characters.json");
             String json = file.readString();
 
-            List<Npc> characters = gson.fromJson(json, new TypeToken<List<Npc>>(){}.getType());
-            return characters;
+            return gson.fromJson(json, new TypeToken<List<Npc>>(){}.getType());
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -115,17 +110,20 @@ public class SelectCharacterController {
     }
 
     public void selectPlayer(){
-        this.player = new Player("username", getSelectedCharacter());
-        this.characters.remove(getSelectedCharacter());
+        // Création du joueur
+        this.player = new Player(getSelectedCharacter());
+        this.characters.remove(getSelectedCharacter()); // On retire le personnage de la liste des pnjs
 
+        // Tueur aléatoire
         int randomMurdererIndex = (int)(Math.random() * characters.size() - 1);
         this.murderer = new Murderer(characters.get(randomMurdererIndex));
         this.characters.remove(characters.get(randomMurdererIndex));
-        playGame();
+
+        playGame(); // Lance le jeu
     }
 
     public void playGame(){
-        game.screenManager.showGame(this.player, this.characters, this.murderer);
+        game.screenManager.showGame(this.player, this.characters, this.murderer, this.items);
     }
 
     public List<Npc> getNpcs() {
@@ -154,6 +152,6 @@ public class SelectCharacterController {
         items.add(item); items.add(item2);
 
         Npc character = characters.get(0);
-        Player player = new Player("username", character);
+        Player player = new Player(character);
     }
 }

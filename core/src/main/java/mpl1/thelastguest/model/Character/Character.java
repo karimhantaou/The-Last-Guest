@@ -1,6 +1,7 @@
 package mpl1.thelastguest.model.Character;
 
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Item.StatItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,14 +9,31 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Character {
-    private String name;
-    private Map<String, Integer> stats; //str, per, lck, ap, inv
-    private Map<String, Integer> position; // x, y
-    private List<Item> items =  new ArrayList<>();
-    private boolean alive;
 
-    private String texturePath;
+    // Nom du personnage
+    protected String name;
 
+    // Statistiques du personnage
+    protected Map<String, Integer> stats; //str, per, lck, ap, inv
+
+    // Position du personnage
+    protected Map<String, Integer> position; // x, y
+
+    // Inventaire du personnage
+    protected List<Item> items =  new ArrayList<>();
+
+    // Empreintes du personnages
+    protected String fingerprint;
+
+    // Indices si personne morte
+    private Map<String,String> clues; // fingerprint,
+
+    // Etat du personnage
+    protected boolean alive;
+
+    protected String texturePath;
+
+    // Constructeur pour les pnj
     public Character() {
         this.items = new ArrayList<>();
         this.alive = true;
@@ -23,8 +41,12 @@ public abstract class Character {
         this.position.put("x", 0);
         this.position.put("y", 0);
         this.texturePath = "placeholder.png";
+
+        String[] fingerprints = {"A", "L", "W"};
+        this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
+    // Constructeur pour le joueur et le tueur
     public Character(String name, Map<String, Integer> stats, String texturePath) {
         this.name = name;
         this.stats = stats;
@@ -35,16 +57,43 @@ public abstract class Character {
         position.put("y", 0);
         this.position = position;
 
-        this.alive = true;
+        String[] fingerprints = {"A", "L", "W"};
+        this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
 
+        this.alive = true;
     }
 
-    // GETTERS
+    // NAME
     public String getName() {
         return name;
     }
 
-    //stats
+
+    // POSITION
+
+    public Map<String, Integer> getPosition() {
+        return position;
+    }
+
+    public int getPositionX(){
+        return this.position.get("x");
+    }
+
+    public int getPositionY(){
+        return this.position.get("y");
+    }
+
+    public void setPosition(Map<String, Integer> position) {
+        this.position = position;
+    }
+
+    public String getTexturePath() {
+        return texturePath;
+    }
+
+
+    // STATS
+
     public Map<String, Integer> getStats() {
         return stats;
     }
@@ -68,38 +117,6 @@ public abstract class Character {
     public int getInv(){
         return stats.get("inv");
     }
-
-    // position
-    public Map<String, Integer> getPosition() {
-        return position;
-    }
-
-    public int getPositionX(){
-        return this.position.get("x");
-    }
-
-    public int getPositionY(){
-        return this.position.get("y");
-    }
-
-    // items
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public int countItems() {
-        return items.size();
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public String getTexturePath() {
-        return texturePath;
-    }
-
-    // SETTERS
 
     public void setStats(Map<String, Integer> stats) {
         this.stats = stats;
@@ -125,24 +142,78 @@ public abstract class Character {
         this.stats.put("inv", inv);
     }
 
-    public void setPosition(Map<String, Integer> position) {
-        this.position = position;
+
+    // ITEMS
+
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public int countItems() {
+        return items.size();
     }
 
-    public void setItem(Item item){
-        this.items.add(item);
+    private void addStats(StatItem item){
+        setStr(getStr() + item.getStr());
+        setPer(getPer() + item.getPer());
+        setLck(getLck() + item.getLck());
+        setAp(getAp() + item.getAp());
+        setInv(getInv() + item.getInv());
+    }
+
+    private void removeStats(StatItem item){
+        setStr(getStr() - item.getStr());
+        setPer(getPer() - item.getPer());
+        setLck(getLck() - item.getLck());
+        setAp(getAp() - item.getAp());
+        setInv(getInv() - item.getInv());
+    }
+
+    public void pickItem(Item item){
+        if(countItems() < getInv()){
+            if(item.getClass() == StatItem.class){
+                StatItem statItem = (StatItem)item;
+                addStats(statItem);
+            }
+            this.items.add(item);
+            System.out.println(item.getName() + " added to the inventory.");
+        } else{
+            System.out.println("Inventory full !");
+        }
     }
 
     public void dropItem(Item item){
+        if(item.getClass() == StatItem.class){
+            StatItem statItem = (StatItem)item;
+            removeStats(statItem);
+        }
         this.items.remove(item);
+        System.out.println(item.getName() + " dropped from the inventory.");
+    }
+
+
+    // FINGERPRINT
+
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
+    public void setFingerprint(String fingerprint) {
+        this.fingerprint = fingerprint;
+    }
+
+
+    // ALIVE
+
+    public boolean isAlive() {
+        return alive;
     }
 
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
+
+
 }
+
 

@@ -7,68 +7,23 @@ import mpl1.thelastguest.model.Item.StatItem;
 import java.util.List;
 import java.util.Objects;
 
-public class Player{
-    private String username;
-    private Character playerCharacter;
+public class Player extends Character {
 
-    public Player(String username, Character playerCharacter) {
-        this.username = username;
-        this.playerCharacter = playerCharacter;
+    private boolean inspector = true;
+
+    public Player(Npc npc){
+        super(npc.getName(), npc.getStats(), npc.getTexturePath());
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public Character getPlayerCharacter() {
-        return playerCharacter;
-    }
-
-    // Items
-
-    private void addStats(StatItem item){
-        playerCharacter.setStr(playerCharacter.getStr() + item.getStr());
-        playerCharacter.setPer(playerCharacter.getPer() + item.getPer());
-        playerCharacter.setLck(playerCharacter.getLck() + item.getLck());
-        playerCharacter.setAp(playerCharacter.getAp() + item.getAp());
-        playerCharacter.setInv(playerCharacter.getInv() + item.getInv());
-    }
-
-    private void removeStats(StatItem item){
-        playerCharacter.setStr(playerCharacter.getStr() - item.getStr());
-        playerCharacter.setPer(playerCharacter.getPer() - item.getPer());
-        playerCharacter.setLck(playerCharacter.getLck() - item.getLck());
-        playerCharacter.setAp(playerCharacter.getAp() - item.getAp());
-        playerCharacter.setInv(playerCharacter.getInv() - item.getInv());
-    }
-
-    public void pickItem(Item item){
-        if(this.playerCharacter.getItems().size() < playerCharacter.getInv()){
-            if(item.getClass() == StatItem.class){
-                StatItem statItem = (StatItem)item;
-                addStats(statItem);
-            }
-            this.playerCharacter.setItem(item);
-            System.out.println(item.getName() + " added to the inventory.");
-        } else{
-            System.out.println("Inventory full !");
-        }
-    }
-
-    public void dropItem(Item item){
-        if(item.getClass() == StatItem.class){
-            StatItem statItem = (StatItem)item;
-            removeStats(statItem);
-        }
-        this.playerCharacter.dropItem(item);
-        System.out.println(item.getName() + " dropped from the inventory.");
+    public boolean isInspector() {
+        return inspector;
     }
 
     // Actions
 
     // Permet de savoir si un item permet de faire une action spécial
     private boolean canDoAction(String action){
-        List<Item> items = playerCharacter.getItems();
+        List<Item> items = getItems();
         for(Item item : items){
             if(item.getClass() == ActionItem.class){
                 ActionItem actionItem = (ActionItem)item;
