@@ -1,8 +1,8 @@
 package mpl1.thelastguest.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import mpl1.thelastguest.model.Items.Item;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +11,19 @@ public abstract class Character {
     private String name;
     private Map<String, Integer> stats; //str, per, lck, ap, inv
     private Map<String, Integer> position; // x, y
-    private List<String> items;
-    private boolean alive = true;
+    private List<Item> items =  new ArrayList<>();
+    private boolean alive;
 
     private String texturePath;
+
+    public Character() {
+        this.items = new ArrayList<>();
+        this.alive = true;
+        this.position = new HashMap<>();
+        this.position.put("x", 0);
+        this.position.put("y", 0);
+        this.texturePath = "placeholder.png";
+    }
 
     public Character(String name, Map<String, Integer> stats, String texturePath) {
         this.name = name;
@@ -25,6 +34,8 @@ public abstract class Character {
         position.put("x", 0);
         position.put("y", 0);
         this.position = position;
+
+        this.alive = true;
 
     }
 
@@ -72,7 +83,7 @@ public abstract class Character {
     }
 
     // items
-    public List<String> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
@@ -118,8 +129,16 @@ public abstract class Character {
         this.position = position;
     }
 
-    public void setItems(List<String> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public void setItem(Item item){
+        this.items.add(item);
+    }
+
+    public void dropItem(Item item){
+        this.items.remove(item);
     }
 
     public void setAlive(boolean alive) {

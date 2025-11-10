@@ -1,5 +1,14 @@
 package mpl1.thelastguest.model;
 
+import mpl1.thelastguest.model.Items.ActionItem;
+import mpl1.thelastguest.model.Items.Item;
+import mpl1.thelastguest.model.Items.StatItem;
+
+import javax.swing.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 public class Player{
     private String username;
     private Character playerCharacter;
@@ -15,5 +24,80 @@ public class Player{
 
     public Character getPlayerCharacter() {
         return playerCharacter;
+    }
+
+    // Items
+
+    private void addStats(StatItem item){
+        playerCharacter.setStr(playerCharacter.getStr() + item.getStr());
+        playerCharacter.setPer(playerCharacter.getPer() + item.getPer());
+        playerCharacter.setLck(playerCharacter.getLck() + item.getLck());
+        playerCharacter.setAp(playerCharacter.getAp() + item.getAp());
+        playerCharacter.setInv(playerCharacter.getInv() + item.getInv());
+    }
+
+    private void removeStats(StatItem item){
+        playerCharacter.setStr(playerCharacter.getStr() - item.getStr());
+        playerCharacter.setPer(playerCharacter.getPer() - item.getPer());
+        playerCharacter.setLck(playerCharacter.getLck() - item.getLck());
+        playerCharacter.setAp(playerCharacter.getAp() - item.getAp());
+        playerCharacter.setInv(playerCharacter.getInv() - item.getInv());
+    }
+
+    public void pickItem(Item item){
+        if(item.getClass() == StatItem.class){
+            StatItem statItem = (StatItem)item;
+            addStats(statItem);
+        }
+        this.playerCharacter.setItem(item);
+    }
+
+    public void dropItem(Item item){
+        if(item.getClass() == StatItem.class){
+            StatItem statItem = (StatItem)item;
+            removeStats(statItem);
+        }
+        this.playerCharacter.dropItem(item);
+    }
+
+    // Actions
+
+    // Permet de savoir si un item permet de faire une action spécial
+    private boolean canDoAction(String action){
+        List<Item> items = playerCharacter.getItems();
+        for(Item item : items){
+            if(item.getClass() == ActionItem.class){
+                ActionItem actionItem = (ActionItem)item;
+                if(Objects.equals(actionItem.getAction(), action)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void openDoor(){
+        if(canDoAction("Open door")){
+            System.out.println("open door");
+        }
+    }
+
+    public void kill(){
+        if(canDoAction("kill")){
+            System.out.println("kill");
+        }
+    }
+
+    // La méthode qui sera utilisée pour afficher les actions. On mettra un objet en paramètre pour savoir ce qu'il peut faire.
+    public void displayActions(){
+        System.out.println("Move");
+
+        if(canDoAction("kill")){
+            System.out.println("Kill");
+        }
+
+        if(canDoAction("Open door")){
+            System.out.println("Open door");
+        }
     }
 }

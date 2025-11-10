@@ -7,9 +7,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.*;
+import mpl1.thelastguest.model.Items.ActionItem;
+import mpl1.thelastguest.model.Items.Item;
+import mpl1.thelastguest.model.Items.StatItem;
 import mpl1.thelastguest.view.SelectCharacterScreen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class SelectCharacterController {
@@ -25,6 +31,8 @@ public class SelectCharacterController {
         this.game = game;
         this.characters = createCharacters();
         this.selectedCharacter = 0;
+
+        testItem();
     }
 
     public void update(float delta) {
@@ -89,5 +97,31 @@ public class SelectCharacterController {
 
     public Murderer getMurderer() {
         return murderer;
+    }
+
+    public void testItem(){
+        // Item 1
+        ActionItem item =  new ActionItem("Clef", "Open door");
+
+
+        // Item 2
+        Map<String, Integer> stats = new HashMap<>();
+        stats.put("str", 0);
+        stats.put("per", 0);
+        stats.put("lck", 10);
+        stats.put("ap", 0);
+        stats.put("inv", 0);
+        StatItem item2 = new StatItem("Chapeau de zgeg", stats);
+
+        List<Item> items = new ArrayList<>();
+        items.add(item); items.add(item2);
+
+        Npc character = characters.get(0);
+        Player player = new Player("username", character);
+        player.pickItem(item2);
+        System.out.println(player.getPlayerCharacter().getStats());
+        player.dropItem(item2);
+        System.out.println(player.getPlayerCharacter().getStats());
+        player.displayActions();
     }
 }
