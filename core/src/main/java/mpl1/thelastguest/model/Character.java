@@ -16,8 +16,9 @@ public abstract class Character implements Movable{
     private List<String> items;
     private boolean alive;
     private final Sprite sprite;
+    private Integer step;
 
-    public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName) {
+    public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
         this.name = name;
         this.stats = stats;
 
@@ -27,48 +28,49 @@ public abstract class Character implements Movable{
         this.position = position;
         Texture texture = new Texture(Gdx.files.internal(spriteName));
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(14, 14);
-        this.sprite.setPosition(posX, posY);
+        this.sprite.setSize(step, step);
+        this.sprite.setPosition((posX * step), posY * step);
+        this.step = step;
         this.alive = true;
     }
 
     public Sprite getSprite() {
-        return sprite;
+        return this.sprite;
     }
 
     // GETTERS
     public String getName() {
-        return name;
+        return this.name;
     }
 
     //stats
     public Map<String, Integer> getStats() {
-        return stats;
+        return this.stats;
     }
 
     public int getStr(){
-        return stats.get("str");
+        return this.stats.get("str");
     }
 
     public int getPer(){
-        return stats.get("per");
+        return this.stats.get("per");
     }
 
     public int getLck(){
-        return stats.get("lck");
+        return this.stats.get("lck");
     }
 
     public int getAp(){
-        return stats.get("ap");
+        return this.stats.get("ap");
     }
 
     public int getInv(){
-        return stats.get("inv");
+        return this.stats.get("inv");
     }
 
     // position
     public Map<String, Integer> getPosition() {
-        return position;
+        return this.position;
     }
 
     public Integer getPositionX(){
@@ -81,15 +83,15 @@ public abstract class Character implements Movable{
 
     // items
     public List<String> getItems() {
-        return items;
+        return this.items;
     }
 
     public int countItems() {
-        return items.size();
+        return this.items.size();
     }
 
     public boolean isAlive() {
-        return alive;
+        return this.alive;
     }
 
     // SETTERS
@@ -125,7 +127,7 @@ public abstract class Character implements Movable{
     public void setPosition(Integer x, Integer y) {
         this.position.put("x", x);
         this.position.put("y", y);
-        sprite.setPosition(x, y);
+        this.sprite.setPosition(x, y);
     }
 
     public void setItems(List<String> items) {
@@ -136,23 +138,23 @@ public abstract class Character implements Movable{
         this.alive = alive;
     }
 
-    public void moveRight(int step) {
-        this.sprite.setPosition(this.sprite.getX() + step, this.sprite.getY());
-        position.put("x", position.get("x") + step);
+    public void moveRight() {
+        this.sprite.setPosition((getPositionX() + 1) * this.step, getPositionY() * this.step);
+        this.position.put("x", this.position.get("x") + 1);
     }
 
-    public void moveLeft(int step) {
-        this.sprite.setPosition(this.sprite.getX() - step, this.sprite.getY());
-        position.put("x", position.get("x") - step);
+    public void moveLeft() {
+        this.sprite.setPosition((getPositionX() - 1) * this.step, getPositionY() * this.step);
+        this.position.put("x", this.position.get("x") - 1);
     }
 
-    public void moveUp(int step) {
-        this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() + step);
-        position.put("y", position.get("y") + step);
+    public void moveUp() {
+        this.sprite.setPosition(getPositionX() * this.step, (getPositionY() + 1) * this.step);
+        this.position.put("y", this.position.get("y") + 1);
     }
 
-    public void moveDown(int step) {
-        this.sprite.setPosition(this.sprite.getX(), this.sprite.getY() - step);
-        position.put("y", position.get("y") - step);
+    public void moveDown() {
+        this.sprite.setPosition(getPositionX() * this.step, (getPositionY() - 1) * this.step);
+        this.position.put("y", this.position.get("y") - 1);
     }
 }

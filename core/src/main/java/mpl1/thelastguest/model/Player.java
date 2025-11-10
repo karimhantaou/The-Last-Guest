@@ -11,11 +11,12 @@ public class Player {
         this.username = username;
         this.playerCharacter = playerCharacter;
     }
+
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public Character getPlayerCharacter() {
-        return playerCharacter;
+        return this.playerCharacter;
     }
 }
