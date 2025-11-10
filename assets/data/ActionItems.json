@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Key",
+    "action": "open_door"
+  },
+  {
+    "name": "Knife",
+    "action": "kill"
+  },
+  {
+    "name": "Magnifying glass",
+    "action": "inspect"
+  },
+  {
+    "name": "Fingerprint Scanner",
+    "action": "scan_fingerprint"
+  },
+  {
+    "name": "Lies detector",
+    "action": "detect_lie"
+  }
+]

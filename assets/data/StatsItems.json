@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Steroids",
+    "stats": {
+      "str": 2,
+      "per": 0,
+      "lck": 0,
+      "ap": 0,
+      "inv": 0
+    }
+  },
+  {
+    "name": "Glasses",
+    "stats": {
+      "str": 0,
+      "per": 2,
+      "lck": 0,
+      "ap": 0,
+      "inv": 0
+    }
+  },
+  {
+    "name": "Lucky charm",
+    "stats": {
+      "str": 0,
+      "per": 0,
+      "lck": 2,
+      "ap": 0,
+      "inv": 0
+    }
+  },
+  {
+    "name": "Nike Air Max",
+    "stats": {
+      "str": 0,
+      "per": 0,
+      "lck": 0,
+      "ap": 2,
+      "inv": 0
+    }
+  },
+  {
+    "name": "Backpack",
+    "stats": {
+      "str": 0,
+      "per": 0,
+      "lck": 0,
+      "ap": 0,
+      "inv": 1
+    }
+  }
+]

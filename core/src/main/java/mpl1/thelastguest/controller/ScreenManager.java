@@ -1,9 +1,9 @@
 package mpl1.thelastguest.controller;
 
 import mpl1.thelastguest.Main;
-import mpl1.thelastguest.model.Murderer;
-import mpl1.thelastguest.model.Npc;
-import mpl1.thelastguest.model.Player;
+import mpl1.thelastguest.model.Character.Murderer;
+import mpl1.thelastguest.model.Character.Npc;
+import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 import mpl1.thelastguest.view.SelectCharacterScreen;

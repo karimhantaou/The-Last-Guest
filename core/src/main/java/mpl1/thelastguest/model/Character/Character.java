@@ -1,6 +1,6 @@
-package mpl1.thelastguest.model;
+package mpl1.thelastguest.model.Character;
 
-import mpl1.thelastguest.model.Items.Item;
+import mpl1.thelastguest.model.Item.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;

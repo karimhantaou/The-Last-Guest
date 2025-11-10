@@ -9,9 +9,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import mpl1.thelastguest.model.Murderer;
-import mpl1.thelastguest.model.Npc;
-import mpl1.thelastguest.model.Player;
+import mpl1.thelastguest.model.Character.Murderer;
+import mpl1.thelastguest.model.Character.Npc;
+import mpl1.thelastguest.model.Character.Player;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package mpl1.thelastguest.model;
+package mpl1.thelastguest.model.Character;
 
 import java.util.Map;
 

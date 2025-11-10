@@ -1,12 +1,10 @@
-package mpl1.thelastguest.model;
+package mpl1.thelastguest.model.Character;
 
-import mpl1.thelastguest.model.Items.ActionItem;
-import mpl1.thelastguest.model.Items.Item;
-import mpl1.thelastguest.model.Items.StatItem;
+import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Item.StatItem;
 
-import javax.swing.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class Player{

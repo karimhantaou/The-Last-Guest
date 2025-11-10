@@ -6,10 +6,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import mpl1.thelastguest.Main;
-import mpl1.thelastguest.model.*;
-import mpl1.thelastguest.model.Items.ActionItem;
-import mpl1.thelastguest.model.Items.Item;
-import mpl1.thelastguest.model.Items.StatItem;
+import mpl1.thelastguest.model.Character.Murderer;
+import mpl1.thelastguest.model.Character.Npc;
+import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Item.StatItem;
 import mpl1.thelastguest.view.SelectCharacterScreen;
 
 import java.util.ArrayList;
@@ -31,8 +33,6 @@ public class SelectCharacterController {
         this.game = game;
         this.characters = createCharacters();
         this.selectedCharacter = 0;
-
-        testItem();
     }
 
     public void update(float delta) {

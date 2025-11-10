@@ -1,4 +1,4 @@
-package mpl1.thelastguest.model.Items;
+package mpl1.thelastguest.model.Item;
 
 public class ActionItem extends Item {
     private String action;

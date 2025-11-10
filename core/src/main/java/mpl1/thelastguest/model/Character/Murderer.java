@@ -1,7 +1,4 @@
-package mpl1.thelastguest.model;
-
-import java.util.List;
-import java.util.Map;
+package mpl1.thelastguest.model.Character;
 
 public class Murderer extends Character{
 

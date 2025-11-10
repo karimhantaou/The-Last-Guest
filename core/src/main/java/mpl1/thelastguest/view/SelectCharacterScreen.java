@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.SelectCharacterController;
-import mpl1.thelastguest.model.Npc;
+import mpl1.thelastguest.model.Character.Npc;
 
 import java.util.ArrayList;
 import java.util.List;
