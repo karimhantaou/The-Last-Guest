@@ -1,5 +1,11 @@
 package mpl1.thelastguest.model.Character;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
@@ -31,6 +37,14 @@ public abstract class Character {
     private boolean alive;
 
     private String texturePath;
+    private final Sprite sprite; //Sprite of character
+
+    private List<int[]> path =  new ArrayList<>(); //path to move with mousse
+
+    private int step;
+
+    private Integer nbPath;
+
 
     // Constructeur pour les pnj
     public Character() {
@@ -38,6 +52,12 @@ public abstract class Character {
         this.alive = true;
         this.x = 0; this.y = 0;
         this.texturePath = "placeholder.png";
+        Texture texture = new Texture(Gdx.files.internal(texturePath));
+        this.sprite = new Sprite(texture);
+        int step = 50;
+        this.sprite.setSize(step, step);
+        this.sprite.setPosition((this.x * step), this.y * step);
+        this.step = step;
 
         String[] fingerprints = {"A", "L", "W"};
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
@@ -49,7 +69,12 @@ public abstract class Character {
     public Character(String name, Map<String, Integer> stats, String texturePath) {
         this.name = name;
         this.stats = stats;
-        this.texturePath = texturePath;
+        Texture texture = new Texture(Gdx.files.internal(texturePath));
+        this.sprite = new Sprite(texture);
+        int step = 50;
+        this.sprite.setSize(step, step);
+        this.sprite.setPosition((this.x * step), this.y * step);
+
 
         this.x = 0; this.y = 0;
 
@@ -66,6 +91,10 @@ public abstract class Character {
         return name;
     }
 
+    // TEXTUREPATH
+    public String getTexturePath(){
+        return texturePath;
+    }
 
     // POSITION
 
@@ -89,14 +118,9 @@ public abstract class Character {
     public void setPosition(int x, int y){
         this.x = x;
         this.y = y;
+        this.sprite.setPosition(x * this.step, y * this.step);
+        hiddenPassage();
     }
-
-    // TEXTURE
-
-    public String getTexturePath() {
-        return texturePath;
-    }
-
 
     // STATS
 
@@ -277,6 +301,121 @@ public abstract class Character {
                 System.out.println(actionItem.getAction());
             }
         }
+    }
+
+
+    public int[] getPath(){
+        int[] tmp;
+
+        if (this.path.isEmpty())
+            return null;
+        tmp = this.path.get(0);
+        this.path.remove(0);
+        return tmp;
+    }
+
+    public Sprite getSprite() {
+        int[] pos = getPath();
+
+        if (pos != null) {
+            setPosition(pos[0], pos[1]);
+            hiddenPassage();
+            try {
+                Thread.sleep(100 / this.nbPath); //For display tiled by tiled
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return this.sprite;
+    }
+
+    public void hiddenPassage(){
+        if (getY() == 42 || getY() == 43)
+            if (getX() == 14 || getX() == 15)
+                setPosition(32, 6);
+        if (getY() == 6 || getY() == 5)
+            if (getX() == 33 || getX() == 34)
+                setPosition(45, 41);
+        if (getX() == 7 && (getY() == 30 || getY() == 31))
+            setPosition(40, 45);
+        if (getY() == 46 && (getX() == 40 || getX() == 41))
+            setPosition(8, 30);
+    }
+
+    //Movable
+    public void moveRight() {
+        setPosition((getX() + 1), getY());
+    }
+
+    public void moveLeft() {
+        setPosition((getX() - 1), getY());
+    }
+
+    public void moveUp() {
+        setPosition(getX(), (getY() + 1));
+    }
+
+    public void moveDown() {
+        setPosition(getX(), (getY() - 1));
+    }
+
+    //Movable the player to select point (implement BFS algo)
+    public void moveToPoint(int posX, int posY) {
+        TiledMap map = new TmxMapLoader().load("maps/map.tmx");
+        TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
+        Queue<int[]> queue = new ArrayDeque<>();
+        Map<String, String> prev = new HashMap<>();
+        List<int[]> path = new ArrayList<>();
+        int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
+        int[][] grid = new int[murInt.getHeight()][murInt.getWidth()];
+        int[] start = { getX(), getY() };
+        int[] goal  = { posX - 11 , 50 - posY  - 1 };
+        int[] current;
+
+        for (int y = 0; y < murInt.getHeight(); y++) {
+            for (int x = 0; x < murInt.getWidth(); x++) {
+                if (murInt.getCell(x, y) == null)
+                    grid[y][x] = 0;
+                else
+                    grid[y][x] = 1;
+            }
+        }
+        queue.add(start);
+        prev.put(Arrays.toString(start), null);
+        while (!queue.isEmpty()) {
+            current = queue.poll();
+            if (Arrays.equals(current, goal))
+                break;
+            for (int[] dir : directions) {
+                int nextX = current[0] + dir[0];
+                int nextY = current[1] + dir[1];
+                if (nextX >= 0 && nextY >= 0 && nextX < murInt.getWidth() && nextY < murInt.getHeight()) {
+                    if (grid[nextY][nextX] == 0) {
+                        int[] around = {nextX, nextY};
+                        String key = Arrays.toString(around);
+                        if (!prev.containsKey(key)) {
+                            prev.put(key, Arrays.toString(current));
+                            queue.add(around);
+                        }
+                    }
+                }
+            }
+        }
+        String key = Arrays.toString(goal);
+        while (key != null) {
+            String[] parts = key.replaceAll("[\\[\\] ]", "").split(",");
+            path.add(new int[]{
+                Integer.parseInt(parts[0]),
+                Integer.parseInt(parts[1])
+            });
+            key = prev.get(key);
+        }
+        Collections.reverse(path);
+        if (path.size() == 1)
+            return;
+        this.path = path;
+        this.nbPath = path.size();
     }
 
 }

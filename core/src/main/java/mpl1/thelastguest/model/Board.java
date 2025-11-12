@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import mpl1.thelastguest.model.Character.Npc;
+import mpl1.thelastguest.model.Character.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,21 +22,21 @@ public class Board {
 
     public Board(Integer step) {
         this.characters = new ArrayList<>();
-        this.characters.add(new Npc("Red", new HashMap<String, Integer>() {{
-            put("str", 8);
-            put("per", 6);
-            put("lck", 4);
-            put("ap", 9);
-            put("in", 2);
-        }}, 20, 25, "pion.png", step));
-        this.characters.add(new Npc("Blue", new HashMap<String, Integer>() {{
-            put("str", 5);
-            put("per", 9);
-            put("lck", 4);
-            put("ap", 4);
-            put("in", 2);
-        }}, 25, 25, "pion.png", step));
-        this.player = new Player("bastien", this.characters.get(0));
+//        this.characters.add(new Npc("Red", new HashMap<String, Integer>() {{
+//            put("str", 8);
+//            put("per", 6);
+//            put("lck", 4);
+//            put("ap", 9);
+//            put("in", 2);
+//        }}, "pion.png"));
+//        this.characters.add(new Npc("Blue", new HashMap<String, Integer>() {{
+//            put("str", 5);
+//            put("per", 9);
+//            put("lck", 4);
+//            put("ap", 4);
+//            put("in", 2);
+//        }}, "placeholder.png"));
+//        this.player = new Player("bastien", this.characters.get(0));
         this.step = step;
         this.tiledGrey = new ShapeRenderer();
     }
@@ -86,7 +88,7 @@ public class Board {
 
         if (murInt.getCell(this.player.getPlayerCharacter().getPositionX(), this.player.getPlayerCharacter().getPositionY() + 1) == null
         && murExt.getCell(this.player.getPlayerCharacter().getPositionX(), this.player.getPlayerCharacter().getPositionY() + 1) == null)
-            this.player.getPlayerCharacter().moveUp();
+            this.player().moveUp();
     }
 
     public void playerMoveDown(TiledMap map) {
