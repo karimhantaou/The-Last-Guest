@@ -33,5 +33,8 @@ public class GameController {
         if  (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             view.getBoard().playerMoveRight(view.getMap());
         }
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            view.getBoard().moveToPoint(Gdx.input.getX() / view.getBoard().getStep(), Gdx.input.getY() / view.getBoard().getStep());
+        }
     }
 }
