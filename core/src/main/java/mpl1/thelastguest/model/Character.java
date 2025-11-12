@@ -18,6 +18,7 @@ public abstract class Character implements Movable {
     private final Sprite sprite; //Sprite of character
     private Integer step; // Step (size of tiled when display)
     private List<int[]> path =  new ArrayList<>(); //path to move with mousse
+    private Integer nbPath;
 
     //constructor
     public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
@@ -58,7 +59,7 @@ public abstract class Character implements Movable {
             setPosition(pos[0], pos[1]);
             hiddenPassage();
             try {
-                Thread.sleep(100); //For display tiled by tiled
+                Thread.sleep(100 / this.nbPath); //For display tiled by tiled
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -235,6 +236,7 @@ public abstract class Character implements Movable {
         if (path.size() == 1)
             return;
         this.path = path;
+        this.nbPath = path.size();
     }
 
     public void hiddenPassage(){

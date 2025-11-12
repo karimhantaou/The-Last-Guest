@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         this.batch.setProjectionMatrix(this.camera.combined);
         this.board.displayAllSprites(this.batch);
         this.controller.update(delta);
-        board.drawTileSelection();
+        this.board.drawTileSelection();
     }
 
     //C'est ici on initialise les élements
