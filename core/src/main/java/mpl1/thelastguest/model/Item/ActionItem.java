@@ -1,8 +1,10 @@
 package mpl1.thelastguest.model.Item;
 
-public class ActionItem extends Item {
-    private String action;
+import java.util.Map;
 
+public class ActionItem extends Item {
+
+    private String action;
 
     public ActionItem(String name, String action) {
         super(name);
@@ -15,4 +17,7 @@ public class ActionItem extends Item {
     public String getAction() {
         return this.action;
     }
+
+    @Override
+    public Map<String, Integer> getStats(){return null;}
 }

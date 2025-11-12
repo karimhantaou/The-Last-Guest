@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StatItem extends Item {
-    private Map<String, Integer> stats = new HashMap<>(); //str, per, lck, ap, inv
 
+    private Map<String, Integer> stats = new HashMap<>(); //str, per, lck, ap, inv
 
     public StatItem(String name, Map<String, Integer> stats){
         super(name);
@@ -17,6 +17,11 @@ public class StatItem extends Item {
     @Override
     public Map<String, Integer> getStats(){
         return this.stats;
+    }
+
+    @Override
+    public String getAction(){
+        return null;
     }
 
     public int getStr(){

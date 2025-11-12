@@ -3,7 +3,10 @@ package mpl1.thelastguest.model.Item;
 import java.util.Map;
 
 public abstract class Item {
+
     private String name;
+    private String fingerprint;
+    private String woundType = null;
 
     public Item(String name){
         this.name = name;
@@ -14,6 +17,13 @@ public abstract class Item {
     public String getName(){
         return this.name;
     }
-    public Map<String, Integer> getStats(){return null;}
-    public String getAction(){return null;}
+
+    public String getFingerprint(){return this.fingerprint;}
+    public void setFingerprint(String fingerprint){this.fingerprint = fingerprint;}
+
+    public String getWoundType(){return this.woundType;}
+
+    abstract Map<String, Integer> getStats();
+    abstract String getAction();
+
 }

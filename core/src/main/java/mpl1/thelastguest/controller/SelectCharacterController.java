@@ -14,10 +14,7 @@ import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
 import mpl1.thelastguest.view.SelectCharacterScreen;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class SelectCharacterController {
@@ -119,7 +116,30 @@ public class SelectCharacterController {
         this.murderer = new Murderer(characters.get(randomMurdererIndex));
         this.characters.remove(characters.get(randomMurdererIndex));
 
-        playGame(); // Lance le jeu
+        // Choisit l'arme du crime et rajoute l'empreinte du tueur.
+        List<Integer> weapons = new ArrayList<>();
+        int itemIndex = 0;
+        for(Item item : this.items){
+            if(item.getClass() == ActionItem.class){
+                ActionItem actionItem = (ActionItem)item;
+                if(Objects.equals(actionItem.getAction(), "kill")){
+                    weapons.add(itemIndex);
+                }
+            }
+            itemIndex++;
+        }
+
+        int randomIndex = weapons.get(new Random().nextInt(weapons.size()));
+        items.get(randomIndex).setFingerprint(murderer.getFingerprint());
+
+        // Première victime
+        Npc victim = new Npc("Victim", null, "placeholder.png");
+        victim.addClues(murderer, items.get(randomIndex));
+        victim.setAlive(false);
+        this.characters.add(victim);
+
+        // Lance le jeu
+        playGame();
     }
 
     public void playGame(){
@@ -153,5 +173,10 @@ public class SelectCharacterController {
 
         Npc character = characters.get(0);
         Player player = new Player(character);
+
+        System.out.println(player.getStats());
+        player.dropItem(item2);
+        System.out.println(player.getStats());
+
     }
 }

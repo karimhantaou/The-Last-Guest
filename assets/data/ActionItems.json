@@ -1,11 +1,22 @@
 [
   {
-    "name": "Key",
-    "action": "open_door"
+    "name": "Knife",
+    "action": "kill",
+    "woundType": "cut"
   },
   {
-    "name": "Knife",
-    "action": "kill"
+    "name": "Gun",
+    "action": "kill",
+    "woundType": "bullet"
+  },
+  {
+    "name": "Fork",
+    "action": "kill",
+    "woundType": "cut"
+  },
+  {
+    "name": "Key",
+    "action": "open_door"
   },
   {
     "name": "Magnifying glass",

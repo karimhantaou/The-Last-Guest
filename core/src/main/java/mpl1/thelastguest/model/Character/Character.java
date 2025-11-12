@@ -1,37 +1,35 @@
 package mpl1.thelastguest.model.Character;
 
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Character {
 
     // Nom du personnage
-    protected String name;
+    private String name;
 
     // Statistiques du personnage
-    protected Map<String, Integer> stats; //str, per, lck, ap, inv
+    private Map<String, Integer> stats; //str, per, lck, ap, inv
 
     // Position du personnage
-    protected Map<String, Integer> position; // x, y
+    private Map<String, Integer> position; // x, y
 
     // Inventaire du personnage
-    protected List<Item> items =  new ArrayList<>();
+    private List<Item> items =  new ArrayList<>();
 
     // Empreintes du personnages
-    protected String fingerprint;
+    private String fingerprint;
 
     // Indices si personne morte
     private Map<String,String> clues; // fingerprint,
 
     // Etat du personnage
-    protected boolean alive;
+    private boolean alive;
 
-    protected String texturePath;
+    private String texturePath;
 
     // Constructeur pour les pnj
     public Character() {
@@ -44,6 +42,8 @@ public abstract class Character {
 
         String[] fingerprints = {"A", "L", "W"};
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
+
+        this.clues = new HashMap<>();
     }
 
     // Constructeur pour le joueur et le tueur
@@ -59,6 +59,8 @@ public abstract class Character {
 
         String[] fingerprints = {"A", "L", "W"};
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
+
+        this.clues = new HashMap<>();
 
         this.alive = true;
     }
@@ -86,6 +88,13 @@ public abstract class Character {
     public void setPosition(Map<String, Integer> position) {
         this.position = position;
     }
+
+    public void move(int x, int y){
+        this.position.put("x", x);
+        this.position.put("y", y);
+    }
+
+    // TEXTURE
 
     public String getTexturePath() {
         return texturePath;
@@ -183,12 +192,16 @@ public abstract class Character {
     }
 
     public void dropItem(Item item){
-        if(item.getClass() == StatItem.class){
-            StatItem statItem = (StatItem)item;
-            removeStats(statItem);
+        if(items.contains(item)){
+            if(item.getClass() == StatItem.class){
+                StatItem statItem = (StatItem)item;
+                removeStats(statItem);
+            }
+            this.items.remove(item);
+            System.out.println(item.getName() + " dropped from the inventory.");
+        } else{
+            System.out.println("No item: " + item.getName());
         }
-        this.items.remove(item);
-        System.out.println(item.getName() + " dropped from the inventory.");
     }
 
 
@@ -203,6 +216,16 @@ public abstract class Character {
     }
 
 
+    // CLUES
+    public Map<String, String> getClues(){
+        return clues;
+    }
+
+    public void addClues(Character murderer, Item weapon){
+        this.clues.put("fingerprint", murderer.getFingerprint());
+        this.clues.put("wound", weapon.getWoundType());
+    }
+
     // ALIVE
 
     public boolean isAlive() {
@@ -213,6 +236,47 @@ public abstract class Character {
         this.alive = alive;
     }
 
+
+    // ACTIONS
+
+    // Permet de savoir si un item permet de faire une action spécial
+    private boolean canDoAction(String action){
+        List<Item> items = getItems();
+        for(Item item : items){
+            if(item.getClass() == ActionItem.class){
+                ActionItem actionItem = (ActionItem)item;
+                if(Objects.equals(actionItem.getAction(), action)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Exemple d'actions
+    public void openDoor(){
+        if(canDoAction("Open door")){
+            System.out.println("open door");
+        }
+    }
+
+    public void kill(Npc npc, Item weapon){
+        npc.addClues(this, weapon);
+        npc.setAlive(false);
+    }
+
+    // La méthode qui sera utilisée pour afficher les actions. On mettra un objet en paramètre pour savoir ce qu'il peut faire.
+    // Pour l'instant ça print juste mais à therme afficher des boutons différents. (dans la vue surement)
+    public void displayActions(){
+        System.out.println("Move");
+
+        for(Item item : items){
+            if(item.getClass() == ActionItem.class){
+                ActionItem actionItem = (ActionItem)item;
+                System.out.println(actionItem.getAction());
+            }
+        }
+    }
 
 }
 

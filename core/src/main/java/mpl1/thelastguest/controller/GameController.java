@@ -6,6 +6,7 @@ import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
@@ -26,11 +27,9 @@ public class GameController {
         this.murderer = murderer;
         this.items = items;
 
-        for (Npc npc : npcs) {
-            System.out.println(npc.getName() + ": " + npc.getFingerprint());
+        for(Npc npc : this.npcs){
+            System.out.println(npc.getName() + ": " + npc.isAlive());
         }
-        System.out.println(murderer.getName() + "(m): " + murderer.getFingerprint());
-        System.out.println(player.getName() + "(p): " + player.getFingerprint());
 
     }
 
