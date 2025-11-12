@@ -8,6 +8,7 @@ import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 
@@ -19,6 +20,7 @@ public class GameController {
     private List<Npc> npcs;
     private Murderer murderer;
     private List<Item> items;
+    private GameScreen view;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -26,11 +28,28 @@ public class GameController {
         this.npcs = npcs;
         this.murderer = murderer;
         this.items = items;
+        this.view = view;
     }
+
 
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new MenuScreen(game));
+        }
+        if  (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            view.getBoard().playerMoveUp(view.getMap());
+        }
+        if  (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            view.getBoard().playerMoveDown(view.getMap());
+        }
+        if  (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            view.getBoard().playerMoveLeft(view.getMap());
+        }
+        if  (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            view.getBoard().playerMoveRight(view.getMap());
+        }
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            view.getBoard().moveToPoint(Gdx.input.getX() / view.getBoard().getStep(), Gdx.input.getY() / view.getBoard().getStep());
         }
     }
 }
