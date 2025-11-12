@@ -33,6 +33,10 @@ public class SelectCharacterController {
         this.characters = createCharacters();
         this.selectedCharacter = 0;
         this.items = createItems();
+
+        for(Npc npc : this.characters){
+            System.out.println(npc.getTexturePath());
+        }
     }
 
     public void update(float delta) {

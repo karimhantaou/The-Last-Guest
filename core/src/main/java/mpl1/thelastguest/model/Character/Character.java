@@ -1,5 +1,6 @@
 package mpl1.thelastguest.model.Character;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
@@ -31,6 +32,7 @@ public abstract class Character {
     private boolean alive;
 
     private String texturePath;
+    private Sprite sprite;
 
     // Constructeur pour les pnj
     public Character() {
@@ -61,11 +63,15 @@ public abstract class Character {
         this.alive = true;
     }
 
+    // Créer le sprite pour chaque character
+    public void buildSprite(){
+
+    }
+
     // NAME
     public String getName() {
         return name;
     }
-
 
     // POSITION
 

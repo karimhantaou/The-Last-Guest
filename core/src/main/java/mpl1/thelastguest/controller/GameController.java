@@ -26,6 +26,8 @@ public class GameController {
         this.npcs = npcs;
         this.murderer = murderer;
         this.items = items;
+
+        System.out.println(player.getTexturePath());
     }
 
     public void update(float delta) {
