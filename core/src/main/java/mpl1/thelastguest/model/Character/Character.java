@@ -15,7 +15,8 @@ public abstract class Character {
     private Map<String, Integer> stats; //str, per, lck, ap, inv
 
     // Position du personnage
-    private Map<String, Integer> position; // x, y
+    private int x;
+    private int y;
 
     // Inventaire du personnage
     private List<Item> items =  new ArrayList<>();
@@ -35,9 +36,7 @@ public abstract class Character {
     public Character() {
         this.items = new ArrayList<>();
         this.alive = true;
-        this.position = new HashMap<>();
-        this.position.put("x", 0);
-        this.position.put("y", 0);
+        this.x = 0; this.y = 0;
         this.texturePath = "placeholder.png";
 
         String[] fingerprints = {"A", "L", "W"};
@@ -52,10 +51,7 @@ public abstract class Character {
         this.stats = stats;
         this.texturePath = texturePath;
 
-        Map<String, Integer> position = new HashMap<>();
-        position.put("x", 0);
-        position.put("y", 0);
-        this.position = position;
+        this.x = 0; this.y = 0;
 
         String[] fingerprints = {"A", "L", "W"};
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
@@ -73,25 +69,26 @@ public abstract class Character {
 
     // POSITION
 
-    public Map<String, Integer> getPosition() {
-        return position;
+
+    public int getX(){
+        return x;
     }
 
-    public int getPositionX(){
-        return this.position.get("x");
+    public int getY(){
+        return this.y;
     }
 
-    public int getPositionY(){
-        return this.position.get("y");
+    public void setX(int x){
+        this.x = x;
     }
 
-    public void setPosition(Map<String, Integer> position) {
-        this.position = position;
+    public void setY(int y){
+        this.y = y;
     }
 
-    public void move(int x, int y){
-        this.position.put("x", x);
-        this.position.put("y", y);
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
     }
 
     // TEXTURE
@@ -163,35 +160,37 @@ public abstract class Character {
     }
 
     private void addStats(StatItem item){
-        setStr(getStr() + item.getStr());
-        setPer(getPer() + item.getPer());
-        setLck(getLck() + item.getLck());
-        setAp(getAp() + item.getAp());
-        setInv(getInv() + item.getInv());
+        this.setStr(this.getStr() + item.getStr());
+        this.setPer(this.getPer() + item.getPer());
+        this.setLck(this.getLck() + item.getLck());
+        this.setAp(this.getAp() + item.getAp());
+        this.setInv(this.getInv() + item.getInv());
     }
 
     private void removeStats(StatItem item){
-        setStr(getStr() - item.getStr());
-        setPer(getPer() - item.getPer());
-        setLck(getLck() - item.getLck());
-        setAp(getAp() - item.getAp());
-        setInv(getInv() - item.getInv());
+        this.setStr(this.getStr() - item.getStr());
+        this.setPer(this.getPer() - item.getPer());
+        this.setLck(this.getLck() - item.getLck());
+        this.setAp(this.getAp() - item.getAp());
+        this.setInv(this.getInv() - item.getInv());
     }
 
-    public void pickItem(Item item){
+    public boolean pickItem(Item item){
         if(countItems() < getInv()){
             if(item.getClass() == StatItem.class){
                 StatItem statItem = (StatItem)item;
-                addStats(statItem);
+                this.addStats(statItem);
             }
             this.items.add(item);
             System.out.println(item.getName() + " added to the inventory.");
+            return true;
         } else{
             System.out.println("Inventory full !");
+            return false;
         }
     }
 
-    public void dropItem(Item item){
+    public boolean dropItem(Item item){
         if(items.contains(item)){
             if(item.getClass() == StatItem.class){
                 StatItem statItem = (StatItem)item;
@@ -199,8 +198,10 @@ public abstract class Character {
             }
             this.items.remove(item);
             System.out.println(item.getName() + " dropped from the inventory.");
+            return true;
         } else{
             System.out.println("No item: " + item.getName());
+            return false;
         }
     }
 

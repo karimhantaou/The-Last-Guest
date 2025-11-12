@@ -26,11 +26,6 @@ public class GameController {
         this.npcs = npcs;
         this.murderer = murderer;
         this.items = items;
-
-        for(Npc npc : this.npcs){
-            System.out.println(npc.getName() + ": " + npc.isAlive());
-        }
-
     }
 
     public void update(float delta) {
