@@ -1,5 +1,7 @@
 package mpl1.thelastguest.model.Character;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
@@ -65,7 +67,12 @@ public abstract class Character {
 
     // Créer le sprite pour chaque character
     public void buildSprite(){
+        Texture texture = new Texture(Gdx.files.internal(texturePath));
+        this.sprite = new Sprite(texture);
+    }
 
+    public Sprite getSprite() {
+        return sprite;
     }
 
     // NAME

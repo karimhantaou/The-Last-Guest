@@ -33,9 +33,10 @@ public class SelectCharacterController {
         this.characters = createCharacters();
         this.selectedCharacter = 0;
         this.items = createItems();
+        npcBuildSprite();
 
         for(Npc npc : this.characters){
-            System.out.println(npc.getTexturePath());
+            System.out.println(npc.getSprite());
         }
     }
 
@@ -59,6 +60,12 @@ public class SelectCharacterController {
         } catch (Exception e){
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public void npcBuildSprite(){
+        for(Npc npc : this.characters){
+            npc.buildSprite();
         }
     }
 
