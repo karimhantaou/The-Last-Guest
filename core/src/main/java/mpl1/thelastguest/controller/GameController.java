@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import mpl1.thelastguest.Main;
+import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -20,6 +21,7 @@ public class GameController {
     private Murderer murderer;
     private List<Item> items;
     private GameScreen view;
+    private Board board;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -28,6 +30,7 @@ public class GameController {
         this.npcs = npcs;
         this.murderer = murderer;
         this.items = items;
+        this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
     }
 
     public List<Npc> getNpcs() {
@@ -38,6 +41,10 @@ public class GameController {
         return this.player;
     }
 
+    public Board getBoard(){
+        return this.board;
+    }
+
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new MenuScreen(game));
@@ -46,33 +53,20 @@ public class GameController {
             Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             view.displayActionMenu(mousePosition);
         }
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen()){
+            move(Gdx.input.getX(), Gdx.input.getY());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            board.displayItem();
+        }
     }
 
     public void closeActionMenu(){
         view.closeActionMenu();
     }
 
-    public void move(){
-        System.out.println("Move");
-        view.closeActionMenu();
-        if  (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            view.getBoard().playerMoveUp(view.getMap());
-        }
-        if  (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            view.getBoard().playerMoveDown(view.getMap());
-        }
-        if  (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            view.getBoard().playerMoveLeft(view.getMap());
-        }
-        if  (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            view.getBoard().playerMoveRight(view.getMap());
-        }
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            view.getBoard().moveToPoint(Gdx.input.getX() / view.getBoard().getStep(), Gdx.input.getY() / view.getBoard().getStep());
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            view.getBoard().displayItem();
-        }
+    public void move(float x, float y){
+       board.moveToPoint((int) (x /board.getStep()), (int) (y /board.getStep()));
     }
 
     public void spoofFingerprints(){

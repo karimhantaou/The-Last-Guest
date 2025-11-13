@@ -15,6 +15,7 @@ import mpl1.thelastguest.model.Item.Item;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class Board {
     private final List<Npc> characters; //List of characters
@@ -22,10 +23,12 @@ public class Board {
     private final ShapeRenderer tiledGrey; //Shape for select tiled with mousse
     private final List<Room> rooms;
     private Player player;
+    private List<Item> items;
 
-    public Board(Integer step, List<Npc> characters, Player player) {
+    public Board(Integer step, List<Npc> characters, Player player, List<Item> items) {
         this.characters = characters;
         this.player = player;
+        this.items = items;
         this.step = step;
         for (Character character : this.characters) {
             character.getSprite().setSize(step, step);
@@ -35,6 +38,7 @@ public class Board {
         player.setPosition(25, 25);
         this.tiledGrey = new ShapeRenderer();
         this.rooms = createAllRoom();
+
     }
 
     //GETTER
@@ -132,6 +136,12 @@ public class Board {
         }
     }
 
+    public Item randomItem(){
+        Item item = items.get(new Random().nextInt(items.size()));
+        items.remove(item);
+        return item;
+    }
+
     public List<Room> createAllRoom() {
         List<Room> rooms = new ArrayList<>();
         rooms.add(new Room("cuisine"));
@@ -143,6 +153,11 @@ public class Board {
         rooms.add(new Room("petite salle à manger"));
         rooms.add(new Room("buanderie"));
         rooms.add(new Room("hall"));
+        for(Room room : rooms){
+            if(!items.isEmpty()){
+                room.addItem(randomItem());
+            }
+        }
         return rooms;
     }
 }

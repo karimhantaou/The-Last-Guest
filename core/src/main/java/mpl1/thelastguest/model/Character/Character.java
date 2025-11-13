@@ -58,7 +58,6 @@ public abstract class Character implements Movable {
     }
 
     public Character(String name, Map<String, Integer> stats, String texturePath) {
-        System.out.print(texturePath);
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         String[] fingerprints = {"A", "L", "W"};
 
@@ -156,11 +155,9 @@ public abstract class Character implements Movable {
     }
 
     public void setPosition(Integer x, Integer y) {
-        System.out.println("x"  + x + " y" + y);
         this.x = x;
         this.y = y;
         this.sprite.setPosition(x * this.step, y * this.step);
-        System.out.println("x" + (this.x * this.step) + " y" + (this.y* this.step));
         hiddenPassage();
     }
 
@@ -303,7 +300,7 @@ public abstract class Character implements Movable {
     // ACTIONS
 
     // Permet de savoir si un item permet de faire une action spécial
-    private boolean canDoAction(String action){
+    public boolean canDoAction(String action){
         List<Item> items = getItems();
         for(Item item : items){
             if(item.getClass() == ActionItem.class){
@@ -369,7 +366,6 @@ public abstract class Character implements Movable {
         int[][] grid = new int[murInt.getHeight()][murInt.getWidth()];
         int[] start = { getX(), getY() };
         int[] goal  = { posX - 11 , 50 - posY  - 1 };
-        System.out.println("start: " + start[0] + " " + start[1] + " " + goal[0] + " " + goal[1]);
         int[] current;
 
         for (int y = 0; y < murInt.getHeight(); y++) {

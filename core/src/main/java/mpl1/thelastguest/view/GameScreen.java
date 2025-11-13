@@ -1,19 +1,13 @@
 package mpl1.thelastguest.view;
 
 // Import des composants du jeu
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.GameController;
 
@@ -28,13 +22,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import mpl1.thelastguest.Main;
-import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
-import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 
 import java.util.ArrayList;
@@ -56,6 +47,7 @@ public class GameScreen implements Screen {
     private Murderer murderer;
 
     private Stage stageMenu = new Stage();
+    private boolean actionMenuOpen = false;
     private Skin skin;
 
 
@@ -71,9 +63,7 @@ public class GameScreen implements Screen {
         this.player = player;
         this.murderer = murderer;
 
-        ActionItem spoof = new ActionItem("spoof", "scan_fingerprints");
-        player.pickItem(spoof);
-
+        this.board = controller.getBoard();
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -90,7 +80,6 @@ public class GameScreen implements Screen {
         this.board.drawTileSelection();
         Gdx.gl.glClearColor(10f, 0, 0, 1);
         controller.update(delta);
-
         stageMenu.act(delta);
         stageMenu.draw();
     }
@@ -108,7 +97,7 @@ public class GameScreen implements Screen {
         this.camera.setToOrtho(false, this.mapSize, this.mapSize);
         this.camera.position.set(this.mapSize / 2f, this.mapSize / 2f, 0);
         this.camera.update();
-        this.board = new Board(1600 / 50, controller.getNpcs(), controller.getPlayer());
+        //this.board = new Board(1600 / 50, controller.getNpcs(), controller.getPlayer());
     }
 
     // Permet de gérer le comportement du jeu lors du resize
@@ -139,9 +128,10 @@ public class GameScreen implements Screen {
         return this.map;
     }
 
-
-
     public void displayActionMenu(Vector2 mousePosition) {
+
+        this.actionMenuOpen = true;
+
         // Load skin
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
@@ -168,7 +158,8 @@ public class GameScreen implements Screen {
         move.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.move();
+                controller.move(mousePosition.x, mousePosition.y);
+                closeActionMenu();
             }
         });
 
@@ -204,8 +195,18 @@ public class GameScreen implements Screen {
             }
         });
 
+        TextButton search = new TextButton("Search", skin);
+        search.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.getBoard().displayItem();
+            }
+        });
+
+
         // Layout buttons
         tableMenu.add(move).width(tableWidth).fillX().row();
+        tableMenu.add(search).width(tableWidth).fillX().row();
         if(player.canDoAction("inspect")) tableMenu.add(inspect).width(tableWidth).fillX().row();
         if(player.canDoAction("scan_fingerprints")) tableMenu.add(getFinger).width(tableWidth).fillX().row();
         if(player.canDoAction("kill")) tableMenu.add(kill).width(tableWidth).fillX().row();
@@ -226,9 +227,12 @@ public class GameScreen implements Screen {
     }
 
     public void closeActionMenu(){
+        this.actionMenuOpen = false;
         stageMenu.dispose();
     }
 
-
+    public boolean isActionMenuOpen() {
+        return this.actionMenuOpen;
+    }
 
 }

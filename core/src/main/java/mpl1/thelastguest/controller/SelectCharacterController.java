@@ -34,10 +34,6 @@ public class SelectCharacterController {
         this.selectedCharacter = 0;
         this.items = createItems();
         npcBuildSprite();
-
-        for(Npc npc : this.characters){
-            System.out.println(npc.getSprite());
-        }
     }
 
     public void update(float delta) {
@@ -163,29 +159,4 @@ public class SelectCharacterController {
         return murderer;
     }
 
-    public void testItem(){
-        // Item 1
-        ActionItem item =  new ActionItem("Clef", "Open door");
-
-
-        // Item 2
-        Map<String, Integer> stats = new HashMap<>();
-        stats.put("str", 0);
-        stats.put("per", 0);
-        stats.put("lck", 10);
-        stats.put("ap", 0);
-        stats.put("inv", 0);
-        StatItem item2 = new StatItem("Chapeau de zgeg", stats);
-
-        List<Item> items = new ArrayList<>();
-        items.add(item); items.add(item2);
-
-        Npc character = characters.get(0);
-        Player player = new Player(character);
-
-        System.out.println(player.getStats());
-        player.dropItem(item2);
-        System.out.println(player.getStats());
-
-    }
 }
