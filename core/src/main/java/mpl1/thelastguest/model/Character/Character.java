@@ -254,7 +254,7 @@ public abstract class Character {
     // ACTIONS
 
     // Permet de savoir si un item permet de faire une action spécial
-    private boolean canDoAction(String action){
+    public boolean canDoAction(String action){
         List<Item> items = getItems();
         for(Item item : items){
             if(item.getClass() == ActionItem.class){

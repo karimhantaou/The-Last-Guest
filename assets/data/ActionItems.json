@@ -24,7 +24,7 @@
   },
   {
     "name": "Fingerprint Scanner",
-    "action": "scan_fingerprint"
+    "action": "scan_fingerprints"
   },
   {
     "name": "Lies detector",
@@ -32,6 +32,6 @@
   },
   {
     "name": "Fingerprints spoofer",
-    "action": "spoof_fingerprint"
+    "action": "spoof_fingerprints"
   }
 ]
