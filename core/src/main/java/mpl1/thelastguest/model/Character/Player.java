@@ -12,7 +12,7 @@ public class Player extends Character {
     private boolean inspector = true;
 
     public Player(Npc npc){
-        super(npc.getName(), npc.getStats(), npc.getTexturePath());
+        super(npc.getName(), npc.getStats(), npc.getX(), npc.getY(), npc.getTexturePath(), npc.getStep());
     }
 
     public boolean isInspector() {

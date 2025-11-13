@@ -111,7 +111,7 @@ public class SelectCharacterScreen implements Screen {
         charName.setText(character.getName());
 
         // Update character image
-        Texture newTexture = new Texture(Gdx.files.internal(character.getTexturePath()));
+        Texture newTexture = new  Texture(Gdx.files.internal(character.getTexturePath()));
         charImage.setDrawable(new TextureRegionDrawable(new TextureRegion(newTexture)));
         charTexture.dispose();
         charTexture = newTexture;

@@ -6,9 +6,7 @@ import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
-import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
-import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 
@@ -24,13 +22,20 @@ public class GameController {
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
+        this.view = view;
         this.player = player;
         this.npcs = npcs;
         this.murderer = murderer;
         this.items = items;
-        this.view = view;
     }
 
+    public List<Npc> getNpcs() {
+        return this.npcs;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
 
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -50,6 +55,9 @@ public class GameController {
         }
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             view.getBoard().moveToPoint(Gdx.input.getX() / view.getBoard().getStep(), Gdx.input.getY() / view.getBoard().getStep());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            view.getBoard().displayItem();
         }
     }
 }

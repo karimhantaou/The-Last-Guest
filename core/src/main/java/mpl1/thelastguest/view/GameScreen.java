@@ -1,27 +1,26 @@
 package mpl1.thelastguest.view;
 
 // Import des composants du jeu
-import com.badlogic.gdx.graphics.g2d.Batch;
-import mpl1.thelastguest.Main;
-import mpl1.thelastguest.controller.GameController;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import mpl1.thelastguest.Main;
+import mpl1.thelastguest.controller.GameController;
+import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
 
 import java.util.List;
-import mpl1.thelastguest.model.Board;
 
 public class GameScreen implements Screen {
     private final Main game;
@@ -39,7 +38,6 @@ public class GameScreen implements Screen {
         this.game = game;
         this.font = new BitmapFont();
         this.controller = new GameController(game, this, player, npcs, murderer, items);
-        this.board = new Board(700 / 50);
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
     }
@@ -71,7 +69,7 @@ public class GameScreen implements Screen {
         this.camera.setToOrtho(false, this.mapSize, this.mapSize);
         this.camera.position.set(this.mapSize / 2f, this.mapSize / 2f, 0);
         this.camera.update();
-        this.board = new Board(32);
+        this.board = new Board(1600 / 50, controller.getNpcs(), controller.getPlayer());
     }
 
     // Permet de gérer le comportement du jeu lors du resize

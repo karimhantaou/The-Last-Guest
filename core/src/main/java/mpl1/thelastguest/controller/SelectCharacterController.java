@@ -3,8 +3,6 @@ package mpl1.thelastguest.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
@@ -13,6 +11,8 @@ import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
 import mpl1.thelastguest.view.SelectCharacterScreen;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.*;
 
@@ -33,6 +33,11 @@ public class SelectCharacterController {
         this.characters = createCharacters();
         this.selectedCharacter = 0;
         this.items = createItems();
+        npcBuildSprite();
+
+        for(Npc npc : this.characters){
+            System.out.println(npc.getSprite());
+        }
     }
 
     public void update(float delta) {
@@ -57,7 +62,11 @@ public class SelectCharacterController {
             return null;
         }
     }
-
+    public void npcBuildSprite(){
+        for(Npc npc : this.characters){
+            npc.buildSprite();
+        }
+    }
     public List<Item> createItems(){
         List<Item> items =  new ArrayList<>();
         try{
@@ -133,7 +142,7 @@ public class SelectCharacterController {
         items.get(randomIndex).setFingerprint(murderer.getFingerprint());
 
         // Première victime
-        Npc victim = new Npc("Victim", null, "placeholder.png");
+        Npc victim = new Npc("Victim", null, 0, 0, "placeholder.png", 1600 / 50);
         victim.addClues(murderer, items.get(randomIndex));
         victim.setAlive(false);
         this.characters.add(victim);
