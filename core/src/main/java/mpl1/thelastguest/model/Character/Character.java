@@ -236,6 +236,7 @@ public abstract class Character implements Movable {
         this.setInv(this.getInv() - item.getInv());
     }
 
+
     public boolean pickItem(Item item){
         if(countItems() < getInv()){
             if(item.getClass() == StatItem.class){

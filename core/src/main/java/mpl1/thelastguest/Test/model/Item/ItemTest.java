@@ -69,4 +69,5 @@ class ItemTest {
         assertNull(actionItem.getWoundType());
         assertNull(actionItem.getWoundType());
     }
+
 }

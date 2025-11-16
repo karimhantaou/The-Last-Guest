@@ -8,7 +8,7 @@
       "ap": 9,
       "inv": 2
     },
-    "texturePath": "pawns/redPawn.png"
+    "texturePath": "pawns/red.png"
   },
   {
     "name": "Blue",
@@ -19,7 +19,7 @@
       "ap": 4,
       "inv": 2
     },
-    "texturePath": "pawns/bluePawn.png"
+    "texturePath": "pawns/crystal.gif"
   },
   {
     "name": "Green",
@@ -39,7 +39,8 @@
       "lck": 6,
       "ap": 5,
       "inv": 4
-    }
+    },
+    "texturePath": "pawns/orange.jpg"
   },
   {
     "name": "Purple",
@@ -49,7 +50,9 @@
       "lck": 3,
       "ap": 8,
       "inv": 6
-    }
+    },
+    "texturePath": "pawns/black.png"
+
   },
   {
     "name": "Orange",
