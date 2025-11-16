@@ -8,7 +8,9 @@ import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 
@@ -46,20 +48,18 @@ public class GameController {
     }
 
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new MenuScreen(game));
-        }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && !view.isRoomInventoryOpen()){
             Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             view.displayActionMenu(mousePosition);
         }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen()){
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen()){
             move(Gdx.input.getX(), Gdx.input.getY());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             board.displayItem();
         }
     }
+
 
     public void closeActionMenu(){
         view.closeActionMenu();
@@ -77,19 +77,40 @@ public class GameController {
         closeActionMenu();
     }
 
-    public void kill(Npc npc, Item weapon){
-        System.out.println("Kill");
-        closeActionMenu();
+
+    // ROOM SEARCH
+
+    public void search(){
+        Room actualRoom = board.findRoom(player.getRoom());
+        if(!actualRoom.getItems().isEmpty()){
+            view.displayRoomInventory(actualRoom);
+        } else{
+            System.out.println("You found nothing.");
+        }
     }
 
-    public void inspect(Npc npc){
-        System.out.println("Inspect");
-        closeActionMenu();
+    public void pickItem(Item item){
+        if(player.pickItem(item)){
+            Room actualRoom = board.findRoom(player.getRoom());
+            actualRoom.removeItem(item);
+            view.closeRoomInventory();
+            view.getPlayerInventory().rebuild();
+        }
     }
 
-    public void scanFingerprints(Npc npc){
-        System.out.println("Scan Fingerprints");
-        closeActionMenu();
+    public void closeRoomInventory(){
+        view.closeRoomInventory();
     }
 
+    // PLAYER INVENTORY
+
+    public void displayItemActionMenu(Item item){
+        Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        view.displayItemActionMenu(mousePosition, item);
+    }
+
+    public void closeItemActionMenu(){
+        view.closeItemActionMenu();
+        view.getPlayerInventory().rebuild();
+    }
 }

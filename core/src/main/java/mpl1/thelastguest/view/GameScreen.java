@@ -2,12 +2,6 @@ package mpl1.thelastguest.view;
 
 // Import des composants du jeu
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.GameController;
 
@@ -27,6 +21,11 @@ import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Room;
+import mpl1.thelastguest.view.ui.ActionMenu;
+import mpl1.thelastguest.view.ui.ItemActionMenu;
+import mpl1.thelastguest.view.ui.PlayerInventory;
+import mpl1.thelastguest.view.ui.RoomInventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +45,17 @@ public class GameScreen implements Screen {
     private Player player;
     private Murderer murderer;
 
-    private Stage stageMenu = new Stage();
-    private boolean actionMenuOpen = false;
-    private Skin skin;
+    // UI
+    private PlayerInventory playerInventory;
 
+    private ActionMenu actionMenu;
+    private boolean actionMenuOpen;
+
+    private RoomInventory  roomInventory;
+    private boolean roomInventoryOpen;
+
+    private ItemActionMenu itemActionMenu;
+    private boolean itemActionMenuOpen;
 
     // Constructeur de salopard
     public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
@@ -64,6 +70,18 @@ public class GameScreen implements Screen {
         this.murderer = murderer;
 
         this.board = controller.getBoard();
+
+        // UI
+        playerInventory = new PlayerInventory(controller, player);
+
+        actionMenu = new ActionMenu(controller, player);
+        this.actionMenuOpen = false;
+
+        roomInventory = new RoomInventory(controller, player);
+        this.roomInventoryOpen = false;
+
+        itemActionMenu = new ItemActionMenu(controller, player);
+        itemActionMenuOpen = false;
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -80,8 +98,24 @@ public class GameScreen implements Screen {
         this.board.drawTileSelection();
         Gdx.gl.glClearColor(10f, 0, 0, 1);
         controller.update(delta);
-        stageMenu.act(delta);
-        stageMenu.draw();
+
+        playerInventory.getStage().act(delta);
+        playerInventory.getStage().draw();
+
+        if (isActionMenuOpen() && actionMenu.getStage() != null) {
+            actionMenu.getStage().act(delta);
+            actionMenu.getStage().draw();
+        }
+
+        if(isRoomInventoryOpen() && roomInventory.getStage() != null) {
+            roomInventory.getStage().act(delta);
+            roomInventory.getStage().draw();
+        }
+
+        if(isItemActionMenuOpen() && itemActionMenu.getStage() != null) {
+            itemActionMenu.getStage().act(delta);
+            itemActionMenu.getStage().draw();
+        }
     }
 
     //C'est ici on initialise les élements
@@ -97,7 +131,8 @@ public class GameScreen implements Screen {
         this.camera.setToOrtho(false, this.mapSize, this.mapSize);
         this.camera.position.set(this.mapSize / 2f, this.mapSize / 2f, 0);
         this.camera.update();
-        //this.board = new Board(1600 / 50, controller.getNpcs(), controller.getPlayer());
+
+        playerInventory.rebuild();
     }
 
     // Permet de gérer le comportement du jeu lors du resize
@@ -128,111 +163,54 @@ public class GameScreen implements Screen {
         return this.map;
     }
 
-    public void displayActionMenu(Vector2 mousePosition) {
+    // PLAYER INVENTORY
 
-        this.actionMenuOpen = true;
-
-        // Load skin
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
-        // Create stage
-        stageMenu = new Stage();
-        Gdx.input.setInputProcessor(stageMenu);
-
-        // Create table
-        Table tableMenu = new Table();
-        stageMenu.addActor(tableMenu);
-
-        // Position setup
-        float x = mousePosition.x;
-        float y = Gdx.graphics.getHeight() - mousePosition.y;
-
-        float tableWidth = 200f;
-        tableMenu.setWidth(tableWidth);
-        tableMenu.pack(); // Adjust size to content
-        tableMenu.setPosition(x, y - tableMenu.getHeight()); // Adjust so top aligns with click
-
-        // Buttons
-
-        TextButton move = new TextButton("Move", skin);
-        move.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.move(mousePosition.x, mousePosition.y);
-                closeActionMenu();
-            }
-        });
-
-        TextButton kill = new TextButton("Kill", skin);
-        kill.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Kill");
-            }
-        });
-
-        TextButton inspect = new TextButton("Inspect", skin);
-        inspect.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.inspect(npcs.get(0));
-            }
-        });
-
-        TextButton getFinger = new TextButton("Scan fingerprints", skin);
-        getFinger.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.scanFingerprints(npcs.get(0));
-            }
-        });
-
-        TextButton spoof = new TextButton("Spoof fingerprints", skin);
-        spoof.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.spoofFingerprints();
-            }
-        });
-
-        TextButton search = new TextButton("Search", skin);
-        search.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.getBoard().displayItem();
-            }
-        });
-
-
-        // Layout buttons
-        tableMenu.add(move).width(tableWidth).fillX().row();
-        tableMenu.add(search).width(tableWidth).fillX().row();
-        if(player.canDoAction("inspect")) tableMenu.add(inspect).width(tableWidth).fillX().row();
-        if(player.canDoAction("scan_fingerprints")) tableMenu.add(getFinger).width(tableWidth).fillX().row();
-        if(player.canDoAction("kill")) tableMenu.add(kill).width(tableWidth).fillX().row();
-        if(player.canDoAction("spoof_fingerprints")) tableMenu.add(spoof).width(tableWidth).fillX().row();
-
-        TextButton close = new TextButton("X", skin);
-        close.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.closeActionMenu();
-            }
-        });
-
-        tableMenu.add(close).width(tableWidth).fillX().row();
-
-        // re-pack to resize table height automatically
-        tableMenu.pack();
+    public PlayerInventory getPlayerInventory() {
+        return this.playerInventory;
     }
 
-    public void closeActionMenu(){
+    // ACTION MENU
+    public void displayActionMenu(Vector2 position) {
+        this.actionMenuOpen = true;
+        actionMenu.display(position);
+    }
+
+    public void closeActionMenu() {
         this.actionMenuOpen = false;
-        stageMenu.dispose();
     }
 
     public boolean isActionMenuOpen() {
         return this.actionMenuOpen;
+    }
+
+    // ROOM INVENTORY
+
+    public void displayRoomInventory(Room actualRoom) {
+        this.roomInventoryOpen = true;
+        roomInventory.display(actualRoom);
+    }
+
+    public void closeRoomInventory(){
+        this.roomInventoryOpen = false;
+    }
+
+    public boolean isRoomInventoryOpen() {
+        return this.roomInventoryOpen;
+    }
+
+    // ITEM ACTION MENU
+
+    public void displayItemActionMenu(Vector2 mousePosition, Item item) {
+        this.itemActionMenuOpen = true;
+        itemActionMenu.display(mousePosition, item);
+    }
+
+    public void closeItemActionMenu() {
+        this.itemActionMenuOpen = false;
+    }
+
+    public boolean isItemActionMenuOpen() {
+        return this.itemActionMenuOpen;
     }
 
 }
