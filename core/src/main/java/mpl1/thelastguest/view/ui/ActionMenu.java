@@ -70,16 +70,6 @@ public class ActionMenu {
             root.row(); root.add(btnInspect);
         }
 
-        if(player.canDoAction("scan_fingerprints")) {
-            TextButton btnScan = new TextButton("Scan fingerprints", skin);
-            btnScan.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-
-                }
-            });
-            root.row(); root.add(btnScan);
-        }
-
         if(player.canDoAction("kill")) {
             TextButton btnKill = new TextButton("Kill", skin);
             btnKill.addListener(new ClickListener() {
@@ -87,15 +77,6 @@ public class ActionMenu {
                 }
             });
             root.row(); root.add(btnKill);
-        }
-
-        if(player.canDoAction("spoof_fingerprints")) {
-            TextButton btnSpoof = new TextButton("Spoof fingerprints", skin);
-            btnSpoof.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                }
-            });
-            root.row(); root.add(btnSpoof);
         }
 
         TextButton btnClose = new TextButton("Close", skin);

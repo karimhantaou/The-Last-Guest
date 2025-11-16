@@ -79,6 +79,10 @@ public class GameController {
     }
 
 
+    public void scanFingerprints(Item item){
+        System.out.println(item.getFingerprint());
+    }
+
     // ROOM SEARCH
 
     public void search(){
@@ -121,5 +125,9 @@ public class GameController {
             Room actualRoom = board.findRoom(player.getRoom());
             actualRoom.addItem(item);
         }
+    }
+
+    public void destroyItem(Item item){
+        player.dropItem(item);
     }
 }

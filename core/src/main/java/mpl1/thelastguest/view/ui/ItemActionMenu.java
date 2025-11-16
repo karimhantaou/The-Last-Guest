@@ -44,27 +44,36 @@ public class ItemActionMenu {
 
         // BUTTONS
 
-        //Use action item
-        if(item.getClass() == ActionItem.class){
-            TextButton btnUse = new TextButton("Use", skin);
-            btnUse.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.move(mousePosition.x, mousePosition.y);
-                    close();
-                }
-            });
-            root.row(); root.add(btnUse);
-        }
-
         // Scan item's fingerprints
         if(player.canDoAction("scan_fingerprints")) {
-            TextButton btnScan = new TextButton("Scan fingerprints", skin);
+            TextButton btnScan = new TextButton("Scan", skin);
             btnScan.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
-
+                    controller.scanFingerprints(item);
                 }
             });
             root.row(); root.add(btnScan);
+        }
+
+        // Action item's USE
+        if(item.getClass() == ActionItem.class) {
+            ActionItem actionItem = (ActionItem) item;
+            String action = actionItem.getAction();
+
+            TextButton use = new TextButton("Use", skin);
+            use.addListener(new ClickListener() {
+                @Override public void clicked(InputEvent ev, float x, float y) {
+                    switch (action) {
+                        case "kill": break;
+                        case "spoof_fingerprints":
+                            controller.spoofFingerprints();
+                            controller.destroyItem(item);
+                            break;
+                    }
+                    close();
+                }
+            });
+            root.row(); root.add(use);
         }
 
         // Drop item
