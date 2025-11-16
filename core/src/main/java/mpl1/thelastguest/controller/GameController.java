@@ -63,6 +63,7 @@ public class GameController {
 
     public void closeActionMenu(){
         view.closeActionMenu();
+        if (!view.isRoomInventoryOpen()) view.getPlayerInventory().rebuild();
     }
 
     public void move(float x, float y){
@@ -100,6 +101,7 @@ public class GameController {
 
     public void closeRoomInventory(){
         view.closeRoomInventory();
+        view.getPlayerInventory().rebuild();
     }
 
     // PLAYER INVENTORY
@@ -112,5 +114,12 @@ public class GameController {
     public void closeItemActionMenu(){
         view.closeItemActionMenu();
         view.getPlayerInventory().rebuild();
+    }
+
+    public void dropItem(Item item){
+        if(player.dropItem(item)){
+            Room actualRoom = board.findRoom(player.getRoom());
+            actualRoom.addItem(item);
+        }
     }
 }

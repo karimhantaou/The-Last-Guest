@@ -11,13 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Item.StatItem;
+
+import java.util.Map;
 
 public class PlayerInventory {
 
-    private final Stage stage;
-    private final Skin skin;
-    private final Player player;
-    private final GameController controller;
+    private GameController controller;
+    private Player player;
+    private Stage stage;
+    private Skin skin;
 
     private final Table root;
 
@@ -52,7 +55,21 @@ public class PlayerInventory {
         root.add(header).row();
 
         for (Item item : player.getItems()) {
-            TextButton itemBtn = new TextButton(item.getName(), skin);
+
+            String name =  item.getName();
+
+            if(item.getClass() == StatItem.class) {
+                Map<String, Integer> map = ((StatItem) item).getStats();
+                for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                    System.out.println(entry.getKey() + "/" + entry.getValue());
+                    if(entry.getValue() > 0) {
+                        name += " +" + entry.getValue() + " " + entry.getKey();
+                    }
+                }
+
+            }
+
+            TextButton itemBtn = new TextButton(name, skin);
             itemBtn.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
                     controller.displayItemActionMenu(item);

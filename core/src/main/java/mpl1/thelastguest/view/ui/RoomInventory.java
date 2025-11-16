@@ -30,7 +30,6 @@ public class RoomInventory {
     public void display(Room room) {
 
         List<Item> items = room.getItems();
-        System.out.println(items);
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);

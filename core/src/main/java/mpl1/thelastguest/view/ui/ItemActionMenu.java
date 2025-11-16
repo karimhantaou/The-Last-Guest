@@ -10,14 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 
 public class ItemActionMenu {
 
-    private Stage stage;
-    private Skin skin;
     private GameController controller;
     private Player player;
+    private Stage stage;
+    private Skin skin;
 
     public ItemActionMenu(GameController controller, Player player) {
         this.controller = controller;
@@ -43,33 +44,19 @@ public class ItemActionMenu {
 
         // BUTTONS
 
-        TextButton btnMove = new TextButton("Move", skin);
-        btnMove.addListener(new ClickListener() {
-            @Override public void clicked(InputEvent ev, float x, float y) {
-                controller.move(mousePosition.x, mousePosition.y);
-                close();
-            }
-        });
-        root.row(); root.add(btnMove);
-
-        TextButton btnSearch = new TextButton("Search", skin);
-        btnSearch.addListener(new ClickListener() {
-            @Override public void clicked(InputEvent ev, float x, float y) {
-                controller.search();
-                close();
-            }
-        });
-        root.row(); root.add(btnSearch);
-
-        if(player.canDoAction("inspect")) {
-            TextButton btnInspect = new TextButton("Inspect", skin);
-            btnInspect.addListener(new ClickListener() {
+        //Use action item
+        if(item.getClass() == ActionItem.class){
+            TextButton btnUse = new TextButton("Use", skin);
+            btnUse.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
+                    controller.move(mousePosition.x, mousePosition.y);
+                    close();
                 }
             });
-            root.row(); root.add(btnInspect);
+            root.row(); root.add(btnUse);
         }
 
+        // Scan item's fingerprints
         if(player.canDoAction("scan_fingerprints")) {
             TextButton btnScan = new TextButton("Scan fingerprints", skin);
             btnScan.addListener(new ClickListener() {
@@ -80,24 +67,17 @@ public class ItemActionMenu {
             root.row(); root.add(btnScan);
         }
 
-        if(player.canDoAction("kill")) {
-            TextButton btnKill = new TextButton("Kill", skin);
-            btnKill.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                }
-            });
-            root.row(); root.add(btnKill);
-        }
+        // Drop item
+        TextButton btnDrop = new TextButton("Drop", skin);
+        btnDrop.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent ev, float x, float y) {
+                controller.dropItem(item);
+                close();
+            }
+        });
+        root.row(); root.add(btnDrop);
 
-        if(player.canDoAction("spoof_fingerprints")) {
-            TextButton btnSpoof = new TextButton("Spoof fingerprints", skin);
-            btnSpoof.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                }
-            });
-            root.row(); root.add(btnSpoof);
-        }
-
+        // Close menu
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
             @Override public void clicked(InputEvent ev, float x, float y) {

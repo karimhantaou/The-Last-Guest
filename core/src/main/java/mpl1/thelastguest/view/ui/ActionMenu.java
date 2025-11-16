@@ -13,10 +13,10 @@ import mpl1.thelastguest.model.Character.Player;
 
 public class ActionMenu {
 
-    private Stage stage;
-    private Skin skin;
     private GameController controller;
     private Player player;
+    private Stage stage;
+    private Skin skin;
 
     public ActionMenu(GameController controller, Player player) {
         this.controller = controller;
