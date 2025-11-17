@@ -81,6 +81,8 @@ class BoardTest {
     void setSize() {
         board.setSize(100, 200);
         assertEquals(2, board.getStep());
+        board.setSize(200, 100);
+        assertEquals(2, board.getStep());
     }
 
     @Test

@@ -8,14 +8,16 @@ import mpl1.thelastguest.model.Item.StatItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CharacterTest {
-    Npc character;
+class PlayerTest {
+    Player character;
     Map<String, Integer> stats1;
+    String[] fingerprints = {"A", "L", "W"};
     @BeforeEach
     void setUp() {
         stats1 = new HashMap<>();
@@ -24,7 +26,7 @@ class CharacterTest {
         stats1.put("lck", 4);
         stats1.put("ap", 4);
         stats1.put("inv", 2);
-        this.character = new Npc("character", stats1, 25, 25, null, 14);
+        this.character = new Player( new Npc("character", stats1, 25, 25, null, 14));
     }
     @Test
     void getName() {
@@ -44,18 +46,12 @@ class CharacterTest {
 
     @Test
     void getPath() {
+        assertNull(character.getPath());
     }
 
     @Test
     void getNbPath() {
-    }
-
-    @Test
-    void getIsEnd() {
-    }
-
-    @Test
-    void setIsEnd() {
+        assertEquals(0, character.getNbPath());
     }
 
     @Test
@@ -219,8 +215,14 @@ class CharacterTest {
 
     @Test
     void dropItem() {
+        Map<String, Integer> stats = new HashMap<>();
+        stats.put("str", 2);
+        stats.put("per", 0);
+        stats.put("lck", 0);
+        stats.put("ap", 0);
+        stats.put("inv", 0);
         Item item1 = (new ActionItem("Knife", "kill"));
-        Item item2 = (new ActionItem("Fork", "kill"));
+        Item item2 = (new StatItem("Steroids", stats));
         Item item3 = (new ActionItem("lala", "kill"));
         character.pickItem(item1);
         character.pickItem(item2);
@@ -230,10 +232,13 @@ class CharacterTest {
 
     @Test
     void getFingerprint() {
+        assertTrue(Arrays.asList(fingerprints).contains(character.getFingerprint()));
     }
 
     @Test
     void setFingerprint() {
+        character.setFingerprint("C");
+        assertEquals("C", character.getFingerprint());
     }
 
     @Test
@@ -313,5 +318,10 @@ class CharacterTest {
         character.hiddenPassage(true);
         assertEquals(32, character.getX());
         assertEquals(6, character.getY());
+    }
+
+    @Test
+    void inspector() {
+        assertTrue(character.isInspector());
     }
 }
