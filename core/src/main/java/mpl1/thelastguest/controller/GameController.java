@@ -8,9 +8,12 @@ import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
+import mpl1.thelastguest.view.ui.notification.Notification;
 
 import java.util.List;
 
@@ -46,23 +49,39 @@ public class GameController {
     }
 
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new MenuScreen(game));
-        }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && !view.isRoomInventoryOpen()){
             Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             view.displayActionMenu(mousePosition);
         }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen()){
-            move(Gdx.input.getX(), Gdx.input.getY());
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen() && !view.isItemActionMenuOpen()){
+
+            int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
+            int tileY =  (int)(50 - Gdx.input.getY() / board.getStep());
+
+            boolean tileIsEmpty = true;
+
+            for (Npc npc : npcs) {
+                System.out.println(npc.getName() + ": " + npc.getX() + ", " + npc.getY());
+                if(npc.getX() == tileX && npc.getY() == tileY) {
+                    tileIsEmpty = false;
+                    System.out.println("on tile");
+                }
+            }
+
+            if(tileIsEmpty){
+                move(Gdx.input.getX(), Gdx.input.getY());
+
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             board.displayItem();
         }
     }
 
+
     public void closeActionMenu(){
         view.closeActionMenu();
+        if (!view.isRoomInventoryOpen()) view.getPlayerInventory().rebuild();
     }
 
     public void move(float x, float y){
@@ -73,23 +92,106 @@ public class GameController {
         String[] fingerprints = {"A", "L", "W"};
         String fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
         player.setFingerprint(fingerprint);
-        System.out.println(player.getFingerprint());
+        view.getNotificationManager().addNotification(new Notification("New fingerprints: " + player.getFingerprint()));
         closeActionMenu();
     }
 
-    public void kill(Npc npc, Item weapon){
-        System.out.println("Kill");
-        closeActionMenu();
-    }
 
-    public void inspect(Npc npc){
-        System.out.println("Inspect");
-        closeActionMenu();
+    public void scanFingerprints(Item item){
+
+        Notification notification;
+
+        if(item.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + item.getFingerprint(), 5f);
+        } else{
+            notification = new Notification("No fingerprints found.");
+        }
+
+        view.getNotificationManager().addNotification(notification);
+
     }
 
     public void scanFingerprints(Npc npc){
-        System.out.println("Scan Fingerprints");
-        closeActionMenu();
+        Notification notification;
+
+        if(npc.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
+        } else{
+            notification = new Notification("No fingerprints found.");
+        }
+
+        view.getNotificationManager().addNotification(notification);    }
+
+    public void scanClueFingerprints(Npc npc){
+        Notification notification;
+
+        if(npc.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
+        } else{
+            notification = new Notification("No fingerprints found.");
+        }
+
+        view.getNotificationManager().addNotification(notification);
     }
 
+    public void kill(Item weapon, Npc npc){
+        player.kill(npc, weapon);
+    }
+
+    public void inspect(Npc npc){
+        view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
+    }
+    // ROOM SEARCH
+
+    public void search(){
+        Room actualRoom = board.findRoom(player.getRoom());
+        if(!actualRoom.getItems().isEmpty()){
+            view.displayRoomInventory(actualRoom);
+        } else{
+            view.getNotificationManager().addNotification(new Notification("Nothing in the room"));
+        }
+    }
+
+    public void pickItem(Item item){
+        if(player.pickItem(item)){
+            Room actualRoom = board.findRoom(player.getRoom());
+            actualRoom.removeItem(item);
+            view.closeRoomInventory();
+            view.getPlayerInventory().rebuild();
+            view.getNotificationManager().addNotification(new Notification(item.getName() + ": picked."));
+        } else{
+            view.getNotificationManager().addNotification(new Notification("No more space in the inventory."));
+        }
+    }
+
+    public void closeRoomInventory(){
+        view.closeRoomInventory();
+        view.getPlayerInventory().rebuild();
+    }
+
+    // PLAYER INVENTORY
+
+    public void displayItemActionMenu(Item item){
+        Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        view.displayItemActionMenu(mousePosition, item);
+    }
+
+    public void closeItemActionMenu(){
+        view.closeItemActionMenu();
+        view.getPlayerInventory().rebuild();
+    }
+
+    public void dropItem(Item item){
+        if(player.dropItem(item)){
+            Room actualRoom = board.findRoom(player.getRoom());
+            actualRoom.addItem(item);
+            view.getNotificationManager().addNotification(new Notification(item.getName() + ": droped."));
+        }
+    }
+
+    public void destroyItem(Item item){
+        player.dropItem(item);
+        view.getNotificationManager().addNotification(new Notification(item.getName() + " picked."));
+
+    }
 }
