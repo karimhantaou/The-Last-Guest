@@ -13,6 +13,7 @@ import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
+import mpl1.thelastguest.view.ui.notification.Notification;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class GameController {
             view.displayActionMenu(mousePosition);
         }
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen() && !view.isItemActionMenuOpen()){
+
             int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
             int tileY =  (int)(50 - Gdx.input.getY() / board.getStep());
 
@@ -113,6 +115,7 @@ public class GameController {
 
     public void inspect(Npc npc){
         System.out.println(npc.getClueWound());
+
     }
     // ROOM SEARCH
 
@@ -121,7 +124,8 @@ public class GameController {
         if(!actualRoom.getItems().isEmpty()){
             view.displayRoomInventory(actualRoom);
         } else{
-            System.out.println("You found nothing.");
+            view.getNotificationManager().addNotification(new Notification("Nothing in the room"));
+
         }
     }
 
@@ -131,6 +135,7 @@ public class GameController {
             actualRoom.removeItem(item);
             view.closeRoomInventory();
             view.getPlayerInventory().rebuild();
+            view.getNotificationManager().addNotification(new Notification(item.getName() + ": picked."));
         }
     }
 
@@ -155,10 +160,13 @@ public class GameController {
         if(player.dropItem(item)){
             Room actualRoom = board.findRoom(player.getRoom());
             actualRoom.addItem(item);
+            view.getNotificationManager().addNotification(new Notification(item.getName() + ": droped in the room."));
         }
     }
 
     public void destroyItem(Item item){
         player.dropItem(item);
+        view.getNotificationManager().addNotification(new Notification(item.getName() + " picked."));
+
     }
 }

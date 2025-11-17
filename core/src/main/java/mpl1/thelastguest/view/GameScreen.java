@@ -26,6 +26,7 @@ import mpl1.thelastguest.view.ui.ActionMenu;
 import mpl1.thelastguest.view.ui.ItemActionMenu;
 import mpl1.thelastguest.view.ui.PlayerInventory;
 import mpl1.thelastguest.view.ui.RoomInventory;
+import mpl1.thelastguest.view.ui.notification.NotificationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class GameScreen implements Screen {
 
     // UI
     private PlayerInventory playerInventory;
+    private NotificationManager notificationManager;
 
     private ActionMenu actionMenu;
     private boolean actionMenuOpen;
@@ -56,6 +58,7 @@ public class GameScreen implements Screen {
 
     private ItemActionMenu itemActionMenu;
     private boolean itemActionMenuOpen;
+
 
     // Constructeur de salopard
     public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
@@ -73,6 +76,7 @@ public class GameScreen implements Screen {
 
         // UI
         playerInventory = new PlayerInventory(controller, player);
+        notificationManager = new NotificationManager();
 
         actionMenu = new ActionMenu(controller, player);
         this.actionMenuOpen = false;
@@ -101,6 +105,9 @@ public class GameScreen implements Screen {
 
         playerInventory.getStage().act(delta);
         playerInventory.getStage().draw();
+
+        notificationManager.getStage().draw();
+        notificationManager.getStage().act(delta);
 
         if (isActionMenuOpen() && actionMenu.getStage() != null) {
             actionMenu.getStage().act(delta);
@@ -133,6 +140,7 @@ public class GameScreen implements Screen {
         this.camera.update();
 
         playerInventory.rebuild();
+        notificationManager.rebuild();
     }
 
     // Permet de gérer le comportement du jeu lors du resize
@@ -213,4 +221,9 @@ public class GameScreen implements Screen {
         return this.itemActionMenuOpen;
     }
 
+    // NOTIFICATION
+
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
+    }
 }
