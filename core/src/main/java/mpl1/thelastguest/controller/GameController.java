@@ -92,21 +92,46 @@ public class GameController {
         String[] fingerprints = {"A", "L", "W"};
         String fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
         player.setFingerprint(fingerprint);
-        System.out.println(player.getFingerprint());
+        view.getNotificationManager().addNotification(new Notification("New fingerprints: " + player.getFingerprint()));
         closeActionMenu();
     }
 
 
     public void scanFingerprints(Item item){
-        System.out.println(item.getFingerprint());
+
+        Notification notification;
+
+        if(item.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + item.getFingerprint(), 5f);
+        } else{
+            notification = new Notification("No fingerprints found.");
+        }
+
+        view.getNotificationManager().addNotification(notification);
+
     }
 
     public void scanFingerprints(Npc npc){
-        System.out.println(npc.getFingerprint());
-    }
+        Notification notification;
+
+        if(npc.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
+        } else{
+            notification = new Notification("No fingerprints found.");
+        }
+
+        view.getNotificationManager().addNotification(notification);    }
 
     public void scanClueFingerprints(Npc npc){
-        System.out.println(npc.getClueFingerprint());
+        Notification notification;
+
+        if(npc.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
+        } else{
+            notification = new Notification("No fingerprints found.");
+        }
+
+        view.getNotificationManager().addNotification(notification);
     }
 
     public void kill(Item weapon, Npc npc){
@@ -114,8 +139,7 @@ public class GameController {
     }
 
     public void inspect(Npc npc){
-        System.out.println(npc.getClueWound());
-
+        view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
     }
     // ROOM SEARCH
 
@@ -125,7 +149,6 @@ public class GameController {
             view.displayRoomInventory(actualRoom);
         } else{
             view.getNotificationManager().addNotification(new Notification("Nothing in the room"));
-
         }
     }
 
@@ -136,6 +159,8 @@ public class GameController {
             view.closeRoomInventory();
             view.getPlayerInventory().rebuild();
             view.getNotificationManager().addNotification(new Notification(item.getName() + ": picked."));
+        } else{
+            view.getNotificationManager().addNotification(new Notification("No more space in the inventory."));
         }
     }
 
@@ -160,7 +185,7 @@ public class GameController {
         if(player.dropItem(item)){
             Room actualRoom = board.findRoom(player.getRoom());
             actualRoom.addItem(item);
-            view.getNotificationManager().addNotification(new Notification(item.getName() + ": droped in the room."));
+            view.getNotificationManager().addNotification(new Notification(item.getName() + ": droped."));
         }
     }
 
