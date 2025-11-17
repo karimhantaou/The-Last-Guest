@@ -77,8 +77,8 @@ public abstract class Character implements Movable {
 
     // Constructeur pour le joueur et le tueur
     public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
-        if (texturePath != null) {
-            Texture texture = new Texture(Gdx.files.internal(texturePath));
+        if (spriteName != null) {
+            Texture texture = new Texture(Gdx.files.internal(spriteName));
             this.sprite = new Sprite(texture);
             this.sprite.setPosition(posX * step, posY * step);
         }
