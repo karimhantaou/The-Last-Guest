@@ -13,6 +13,7 @@ import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameController {
     private final Main game;
@@ -22,6 +23,7 @@ public class GameController {
     private List<Item> items;
     private GameScreen view;
     private Board board;
+    private int currentNpc;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -45,20 +47,51 @@ public class GameController {
         return this.board;
     }
 
+    public void startRound() {
+        if (currentNpc == this.npcs.size()) {
+            return;
+        }
+        Npc current = npcs.get(currentNpc);
+        if (Objects.equals(current.getName(), "Victim")) {
+            currentNpc++;
+            return;
+        }
+        current.setAp(current.getStartAp());
+        while(current.getNbPath() == 0 && !current.getIsEnd()) {
+            int x = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
+            int y = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
+            current.moveToPoint(current.getX() + x, current.getY() + y);
+        }
+        if (current.getIsEnd()) {
+            current.setIsEnd(false);
+            currentNpc++;
+        }
+    }
+
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new MenuScreen(game));
+        if (currentNpc == this.npcs.size() ) {
+            player.setAp(player.getStartAp());
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                game.setScreen(new MenuScreen(game));
+            }
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+                Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+                view.displayActionMenu(mousePosition);
+            }
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen()) {
+                move(Gdx.input.getX(), Gdx.input.getY());
+                if (player.getNbPath() == 0)
+                    player.setIsEnd(false);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                board.displayItem();
+            }
+            if (player.getIsEnd()) {
+                player.setIsEnd(false);
+                currentNpc = 0;
+            }
         }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
-            Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            view.displayActionMenu(mousePosition);
-        }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen()){
-            move(Gdx.input.getX(), Gdx.input.getY());
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            board.displayItem();
-        }
+        startRound();
     }
 
     public void closeActionMenu(){

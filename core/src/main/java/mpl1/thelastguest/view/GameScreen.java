@@ -23,6 +23,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import mpl1.thelastguest.model.Board;
+import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -79,7 +80,6 @@ public class GameScreen implements Screen {
         this.controller.update(delta);
         this.board.drawTileSelection();
         Gdx.gl.glClearColor(10f, 0, 0, 1);
-        controller.update(delta);
         stageMenu.act(delta);
         stageMenu.draw();
     }
@@ -233,6 +233,10 @@ public class GameScreen implements Screen {
 
     public boolean isActionMenuOpen() {
         return this.actionMenuOpen;
+    }
+
+    public Batch getBatch() {
+        return this.batch;
     }
 
 }
