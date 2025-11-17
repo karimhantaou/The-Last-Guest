@@ -33,6 +33,7 @@ public class Board {
         for (Character character : this.characters) {
             character.getSprite().setSize(step, step);
             character.setStep(step);
+            character.setPosition(24,24);
         }
         player.getSprite().setSize(step, step);
         player.setPosition(25, 25);
@@ -144,15 +145,15 @@ public class Board {
 
     public List<Room> createAllRoom() {
         List<Room> rooms = new ArrayList<>();
-        rooms.add(new Room("cuisine"));
-        rooms.add(new Room("chambre2"));
-        rooms.add(new Room("chambre1"));
-        rooms.add(new Room("laboratoire"));
-        rooms.add(new Room("grande salle à manger"));
-        rooms.add(new Room("salon"));
-        rooms.add(new Room("petite salle à manger"));
-        rooms.add(new Room("buanderie"));
-        rooms.add(new Room("hall"));
+        rooms.add(new Room("Kitchen"));
+        rooms.add(new Room("Second bedroom"));
+        rooms.add(new Room("First bedroom"));
+        rooms.add(new Room("Laboratory"));
+        rooms.add(new Room("Diner room"));
+        rooms.add(new Room("Living room"));
+        rooms.add(new Room("Small diner room"));
+        rooms.add(new Room("Laundry room"));
+        rooms.add(new Room("Hall"));
         for(Room room : rooms){
             if(!items.isEmpty()){
                 room.addItem(randomItem());

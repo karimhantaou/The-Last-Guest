@@ -56,20 +56,20 @@ public class PlayerInventory {
 
         for (Item item : player.getItems()) {
 
-            String name =  item.getName();
+            StringBuilder name = new StringBuilder(item.getName());
 
             if(item.getClass() == StatItem.class) {
                 Map<String, Integer> map = ((StatItem) item).getStats();
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     System.out.println(entry.getKey() + "/" + entry.getValue());
                     if(entry.getValue() > 0) {
-                        name += " +" + entry.getValue() + " " + entry.getKey();
+                        name.append(" +").append(entry.getValue()).append(" ").append(entry.getKey());
                     }
                 }
 
             }
 
-            TextButton itemBtn = new TextButton(name, skin);
+            TextButton itemBtn = new TextButton(name.toString(), skin);
             itemBtn.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
                     controller.displayItemActionMenu(item);
@@ -81,8 +81,8 @@ public class PlayerInventory {
 
         root.pack();
 
-        // Position left & vertically centered
+        // Position
         float y = (Gdx.graphics.getHeight() - root.getHeight()) / 2f;
-        root.setPosition(0, y);
+        root.setPosition(10, y);
     }
 }

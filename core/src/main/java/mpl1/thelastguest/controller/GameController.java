@@ -33,6 +33,9 @@ public class GameController {
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
+
+        ActionItem mag = new ActionItem("loupe", "inspect");
+        player.pickItem(mag);
     }
 
     public List<Npc> getNpcs() {
@@ -83,6 +86,21 @@ public class GameController {
         System.out.println(item.getFingerprint());
     }
 
+    public void scanFingerprints(Npc npc){
+        System.out.println(npc.getFingerprint());
+    }
+
+    public void scanClueFingerprints(Npc npc){
+        System.out.println(npc.getClueFingerprint());
+    }
+
+    public void kill(Item weapon, Npc npc){
+        player.kill(npc, weapon);
+    }
+
+    public void inspect(Npc npc){
+        System.out.println(npc.getClueWound());
+    }
     // ROOM SEARCH
 
     public void search(){
