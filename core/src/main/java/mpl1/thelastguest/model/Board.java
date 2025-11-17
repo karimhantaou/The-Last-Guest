@@ -33,8 +33,7 @@ public class Board {
         for (Character character : this.characters) {
             character.getSprite().setSize(step, step);
             character.setStep(step);
-            character.setPosition(24,24);
-        }
+         }
         player.getSprite().setSize(step, step);
         player.setPosition(25, 25);
         this.tiledGrey = new ShapeRenderer();

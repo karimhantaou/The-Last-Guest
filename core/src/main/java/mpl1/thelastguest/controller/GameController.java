@@ -33,9 +33,6 @@ public class GameController {
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
-
-        ActionItem mag = new ActionItem("loupe", "inspect");
-        player.pickItem(mag);
     }
 
     public List<Npc> getNpcs() {
@@ -55,8 +52,24 @@ public class GameController {
             Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             view.displayActionMenu(mousePosition);
         }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen()){
-            move(Gdx.input.getX(), Gdx.input.getY());
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen() && !view.isItemActionMenuOpen()){
+            int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
+            int tileY =  (int)(50 - Gdx.input.getY() / board.getStep());
+
+            boolean tileIsEmpty = true;
+
+            for (Npc npc : npcs) {
+                System.out.println(npc.getName() + ": " + npc.getX() + ", " + npc.getY());
+                if(npc.getX() == tileX && npc.getY() == tileY) {
+                    tileIsEmpty = false;
+                    System.out.println("on tile");
+                }
+            }
+
+            if(tileIsEmpty){
+                move(Gdx.input.getX(), Gdx.input.getY());
+
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
             board.displayItem();
