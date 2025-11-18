@@ -2,17 +2,17 @@ package mpl1.thelastguest.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
-import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
-import mpl1.thelastguest.view.MenuScreen;
 import mpl1.thelastguest.view.ui.notification.Notification;
 
 import java.util.List;
@@ -49,32 +49,39 @@ public class GameController {
     }
 
     public void update(float delta) {
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && !view.isRoomInventoryOpen()){
+        if(
+            Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)
+            && !view.isRoomInventoryOpen()
+            && !view.isGuessMenuOpen()
+        ){
             Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             view.displayActionMenu(mousePosition);
         }
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen() && !view.isItemActionMenuOpen()){
+        if(
+            Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+            && !view.isActionMenuOpen()
+            && !view.isRoomInventoryOpen()
+            && !view.isItemActionMenuOpen()
+            && !view.isGuessMenuOpen()
+        ){
 
             int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
-            int tileY =  (int)(50 - Gdx.input.getY() / board.getStep());
+            int tileY =  (int)(50 - Gdx.input.getY() / board.getStep() - 1);
 
             boolean tileIsEmpty = true;
 
             for (Npc npc : npcs) {
-                System.out.println(npc.getName() + ": " + npc.getX() + ", " + npc.getY());
                 if(npc.getX() == tileX && npc.getY() == tileY) {
                     tileIsEmpty = false;
-                    System.out.println("on tile");
                 }
             }
 
             if(tileIsEmpty){
                 move(Gdx.input.getX(), Gdx.input.getY());
-
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            board.displayItem();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            view.displayGuessMenu();
         }
     }
 
@@ -193,5 +200,19 @@ public class GameController {
         player.dropItem(item);
         view.getNotificationManager().addNotification(new Notification(item.getName() + " out of use        "));
 
+    }
+
+    // GUESS MENU
+
+    public void guess(Character character){
+        view.closeGuessMenu();
+
+        if(character == murderer){
+            view.getNotificationManager().addNotification(new Notification("You found the murderer !"));
+            ScreenManager screenManager = new ScreenManager(game);
+            screenManager.showEnd(murderer);
+        } else{
+            view.getNotificationManager().addNotification(new Notification(character.getName() + " is innocent."));
+        }
     }
 }

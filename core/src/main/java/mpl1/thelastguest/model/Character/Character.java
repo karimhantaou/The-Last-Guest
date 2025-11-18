@@ -243,10 +243,8 @@ public abstract class Character implements Movable {
                 this.addStats(statItem);
             }
             this.items.add(item);
-            System.out.println(item.getName() + " added to the inventory.");
             return true;
         } else{
-            System.out.println("Inventory full !");
             return false;
         }
     }
@@ -258,10 +256,8 @@ public abstract class Character implements Movable {
                 removeStats(statItem);
             }
             this.items.remove(item);
-            System.out.println(item.getName() + " dropped from the inventory.");
             return true;
         } else{
-            System.out.println("No item: " + item.getName());
             return false;
         }
     }
@@ -324,24 +320,23 @@ public abstract class Character implements Movable {
     // Exemple d'actions
     public void openDoor(){
         if(canDoAction("Open door")){
-            System.out.println("open door");
         }
     }
 
     public void kill(Npc npc, Item weapon){
         npc.addClues(this, weapon);
         npc.setAlive(false);
+        if(this.getClass() == Murderer.class){
+            ((Murderer) this).addKillNbr();
+        }
     }
 
     // La méthode qui sera utilisée pour afficher les actions. On mettra un objet en paramètre pour savoir ce qu'il peut faire.
     // Pour l'instant ça print juste mais à therme afficher des boutons différents. (dans la vue surement)
     public void displayActions(){
-        System.out.println("Move");
-
         for(Item item : this.items){
             if(item.getClass() == ActionItem.class){
                 ActionItem actionItem = (ActionItem)item;
-                System.out.println(actionItem.getAction());
             }
         }
     }

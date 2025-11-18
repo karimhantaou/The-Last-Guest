@@ -5,6 +5,7 @@ import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
+import mpl1.thelastguest.view.EndScreen;
 import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 import mpl1.thelastguest.view.SelectCharacterScreen;
@@ -30,4 +31,7 @@ public class ScreenManager {
         game.setScreen(new SelectCharacterScreen(game));
     }
 
+    public void showEnd(Murderer murderer){
+        game.setScreen(new EndScreen(game, murderer));
+    }
 }

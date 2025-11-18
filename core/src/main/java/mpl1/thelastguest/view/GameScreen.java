@@ -22,10 +22,7 @@ import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
-import mpl1.thelastguest.view.ui.ActionMenu;
-import mpl1.thelastguest.view.ui.ItemActionMenu;
-import mpl1.thelastguest.view.ui.PlayerInventory;
-import mpl1.thelastguest.view.ui.RoomInventory;
+import mpl1.thelastguest.view.ui.*;
 import mpl1.thelastguest.view.ui.notification.NotificationManager;
 
 import java.util.ArrayList;
@@ -59,6 +56,9 @@ public class GameScreen implements Screen {
     private ItemActionMenu itemActionMenu;
     private boolean itemActionMenuOpen;
 
+    private GuessMenu guessMenu;
+    private boolean guessMenuOpen;
+
 
     // Constructeur de salopard
     public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
@@ -86,6 +86,9 @@ public class GameScreen implements Screen {
 
         itemActionMenu = new ItemActionMenu(controller, player);
         itemActionMenuOpen = false;
+
+        guessMenu = new GuessMenu(controller, npcs, murderer);
+        guessMenuOpen = false;
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -122,6 +125,11 @@ public class GameScreen implements Screen {
         if(isItemActionMenuOpen() && itemActionMenu.getStage() != null) {
             itemActionMenu.getStage().act(delta);
             itemActionMenu.getStage().draw();
+        }
+
+        if(isGuessMenuOpen() && guessMenu.getStage() != null) {
+            guessMenu.getStage().act(delta);
+            guessMenu.getStage().draw();
         }
     }
 
@@ -219,6 +227,21 @@ public class GameScreen implements Screen {
 
     public boolean isItemActionMenuOpen() {
         return this.itemActionMenuOpen;
+    }
+
+    // GUESS MENU
+
+    public void displayGuessMenu(){
+        this.guessMenuOpen = true;
+        guessMenu.display();
+    }
+
+    public void closeGuessMenu(){
+        this.guessMenuOpen = false;
+    }
+
+    public boolean isGuessMenuOpen() {
+        return this.guessMenuOpen;
     }
 
     // NOTIFICATION
