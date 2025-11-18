@@ -99,7 +99,7 @@ public class GameScreen implements Screen {
         this.batch.setProjectionMatrix(this.camera.combined);
         this.board.displayAllSprites(this.batch);
         this.controller.update(delta);
-        this.board.drawTileSelection();
+        this.board.drawTileSelection(this.camera);
         Gdx.gl.glClearColor(10f, 0, 0, 1);
         controller.update(delta);
 
@@ -225,5 +225,9 @@ public class GameScreen implements Screen {
 
     public NotificationManager getNotificationManager() {
         return notificationManager;
+    }
+
+    public OrthographicCamera getCamera() {
+        return this.camera;
     }
 }

@@ -3,6 +3,7 @@ package mpl1.thelastguest.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
@@ -25,6 +26,7 @@ public class GameController {
     private GameScreen view;
     private Board board;
     private int currentNpc;
+    private boolean playerTurn = false;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -71,6 +73,10 @@ public class GameController {
 
     public void update(float delta) {
         if (currentNpc == this.npcs.size() ) {
+            if (!playerTurn) {
+                view.getNotificationManager().addNotification(new Notification("your turn!"));
+                playerTurn = true;
+            }
             player.setAp(player.getStartAp());
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 game.setScreen(new MenuScreen(game));
@@ -96,11 +102,11 @@ public class GameController {
 
                 if(tileIsEmpty){
                     move(Gdx.input.getX(), Gdx.input.getY());
-
                 }
             }
             if (player.getIsEnd()) {
                 player.setIsEnd(false);
+                playerTurn = false;
                 currentNpc = 0;
             }
         }
@@ -112,7 +118,8 @@ public class GameController {
     }
 
     public void move(float x, float y){
-       board.moveToPoint((int) (x /board.getStep()), (int) (y /board.getStep()));
+        Vector3 worldPos = view.getCamera().unproject(new Vector3(x, y, 0));
+        board.moveToPoint((int) (worldPos.x /32), (int) (worldPos.y /32));
     }
 
     public void spoofFingerprints(){

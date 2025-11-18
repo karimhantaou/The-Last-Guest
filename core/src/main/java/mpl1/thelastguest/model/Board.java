@@ -2,12 +2,14 @@ package mpl1.thelastguest.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector3;
 import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -91,15 +93,15 @@ public class Board {
         batch.end();
     }
 
-    public void drawTileSelection() {
-        int mouseX = Gdx.input.getX();
-        int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        int posx = (mouseX / this.step) * this.step;
-        int posy = (mouseY / this.step) * this.step;
+    public void drawTileSelection(OrthographicCamera camera) {
+        this.tiledGrey.setProjectionMatrix(camera.combined);
+        Vector3 worldPos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        int tileX = (int)(worldPos.x / 32);
+        int tileY = (int)(worldPos.y / 32);
 
         this.tiledGrey.begin(ShapeRenderer.ShapeType.Line);
         this.tiledGrey.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
-        this.tiledGrey.rect(posx - this.step / 3, posy, this.step, this.step);
+        this.tiledGrey.rect(tileX * 32, tileY * 32, 32, 32);
         this.tiledGrey.end();
     }
 
@@ -177,7 +179,7 @@ public class Board {
         rooms.add(new Room("Living room"));
         rooms.add(new Room("Small diner room"));
         rooms.add(new Room("Laundry room"));
-        rooms.add(new Room("Hallf"));
+        rooms.add(new Room("Hall"));
         for(Room room : rooms){
             if(!items.isEmpty()){
                 room.addItem(randomItem());

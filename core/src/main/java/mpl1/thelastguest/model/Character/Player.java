@@ -31,7 +31,7 @@ public class Player extends Character {
         int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
         int[][] grid = new int[murInt.getHeight()][murInt.getWidth()];
         int[] start = { getX(), getY() };
-        int[] goal  = { posX - 11 , 50 - posY  - 1 };
+        int[] goal  = { posX,  posY};
         int[] current;
 
         for (int y = 0; y < murInt.getHeight(); y++) {
