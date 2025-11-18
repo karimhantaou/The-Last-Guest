@@ -1,6 +1,9 @@
 package mpl1.thelastguest.view.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -8,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
@@ -34,6 +38,15 @@ public class PlayerInventory {
 
         stage.addActor(root);
 
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f); // R,G,B,A
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        root.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
+
         root.setWidth(200);
         root.left();
         root.defaults().width(200).fillX();
@@ -52,7 +65,7 @@ public class PlayerInventory {
         int max = player.getInv();
 
         Label header = new Label("Inventory " + count + "/" + max, skin);
-        root.add(header).row();
+        root.add(header).padTop(10).padBottom(10).row();
 
         for (Item item : player.getItems()) {
 

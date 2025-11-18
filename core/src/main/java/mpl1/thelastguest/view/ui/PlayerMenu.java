@@ -17,29 +17,24 @@ import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
-import mpl1.thelastguest.model.Item.Item;
-import mpl1.thelastguest.model.Room;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class GuessMenu {
+public class PlayerMenu {
 
     private Stage stage;
     private Skin skin;
     private GameController controller;
 
-    private List<Npc> npcs;
-    private Murderer murderer;
+    private Player player;
 
-    public GuessMenu(GameController controller, List<Npc> npcs, Murderer murderer) {
+    public PlayerMenu(GameController controller, Player player) {
         this.controller = controller;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-        this.npcs = npcs;
-        this.murderer = murderer;
+        this.player = player;
 
     }
 
@@ -50,6 +45,8 @@ public class GuessMenu {
         Table root = new Table();
         stage.addActor(root);
 
+        float width = 200;
+
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f); // R,G,B,A
         pixmap.fill();
@@ -59,50 +56,47 @@ public class GuessMenu {
 
         root.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
 
-        float width = 500;
-
         root.setWidth(width);
         root.defaults().width(width).fillX();
 
         // HEADER
 
-        Label header = new Label("Did you find the murderer ?", skin);
+        Label header = new Label("Your character", skin);
         root.add(header).padTop(10).padBottom(10).row();
 
-        // BUTTONS
+        // STATS
 
-        List<Character> characters = new ArrayList<>();
+        Label str = new Label("Strength: " + player.getStr(), skin);
+        root.add(str).pad(2).row();
 
-        characters.add(murderer);
-        characters.addAll(npcs);
+        Label per = new Label("Perception: " + player.getPer(), skin);
+        root.add(per).pad(2).row();
 
-        Collections.shuffle(characters);
+        Label lck = new Label("Luck: " + player.getLck(), skin);
+        root.add(lck).pad(2).row();
 
-        for (Character character : characters) {
-            if(character.isAlive()){
-                TextButton charBtn = new TextButton(character.getName(), skin);
-                charBtn.addListener(new ClickListener() {
-                    @Override public void clicked(InputEvent ev, float x, float y) {
-                        controller.guess(character);
-                    }
-                });
-                root.row(); root.add(charBtn);
-            }
-        }
+        Label inv = new Label("Strength: " + player.getInv(), skin);
+        root.add(inv).pad(2).row();
 
-        TextButton btnClose = new TextButton("Pass", skin);
+        Label ap = new Label("Action points: " + player.getAp(), skin);
+        root.add(ap).pad(2).row();
+
+        TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
             @Override public void clicked(InputEvent ev, float x, float y) {
                 close();
             }
         });
-        root.row(); root.add(btnClose);
-
-        float x = (Gdx.graphics.getWidth() - root.getWidth()) / 2;
-        float y = 0;
-        root.setPosition(x, y);
+        root.add(btnClose).pad(20).row();
 
         root.pack();
+
+        float x = (Gdx.graphics.getWidth() - root.getWidth()) / 2;
+        float y = (Gdx.graphics.getHeight() - root.getHeight()) /2;
+
+        root.setPosition(x, y);
+        root.pack();
+
     }
 
     public Stage getStage() {
@@ -110,7 +104,7 @@ public class GuessMenu {
     }
 
     public void close() {
-        controller.closeGuessMenu();
+        controller.closePlayerMenu();
         if(stage != null) stage.dispose();
         stage = null;
     }

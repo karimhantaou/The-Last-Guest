@@ -1,6 +1,9 @@
 package mpl1.thelastguest.view.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
@@ -37,6 +41,15 @@ public class RoomInventory {
         Table root = new Table();
         stage.addActor(root);
 
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f); // R,G,B,A
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        root.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
+
         float width = 200;
 
         root.setWidth(width);
@@ -46,7 +59,7 @@ public class RoomInventory {
         // HEADER
 
         Label header = new Label(room.getName(), skin);
-        root.add(header).row();
+        root.add(header).padTop(10).padBottom(10).row();
 
         // BUTTONS
 

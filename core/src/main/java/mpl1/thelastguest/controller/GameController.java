@@ -81,7 +81,11 @@ public class GameController {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            view.displayGuessMenu();
+            displayGuessMenu();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            displayPlayerMenu();
+            System.out.println("Player Menuc");
         }
     }
 
@@ -204,7 +208,16 @@ public class GameController {
 
     // GUESS MENU
 
-    public void guess(Character character){
+    public void displayGuessMenu(){
+        view.displayGuessMenu();
+    }
+
+    public void closeGuessMenu(){
+        view.closeGuessMenu();
+        view.getPlayerInventory().rebuild();
+    }
+
+   public void guess(Character character){
         view.closeGuessMenu();
 
         if(character == murderer){
@@ -214,5 +227,15 @@ public class GameController {
         } else{
             view.getNotificationManager().addNotification(new Notification(character.getName() + " is innocent."));
         }
+    }
+
+    // PLAYER MENU
+    public void displayPlayerMenu(){
+        view.displayPlayerMenu();
+    }
+
+    public void closePlayerMenu(){
+        view.closePlayerMenu();
+        view.getPlayerInventory().rebuild();
     }
 }
