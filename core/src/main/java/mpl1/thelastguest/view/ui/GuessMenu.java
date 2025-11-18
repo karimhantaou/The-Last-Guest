@@ -98,8 +98,10 @@ public class GuessMenu {
         });
         root.row(); root.add(btnClose);
 
+        root.pack();
+
         float x = (Gdx.graphics.getWidth() - root.getWidth()) / 2;
-        float y = 0;
+        float y = (Gdx.graphics.getHeight() - root.getHeight()) / 2;
         root.setPosition(x, y);
 
         root.pack();

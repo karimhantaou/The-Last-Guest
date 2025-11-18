@@ -49,43 +49,40 @@ public class GameController {
     }
 
     public void update(float delta) {
-        if(
-            Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)
-            && !view.isRoomInventoryOpen()
-            && !view.isGuessMenuOpen()
-        ){
-            Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            view.displayActionMenu(mousePosition);
-        }
-        if(
-            Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
-            && !view.isActionMenuOpen()
+       if(
+            !view.isActionMenuOpen()
             && !view.isRoomInventoryOpen()
             && !view.isItemActionMenuOpen()
             && !view.isGuessMenuOpen()
-        ){
+            && !view.isPlayerMenuOpen()
+       ){
+           if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
+               Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+               view.displayActionMenu(mousePosition);
+           }
+           if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
 
-            int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
-            int tileY =  (int)(50 - Gdx.input.getY() / board.getStep() - 1);
+               int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
+               int tileY =  (int)(50 - Gdx.input.getY() / board.getStep() - 1);
 
-            boolean tileIsEmpty = true;
+               boolean tileIsEmpty = true;
 
-            for (Npc npc : npcs) {
-                if(npc.getX() == tileX && npc.getY() == tileY) {
-                    tileIsEmpty = false;
-                }
-            }
+               for (Npc npc : npcs) {
+                   if(npc.getX() == tileX && npc.getY() == tileY) {
+                       tileIsEmpty = false;
+                   }
+               }
 
-            if(tileIsEmpty){
-                move(Gdx.input.getX(), Gdx.input.getY());
-            }
-        }
+               if(tileIsEmpty){
+                   move(Gdx.input.getX(), Gdx.input.getY());
+               }
+           }
+       }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             displayGuessMenu();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             displayPlayerMenu();
-            System.out.println("Player Menuc");
         }
     }
 
@@ -219,6 +216,7 @@ public class GameController {
 
    public void guess(Character character){
         view.closeGuessMenu();
+        view.getPlayerInventory().rebuild();
 
         if(character == murderer){
             view.getNotificationManager().addNotification(new Notification("You found the murderer !"));

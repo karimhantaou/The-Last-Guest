@@ -67,19 +67,19 @@ public class PlayerMenu {
         // STATS
 
         Label str = new Label("Strength: " + player.getStr(), skin);
-        root.add(str).pad(2).row();
+        root.add(str).pad(5).row();
 
         Label per = new Label("Perception: " + player.getPer(), skin);
-        root.add(per).pad(2).row();
+        root.add(per).pad(5).row();
 
         Label lck = new Label("Luck: " + player.getLck(), skin);
-        root.add(lck).pad(2).row();
+        root.add(lck).pad(5).row();
 
         Label inv = new Label("Strength: " + player.getInv(), skin);
-        root.add(inv).pad(2).row();
+        root.add(inv).pad(5).row();
 
         Label ap = new Label("Action points: " + player.getAp(), skin);
-        root.add(ap).pad(2).row();
+        root.add(ap).pad(5).row();
 
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
