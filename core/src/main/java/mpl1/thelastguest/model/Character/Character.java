@@ -1,7 +1,9 @@
 package mpl1.thelastguest.model.Character;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -18,7 +20,7 @@ public abstract class Character implements Movable {
     private final String name; //name of character
 
     // Statistiques du personnage
-    private Map<String, Integer> stats; //str, per, lck, ap, inv
+    private Map<String, Integer> stats = new HashMap<>(); //str, per, lck, ap, inv
 
     // Position du personnage
     private int x;
@@ -36,14 +38,14 @@ public abstract class Character implements Movable {
     // Etat du personnage
     private boolean alive = true; //if character is current alive or not
 
-
     private Sprite sprite; //Sprite of character
     private String texturePath;
-
+    private int startAp;
 
     private Integer step = 1600 / 50; // Step (size of tiled when display)
-    private List<int[]> path =  new ArrayList<>(); //path to move with mousse
-    private Integer nbPath;
+    protected List<int[]> path =  new ArrayList<>(); //path to move with mousse
+    protected Integer nbPath = 0;
+    protected boolean isEnd = false;
 
     // Constructeur pour les pnj
     public Character() {
@@ -58,23 +60,28 @@ public abstract class Character implements Movable {
     }
 
     public Character(String name, Map<String, Integer> stats, String texturePath) {
-        Texture texture = new Texture(Gdx.files.internal(texturePath));
+        if (texturePath != null) {
+            Texture texture = new Texture(Gdx.files.internal(texturePath));
+            this.sprite = new Sprite(texture);
+        }
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = name;
         this.stats = stats;
         this.x = 0;
         this.y = 0;
-        this.sprite = new Sprite(texture);
 
         this.texturePath = texturePath;
-
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
     // Constructeur pour le joueur et le tueur
     public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
-        Texture texture = new Texture(Gdx.files.internal(spriteName));
+        if (spriteName != null) {
+            Texture texture = new Texture(Gdx.files.internal(spriteName));
+            this.sprite = new Sprite(texture);
+            this.sprite.setPosition(posX * step, posY * step);
+        }
         String[] fingerprints = {"A", "L", "W"};
 
 
@@ -84,8 +91,6 @@ public abstract class Character implements Movable {
         this.y = posY;
         this.texturePath = spriteName;
         this.step = step;
-        this.sprite = new Sprite(texture);
-        this.sprite.setPosition(posX * step, posY * step);
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
@@ -116,18 +121,31 @@ public abstract class Character implements Movable {
             return null;
         tmp = this.path.get(0);
         this.path.remove(0);
+        this.nbPath--;
+        if (nbPath == 0)
+            isEnd = true;
         return tmp;
     }
 
+    public int getNbPath(){
+        return this.nbPath;
+    }
+
+    public boolean getIsEnd() {
+        return this.isEnd;
+    }
+
+    public void setIsEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
     //SPRITE
     public Sprite getSprite() {
         int[] pos = getPath();
-
         if (pos != null) {
             setPosition(pos[0], pos[1]);
             hiddenPassage();
             try {
-                Thread.sleep(50); //For display tiled by tiled
+                Thread.sleep(100); //For display tiled by tiled
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -135,7 +153,6 @@ public abstract class Character implements Movable {
         }
         return this.sprite;
     }
-
     // position
 
     public Integer getX() {
@@ -159,6 +176,12 @@ public abstract class Character implements Movable {
         this.y = y;
         this.sprite.setPosition(x * this.step, y * this.step);
         hiddenPassage();
+    }
+
+    public void setPosition(Integer x, Integer y, boolean test) {
+        this.x = x;
+        this.y = y;
+        hiddenPassage(true);
     }
 
     // STATS
@@ -186,6 +209,13 @@ public abstract class Character implements Movable {
         return this.stats.get("inv");
     }
 
+    public int getStartAp(){
+        return this.startAp;
+    }
+
+    public void  setStartAp(int startAp){
+        this.startAp = startAp;
+    }
     public void setStats(Map<String, Integer> stats) {
         this.stats = stats;
     }
@@ -358,6 +388,22 @@ public abstract class Character implements Movable {
         setPosition(getX(), (getY() - 1));
     }
 
+    public void moveRight(boolean test) {
+        setPosition((getX() + 1), getY(), test);
+    }
+
+    public void moveLeft(boolean test) {
+        setPosition((getX() - 1), getY(), test);
+    }
+
+    public void moveUp(boolean test) {
+        setPosition(getX(), (getY() + 1), test);
+    }
+
+    public void moveDown(boolean test) {
+        setPosition(getX(), (getY() - 1), test);
+    }
+
         //Movable the player to select point (implement BFS algo)
     public void moveToPoint(int posX, int posY) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
@@ -368,7 +414,7 @@ public abstract class Character implements Movable {
         int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
         int[][] grid = new int[murInt.getHeight()][murInt.getWidth()];
         int[] start = { getX(), getY() };
-        int[] goal  = { posX - 11 , 50 - posY  - 1 };
+        int[] goal  = { posX , posY };
         int[] current;
 
         for (int y = 0; y < murInt.getHeight(); y++) {
@@ -410,10 +456,12 @@ public abstract class Character implements Movable {
             key = prev.get(key);
         }
         Collections.reverse(path);
-        if (path.size() == 1)
+        if (path.size() == 1 || path.size() > getAp())
             return;
+        setAp(getAp() - path.size());
         this.path = path;
         this.nbPath = path.size();
+        this.isEnd = false;
     }
 
     public void hiddenPassage(){
@@ -422,17 +470,31 @@ public abstract class Character implements Movable {
                 setPosition(32, 6);
         if (getY() == 6 || getY() == 5)
             if (getX() == 33 || getX() == 34)
-                setPosition(45, 41);
+                setPosition(17, 41);
         if (getX() == 7 && (getY() == 30 || getY() == 31))
             setPosition(40, 45);
         if (getY() == 46 && (getX() == 40 || getX() == 41))
             setPosition(8, 30);
     }
 
+    public void hiddenPassage(boolean test) {
+        if (getY() == 42 || getY() == 43)
+            if (getX() == 14 || getX() == 15)
+                setPosition(32, 6, test);
+        if (getY() == 6 || getY() == 5)
+            if (getX() == 33 || getX() == 34)
+                setPosition(17, 41, test);
+        if (getX() == 7 && (getY() == 30 || getY() == 31))
+            setPosition(40, 45, test);
+        if (getY() == 46 && (getX() == 40 || getX() == 41))
+            setPosition(8, 30, test);
+    }
+
     public String getRoom() {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
         int tiled = murInt.getCell(this.x,this.y).getTile().getId();
+        System.out.println("tiled: " + tiled);
         if (tiled == 1593)
             return "Kitchen";
         else if (tiled == 1484)

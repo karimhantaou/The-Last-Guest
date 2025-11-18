@@ -2,11 +2,14 @@ package mpl1.thelastguest.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector3;
 import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -20,20 +23,44 @@ import java.util.Random;
 public class Board {
     private final List<Npc> characters; //List of characters
     private Integer step; // Step (size of tiled when display)
-    private final ShapeRenderer tiledGrey; //Shape for select tiled with mousse
+    private ShapeRenderer tiledGrey; //Shape for select tiled with mousse
     private final List<Room> rooms;
     private Player player;
     private List<Item> items;
 
-    public Board(Integer step, List<Npc> characters, Player player, List<Item> items) {
+    public Board(Integer step, List<Npc> characters, Player player, List<Item> items, boolean test) {
         this.characters = characters;
         this.player = player;
         this.items = items;
         this.step = step;
         for (Character character : this.characters) {
+            int x = (int) (Math.random() * 50);
+            int y = (int) (Math.random() * 50);
+            character.setPosition(x, y, test);
+        }
+        player.setPosition(25, 25, test);
+        this.rooms = createAllRoom();
+    }
+
+    public Board(Integer step, List<Npc> characters, Player player, List<Item> items) {
+        TiledMap map = new TmxMapLoader().load("maps/map.tmx");
+        TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
+        this.characters = characters;
+        this.player = player;
+        this.items = items;
+        this.step = step;
+        for (Character character : this.characters) {
+            int x = (int) (Math.random() * 50);
+            int y = (int) (Math.random() * 50);
+            while (murInt.getCell(x, y) == null) {
+                x = (int) (Math.random() * 50);
+                y = (int) (Math.random() * 50);
+            }
             character.getSprite().setSize(step, step);
             character.setStep(step);
-         }
+            character.setPosition(x, y);
+
+        }
         player.getSprite().setSize(step, step);
         player.setPosition(25, 25);
         this.tiledGrey = new ShapeRenderer();
@@ -66,15 +93,15 @@ public class Board {
         batch.end();
     }
 
-    public void drawTileSelection() {
-        int mouseX = Gdx.input.getX();
-        int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        int posx = (mouseX / this.step) * this.step;
-        int posy = (mouseY / this.step) * this.step;
+    public void drawTileSelection(OrthographicCamera camera) {
+        this.tiledGrey.setProjectionMatrix(camera.combined);
+        Vector3 worldPos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        int tileX = (int)(worldPos.x / 32);
+        int tileY = (int)(worldPos.y / 32);
 
         this.tiledGrey.begin(ShapeRenderer.ShapeType.Line);
         this.tiledGrey.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
-        this.tiledGrey.rect(posx - this.step / 3, posy, this.step, this.step);
+        this.tiledGrey.rect(tileX * 32, tileY * 32, 32, 32);
         this.tiledGrey.end();
     }
 

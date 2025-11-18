@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
@@ -25,6 +26,8 @@ public class GameController {
     private List<Item> items;
     private GameScreen view;
     private Board board;
+    private int currentNpc;
+    private boolean playerTurn = false;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -48,52 +51,72 @@ public class GameController {
         return this.board;
     }
 
-    public void update(float delta) {
-       if(
-            !view.isActionMenuOpen()
-            && !view.isRoomInventoryOpen()
-            && !view.isItemActionMenuOpen()
-            && !view.isGuessMenuOpen()
-            && !view.isPlayerMenuOpen()
-       ){
-           if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
-               Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-               view.displayActionMenu(mousePosition);
-           }
-           if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-
-               int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
-               int tileY =  (int)(50 - Gdx.input.getY() / board.getStep() - 1);
-
-               boolean tileIsEmpty = true;
-
-               for (Npc npc : npcs) {
-                   if(npc.getX() == tileX && npc.getY() == tileY) {
-                       tileIsEmpty = false;
-                   }
-               }
-
-               if(tileIsEmpty){
-                   move(Gdx.input.getX(), Gdx.input.getY());
-               }
-           }
-       }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            displayGuessMenu();
+    public void startRound() {
+        if (currentNpc == this.npcs.size()) {
+            return;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-            displayPlayerMenu();
+        Npc current = npcs.get(currentNpc);
+        if (!current.isAlive()) {
+            currentNpc++;
+            return;
+        }
+        current.setAp(current.getStartAp());
+        while(current.getNbPath() == 0 && !current.getIsEnd()) {
+            int x = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
+            int y = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
+            current.moveToPoint(current.getX() + x, current.getY() + y);
+        }
+        if (current.getIsEnd()) {
+            current.setIsEnd(false);
+            currentNpc++;
         }
     }
 
+    public void update(float delta) {
 
+        if (currentNpc == this.npcs.size() ) {
+            if (!playerTurn) {
+                view.getNotificationManager().addNotification(new Notification("your turn!"));
+                playerTurn = true;
+            }
+            player.setAp(player.getStartAp());
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                game.setScreen(new MenuScreen(game));
+            }
+            if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && !view.isRoomInventoryOpen()){
+                Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+                view.displayActionMenu(mousePosition);
+            }
+            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen() && !view.isItemActionMenuOpen()){
+                int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
+                int tileY =  (int)(50 - Gdx.input.getY() / board.getStep());
+                boolean tileIsEmpty = true;
+                for (Npc npc : npcs) {
+                    System.out.println(npc.getName() + ": " + npc.getX() + ", " + npc.getY());
+                    if(npc.getX() == tileX && npc.getY() == tileY) {
+                        tileIsEmpty = false;
+                        System.out.println("on tile");
+                    }
+                }
+                if(tileIsEmpty){
+                    move(Gdx.input.getX(), Gdx.input.getY());
+                }
+            }
+            if (player.getIsEnd()) {
+                player.setIsEnd(false);
+                playerTurn = false;
+                currentNpc = 0;
+            }
+        startRound();
+    }
     public void closeActionMenu(){
         view.closeActionMenu();
         if (!view.isRoomInventoryOpen()) view.getPlayerInventory().rebuild();
     }
 
     public void move(float x, float y){
-       board.moveToPoint((int) (x /board.getStep()), (int) (y /board.getStep()));
+        Vector3 worldPos = view.getCamera().unproject(new Vector3(x, y, 0));
+        board.moveToPoint((int) (worldPos.x /32), (int) (worldPos.y /32));
     }
 
     public void spoofFingerprints(){

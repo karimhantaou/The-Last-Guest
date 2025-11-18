@@ -33,6 +33,9 @@ public class SelectCharacterController {
         this.characters = createCharacters();
         this.selectedCharacter = 0;
         this.items = createItems();
+        for (Npc npc : this.characters) {
+            npc.setStartAp(npc.getAp());
+        }
         npcBuildSprite();
     }
 
@@ -114,6 +117,7 @@ public class SelectCharacterController {
     public void selectPlayer(){
         // Création du joueur
         this.player = new Player(getSelectedCharacter());
+        this.player.setStartAp(this.player.getAp());
         this.characters.remove(getSelectedCharacter()); // On retire le personnage de la liste des pnjs
 
         // Tueur aléatoire
