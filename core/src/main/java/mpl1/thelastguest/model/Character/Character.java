@@ -312,6 +312,14 @@ public abstract class Character implements Movable {
         return this.clues;
     }
 
+    public String getClueWound(){
+        return this.clues.get("wound");
+    }
+
+    public String getClueFingerprint(){
+        return this.clues.get("fingerprint");
+    }
+
     public void addClues(Character murderer, Item weapon){
         this.clues.put("fingerprint", murderer.getFingerprint());
         this.clues.put("wound", weapon.getWoundType());
@@ -491,23 +499,24 @@ public abstract class Character implements Movable {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
         int tiled = murInt.getCell(this.x,this.y).getTile().getId();
+        System.out.println("tiled: " + tiled);
         if (tiled == 1593)
-            return "cuisine";
+            return "Kitchen";
         else if (tiled == 1484)
-            return "chambre2";
+            return "Second bedroom";
         else if (tiled == 1569)
-            return "chambre1";
+            return "First bedroom";
         else if (tiled == 1482)
-            return "laboratoire";
+            return "Laboratory";
         else if (tiled == 1483)
-            return "grande salle à manger";
+            return "Diner room";
         else if (tiled == 1485)
-            return "salon";
+            return "Living room";
         else if (tiled == 1486)
-            return "petite salle à manger";
+            return "Small diner room";
         else if (tiled == 1637 || tiled == 1638 || tiled == 1639 || tiled == 1645 || tiled == 1646 || tiled == 1647 || tiled == 1653 || tiled == 1654 || tiled == 1655)
-            return "buanderie";
-        return "hall";
+            return "Laundry room";
+        return "Hall";
     }
 
 }
