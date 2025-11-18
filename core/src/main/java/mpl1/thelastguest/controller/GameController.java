@@ -52,7 +52,7 @@ public class GameController {
             return;
         }
         Npc current = npcs.get(currentNpc);
-        if (Objects.equals(current.getName(), "Victim")) {
+        if (!current.isAlive()) {
             currentNpc++;
             return;
         }
