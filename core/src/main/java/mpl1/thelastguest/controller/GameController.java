@@ -104,7 +104,7 @@ public class GameController {
         if(item.getFingerprint() != null){
             notification = new Notification("Fingerprints: " + item.getFingerprint(), 5f);
         } else{
-            notification = new Notification("No fingerprints found.");
+            notification = new Notification("No fingerprints found");
         }
 
         view.getNotificationManager().addNotification(notification);
@@ -117,7 +117,7 @@ public class GameController {
         if(npc.getFingerprint() != null){
             notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
         } else{
-            notification = new Notification("No fingerprints found.");
+            notification = new Notification("No fingerprints found");
         }
 
         view.getNotificationManager().addNotification(notification);    }
@@ -128,7 +128,7 @@ public class GameController {
         if(npc.getFingerprint() != null){
             notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
         } else{
-            notification = new Notification("No fingerprints found.");
+            notification = new Notification("No fingerprints found");
         }
 
         view.getNotificationManager().addNotification(notification);
@@ -158,9 +158,9 @@ public class GameController {
             actualRoom.removeItem(item);
             view.closeRoomInventory();
             view.getPlayerInventory().rebuild();
-            view.getNotificationManager().addNotification(new Notification(item.getName() + ": picked."));
+            view.getNotificationManager().addNotification(new Notification(item.getName() + " picked"));
         } else{
-            view.getNotificationManager().addNotification(new Notification("No more space in the inventory."));
+            view.getNotificationManager().addNotification(new Notification("No more space in the inventory"));
         }
     }
 
@@ -185,13 +185,13 @@ public class GameController {
         if(player.dropItem(item)){
             Room actualRoom = board.findRoom(player.getRoom());
             actualRoom.addItem(item);
-            view.getNotificationManager().addNotification(new Notification(item.getName() + ": droped."));
+            view.getNotificationManager().addNotification(new Notification(item.getName() + " droped"));
         }
     }
 
     public void destroyItem(Item item){
         player.dropItem(item);
-        view.getNotificationManager().addNotification(new Notification(item.getName() + " picked."));
+        view.getNotificationManager().addNotification(new Notification(item.getName() + " out of use        "));
 
     }
 }
