@@ -106,7 +106,6 @@ public class GameController {
 
 
     public void scanFingerprints(Item item){
-
         Notification notification;
 
         if(item.getFingerprint() != null){
@@ -116,7 +115,6 @@ public class GameController {
         }
 
         view.getNotificationManager().addNotification(notification);
-
     }
 
     public void scanFingerprints(Npc npc){
@@ -134,7 +132,7 @@ public class GameController {
         Notification notification;
 
         if(npc.getFingerprint() != null){
-            notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
+            notification = new Notification("Fingerprints: " + npc.getClueFingerprint(), 5f);
         } else{
             notification = new Notification("No fingerprints found");
         }
