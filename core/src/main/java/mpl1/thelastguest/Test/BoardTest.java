@@ -1,6 +1,7 @@
 package mpl1.thelastguest.Test;
 
 import mpl1.thelastguest.model.Board;
+import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.ActionItem;
@@ -38,6 +39,7 @@ class BoardTest {
         npcs.add(new Npc("Npc1", null, null));
         npcs.add(new Npc("Npc2",  null, null));
         player = new Player(new Npc("player",  null, null));
+        Murderer murderer = new Murderer(new Npc("murderer", null, null));
         items.add(new ActionItem("Knife", "kill"));
         items.add(new ActionItem("Gun", "kill"));
         items.add(new ActionItem("Fork", "kill"));
@@ -52,7 +54,7 @@ class BoardTest {
         items.add(new StatItem("Nike Air Max", createStats(0,0,0,2,0)));
         items.add(new StatItem("Backpack", createStats(0,0,0,0,1)));
 
-        board = new Board(step, npcs, player, items);
+        board = new Board(step, npcs, player, items, murderer);
     }
 
     @AfterEach

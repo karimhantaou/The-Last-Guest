@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import mpl1.thelastguest.model.Character.Character;
+import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
@@ -21,15 +22,17 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Board {
-    private final List<Npc> characters; //List of characters
+    private final List<Character> characters; //List of characters
     private Integer step; // Step (size of tiled when display)
     private ShapeRenderer tiledGrey; //Shape for select tiled with mousse
     private final List<Room> rooms;
     private Player player;
     private List<Item> items;
 
-    public Board(Integer step, List<Npc> characters, Player player, List<Item> items, boolean test) {
-        this.characters = characters;
+    public Board(Integer step, List<Npc> characters, Player player, List<Item> items, boolean test, Murderer murderer) {
+        this.characters = new ArrayList<>();
+        this.characters.addAll(characters);
+        this.characters.add(murderer);
         this.player = player;
         this.items = items;
         this.step = step;
@@ -42,10 +45,12 @@ public class Board {
         this.rooms = createAllRoom();
     }
 
-    public Board(Integer step, List<Npc> characters, Player player, List<Item> items) {
+    public Board(Integer step, List<Npc> characters, Player player, List<Item> items, Murderer murderer) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
-        this.characters = characters;
+        this.characters = new ArrayList<>();
+        this.characters.addAll(characters);
+        this.characters.add(murderer);
         this.player = player;
         this.items = items;
         this.step = step;

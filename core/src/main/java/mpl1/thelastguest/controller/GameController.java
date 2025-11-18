@@ -35,7 +35,7 @@ public class GameController {
         this.npcs = npcs;
         this.murderer = murderer;
         this.items = items;
-        this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
+        this.board = new Board(1600 / 50, this.npcs, this.player, this.items, this.murderer);
     }
 
     public List<Npc> getNpcs() {

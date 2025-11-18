@@ -461,9 +461,9 @@ public abstract class Character implements Movable {
             key = prev.get(key);
         }
         Collections.reverse(path);
-        if (path.size() == 1 || path.size() > getAp())
+        if (path.size() == 1 || path.size() - 1 > getAp())
             return;
-        setAp(getAp() - path.size());
+        setAp(getAp() - (path.size() - 1));
         this.path = path;
         this.nbPath = path.size();
         this.isEnd = false;
