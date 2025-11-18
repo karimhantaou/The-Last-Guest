@@ -79,6 +79,7 @@ public class ActionMenu {
             TextButton btnSearch = new TextButton("Search", skin);
             btnSearch.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
+                    System.out.println(player.getAp());
                     controller.search();
                     close();
                 }

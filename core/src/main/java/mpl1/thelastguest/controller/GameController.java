@@ -14,6 +14,7 @@ import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
+import mpl1.thelastguest.view.MenuScreen;
 import mpl1.thelastguest.view.ui.notification.Notification;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class GameController {
     private Board board;
     private int currentNpc;
     private boolean playerTurn = false;
+    private boolean leftClicked = false;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -73,41 +75,63 @@ public class GameController {
     }
 
     public void update(float delta) {
-
         if (currentNpc == this.npcs.size() ) {
             if (!playerTurn) {
                 view.getNotificationManager().addNotification(new Notification("your turn!"));
                 playerTurn = true;
             }
-            player.setAp(player.getStartAp());
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                game.setScreen(new MenuScreen(game));
-            }
-            if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && !view.isRoomInventoryOpen()){
-                Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-                view.displayActionMenu(mousePosition);
-            }
-            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !view.isActionMenuOpen() && !view.isRoomInventoryOpen() && !view.isItemActionMenuOpen()){
-                int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
-                int tileY =  (int)(50 - Gdx.input.getY() / board.getStep());
-                boolean tileIsEmpty = true;
-                for (Npc npc : npcs) {
-                    System.out.println(npc.getName() + ": " + npc.getX() + ", " + npc.getY());
-                    if(npc.getX() == tileX && npc.getY() == tileY) {
-                        tileIsEmpty = false;
-                        System.out.println("on tile");
+            // PLAYERS ACTION
+            if(
+                !view.isActionMenuOpen()
+                    && !view.isRoomInventoryOpen()
+                    && !view.isItemActionMenuOpen()
+                    && !view.isGuessMenuOpen()
+                    && !view.isPlayerMenuOpen()
+            ){
+
+                if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
+                    Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+                    view.displayActionMenu(mousePosition);
+                }
+                if(!leftClicked && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+
+                    System.out.println("Left click");
+
+                    leftClicked = true;
+
+                    int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
+                    int tileY =  (int)(50 - Gdx.input.getY() / board.getStep() - 1);
+
+                    boolean tileIsEmpty = true;
+
+                    for (Npc npc : npcs) {
+                        if(npc.getX() == tileX && npc.getY() == tileY) {
+                            tileIsEmpty = false;
+                        }
+                    }
+                    if(tileIsEmpty){
+                        move(Gdx.input.getX(), Gdx.input.getY());
                     }
                 }
-                if(tileIsEmpty){
-                    move(Gdx.input.getX(), Gdx.input.getY());
+                if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    leftClicked = false;
                 }
             }
-            if (player.getIsEnd()) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                //displayGuessMenu();
                 player.setIsEnd(false);
                 playerTurn = false;
                 currentNpc = 0;
+                player.setAp(player.getStartAp());
+                displayGuessMenu();
             }
-        startRound();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+                displayPlayerMenu();
+            }
+        }
+        if(!view.isGuessMenuOpen()){
+            startRound();
+        }
     }
     public void closeActionMenu(){
         view.closeActionMenu();
@@ -116,7 +140,11 @@ public class GameController {
 
     public void move(float x, float y){
         Vector3 worldPos = view.getCamera().unproject(new Vector3(x, y, 0));
-        board.moveToPoint((int) (worldPos.x /32), (int) (worldPos.y /32));
+        if(!board.moveToPoint((int) (worldPos.x /32), (int) (worldPos.y /32))){
+            view.getNotificationManager().addNotification(new Notification("Not enough action points."));
+        } else{
+            view.getPlayerInventory().rebuild();
+        }
     }
 
     public void spoofFingerprints(){
@@ -140,11 +168,11 @@ public class GameController {
         view.getNotificationManager().addNotification(notification);
     }
 
-    public void scanFingerprints(Npc npc){
+    public void scanFingerprints(Character ch){
         Notification notification;
 
-        if(npc.getFingerprint() != null){
-            notification = new Notification("Fingerprints: " + npc.getFingerprint(), 5f);
+        if(ch.getFingerprint() != null){
+            notification = new Notification("Fingerprints: " + ch.getFingerprint(), 5f);
         } else{
             notification = new Notification("No fingerprints found");
         }
@@ -182,14 +210,16 @@ public class GameController {
     }
 
     public void pickItem(Item item){
-        if(player.pickItem(item)){
-            Room actualRoom = board.findRoom(player.getRoom());
-            actualRoom.removeItem(item);
-            view.closeRoomInventory();
-            view.getPlayerInventory().rebuild();
-            view.getNotificationManager().addNotification(new Notification(item.getName() + " picked"));
-        } else{
-            view.getNotificationManager().addNotification(new Notification("No more space in the inventory"));
+        if(playerAp()){
+            if(player.pickItem(item)){
+                Room actualRoom = board.findRoom(player.getRoom());
+                actualRoom.removeItem(item);
+                view.closeRoomInventory();
+                view.getPlayerInventory().rebuild();
+                view.getNotificationManager().addNotification(new Notification(item.getName() + " picked"));
+            } else{
+                view.getNotificationManager().addNotification(new Notification("No more space in the inventory"));
+            }
         }
     }
 
@@ -245,6 +275,7 @@ public class GameController {
             screenManager.showEnd(murderer);
         } else{
             view.getNotificationManager().addNotification(new Notification(character.getName() + " is innocent."));
+            startRound();
         }
     }
 
@@ -256,5 +287,17 @@ public class GameController {
     public void closePlayerMenu(){
         view.closePlayerMenu();
         view.getPlayerInventory().rebuild();
+    }
+
+    // PLAYER AP
+
+    public boolean playerAp(){
+        if(player.getAp() > 0){
+            player.setAp(player.getAp() - 1);
+            return true;
+        } else{
+            view.getNotificationManager().addNotification(new Notification("Not enough action points."));
+            return false;
+        }
     }
 }

@@ -45,6 +45,7 @@ public class GameScreen implements Screen {
 
     // UI
     private PlayerInventory playerInventory;
+    private PlayerAp playerAp;
     private NotificationManager notificationManager;
 
     private ActionMenu actionMenu;
@@ -79,6 +80,7 @@ public class GameScreen implements Screen {
 
         // UI
         playerInventory = new PlayerInventory(controller, player);
+        playerAp = new PlayerAp(player);
         notificationManager = new NotificationManager();
 
         actionMenu = new ActionMenu(controller, player);
@@ -114,6 +116,9 @@ public class GameScreen implements Screen {
 
         playerInventory.getStage().act(delta);
         playerInventory.getStage().draw();
+
+        playerAp.getStage().act(delta);
+        playerAp.getStage().draw();
 
         notificationManager.getStage().draw();
         notificationManager.getStage().act(delta);

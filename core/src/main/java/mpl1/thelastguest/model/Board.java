@@ -106,8 +106,8 @@ public class Board {
     }
 
     //Movable
-    public void moveToPoint(Integer posX, Integer posY) {
-        this.player.moveToPoint(posX, posY);
+    public boolean moveToPoint(Integer posX, Integer posY) {
+        return this.player.moveToPoint(posX, posY);
     }
 
         //Movable with collision

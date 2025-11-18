@@ -22,7 +22,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void moveToPoint(int posX, int posY) {
+    public boolean moveToPoint(int posX, int posY) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
         Queue<int[]> queue = new ArrayDeque<>();
@@ -74,9 +74,10 @@ public class Player extends Character {
         }
         Collections.reverse(path);
         if (path.size() == 1 || path.size() > getAp())
-            return;
+            return false;
         setAp(getAp() - path.size());
         this.path = path;
         this.nbPath = path.size();
+        return true;
     }
 }

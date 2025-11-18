@@ -19,18 +19,16 @@ import mpl1.thelastguest.model.Item.StatItem;
 
 import java.util.Map;
 
-public class PlayerInventory {
+public class PlayerAp {
 
-    private GameController controller;
     private Player player;
     private Stage stage;
     private Skin skin;
 
     private final Table root;
 
-    public PlayerInventory(GameController controller, Player player) {
+    public PlayerAp(Player player) {
         this.player = player;
-        this.controller = controller;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
         this.stage = new Stage();
@@ -57,48 +55,18 @@ public class PlayerInventory {
     }
 
     public void rebuild() {
-        Gdx.input.setInputProcessor(stage);
-
         root.clearChildren();
 
-        int count = player.countItems();
-        int max = player.getInv();
+        String ap = String.valueOf(player.getAp());
 
-        String actualAp = String.valueOf(player.getAp());
-        String maxAp = String.valueOf(player.getStartAp());
-
-        Label ap = new Label("Action points: " + actualAp + "/" + maxAp, skin);
-        root.add(ap).padTop(10).padBottom(10).row();
-
-        Label header = new Label("Inventory " + count + "/" + max, skin);
+        Label header = new Label(ap, skin);
         root.add(header).padTop(10).padBottom(10).row();
-
-        for (Item item : player.getItems()) {
-            StringBuilder name = new StringBuilder(item.getName());
-            if(item.getClass() == StatItem.class) {
-                Map<String, Integer> map = ((StatItem) item).getStats();
-                for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                    if(entry.getValue() > 0) {
-                        name.append(" +").append(entry.getValue()).append(" ").append(entry.getKey());
-                    }
-                }
-
-            }
-
-            TextButton itemBtn = new TextButton(name.toString(), skin);
-            itemBtn.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.displayItemActionMenu(item);
-                }
-            });
-            root.row();
-            root.add(itemBtn);
-        }
 
         root.pack();
 
         // Position
+        float x = (Gdx.graphics.getHeight() - root.getHeight()) / 2f;
         float y = (Gdx.graphics.getHeight() - root.getHeight()) / 2f;
-        root.setPosition(10, y);
+        root.setPosition(x, y);
     }
 }

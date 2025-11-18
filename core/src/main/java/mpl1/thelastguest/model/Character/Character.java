@@ -254,7 +254,7 @@ public abstract class Character implements Movable {
         this.setStr(this.getStr() + item.getStr());
         this.setPer(this.getPer() + item.getPer());
         this.setLck(this.getLck() + item.getLck());
-        this.setAp(this.getAp() + item.getAp());
+        this.setStartAp(this.getStartAp() + item.getAp());
         this.setInv(this.getInv() + item.getInv());
     }
 
@@ -262,7 +262,7 @@ public abstract class Character implements Movable {
         this.setStr(this.getStr() - item.getStr());
         this.setPer(this.getPer() - item.getPer());
         this.setLck(this.getLck() - item.getLck());
-        this.setAp(this.getAp() - item.getAp());
+        this.setStartAp(this.getStartAp() - item.getAp());
         this.setInv(this.getInv() - item.getInv());
     }
 
@@ -405,7 +405,7 @@ public abstract class Character implements Movable {
     }
 
         //Movable the player to select point (implement BFS algo)
-    public void moveToPoint(int posX, int posY) {
+    public boolean moveToPoint(int posX, int posY) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
         Queue<int[]> queue = new ArrayDeque<>();
@@ -456,12 +456,14 @@ public abstract class Character implements Movable {
             key = prev.get(key);
         }
         Collections.reverse(path);
-        if (path.size() == 1 || path.size() > getAp())
-            return;
+        if (path.size() == 1 || path.size() > getAp()){
+            return false;
+        }
         setAp(getAp() - path.size());
         this.path = path;
         this.nbPath = path.size();
         this.isEnd = false;
+        return true;
     }
 
     public void hiddenPassage(){
