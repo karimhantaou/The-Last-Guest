@@ -1,5 +1,6 @@
 package mpl1.thelastguest.controller;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -299,5 +300,9 @@ public class GameController {
             view.getNotificationManager().addNotification(new Notification("Not enough action points."));
             return false;
         }
+    }
+
+    public GameScreen getView() {
+        return view;
     }
 }

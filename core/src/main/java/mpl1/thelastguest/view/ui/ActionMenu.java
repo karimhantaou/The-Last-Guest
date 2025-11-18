@@ -2,6 +2,7 @@ package mpl1.thelastguest.view.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -30,9 +31,9 @@ public class ActionMenu {
     }
 
     public void display(Vector2 mousePosition, List<Npc> npcs, Board board) {
-
-        int tileX = (int)((mousePosition.x / board.getStep()) - 11);
-        int tileY =  (int)(50 - mousePosition.y / board.getStep());
+        Vector3 worldPos = controller.getView().getCamera().unproject(new Vector3(mousePosition.x, mousePosition.y, 0));
+        int tileX = (int)((worldPos.x / 32));
+        int tileY =  (int)(worldPos.y / 32);
 
         Npc target = null;
 
