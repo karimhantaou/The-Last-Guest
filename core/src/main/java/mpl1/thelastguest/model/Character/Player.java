@@ -73,9 +73,10 @@ public class Player extends Character {
             key = prev.get(key);
         }
         Collections.reverse(path);
-        if (path.size() == 1 || path.size() > getAp())
+        if (path.size() == 1 || path.size() - 1 > getAp()){
             return false;
-        setAp(getAp() - path.size());
+        }
+        setAp(getAp() - (path.size() - 1));
         this.path = path;
         this.nbPath = path.size();
         return true;
