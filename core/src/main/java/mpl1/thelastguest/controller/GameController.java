@@ -75,6 +75,7 @@ public class GameController {
         }
         Character current = npcs.get(currentNpc);
         if (!current.isAlive()) {
+            this.allCharacters.remove(current);
             currentNpc++;
             return;
         }
@@ -90,7 +91,8 @@ public class GameController {
         }
         if (current.getIsEnd()) {
             current.getItem(board.findRoom(current.getRoom()).getItems());
-            current.kill(this.allCharacters);
+            if (current.kill(this.allCharacters))
+                view.getNotificationManager().addNotification(new Notification("one people is dead!"));
             current.setIsEnd(false);
             currentNpc++;
             playerTurn = false;
