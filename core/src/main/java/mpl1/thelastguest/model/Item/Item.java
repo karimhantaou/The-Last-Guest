@@ -10,6 +10,13 @@ public abstract class Item {
 
     public Item(String name){
         this.name = name;
+        String[] fingerprints = {"A", "L", "W"};
+        this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
+    }
+
+    public Item(){
+        String[] fingerprints = {"A", "L", "W"};
+        this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
     // GETTER

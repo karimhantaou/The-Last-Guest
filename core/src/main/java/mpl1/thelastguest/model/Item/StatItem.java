@@ -7,6 +7,8 @@ public class StatItem extends Item {
 
     private Map<String, Integer> stats = new HashMap<>(); //str, per, lck, ap, inv
 
+    public StatItem(){super();}
+
     public StatItem(String name, Map<String, Integer> stats){
         super(name);
         this.stats = stats;

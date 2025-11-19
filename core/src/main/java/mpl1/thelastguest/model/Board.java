@@ -15,10 +15,7 @@ import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class Board {
     private final List<Character> characters; //List of characters
@@ -180,11 +177,21 @@ public class Board {
         rooms.add(new Room("Small diner room"));
         rooms.add(new Room("Laundry room"));
         rooms.add(new Room("Hall"));
-        for(Room room : rooms){
-            if(!items.isEmpty()){
-                room.addItem(randomItem());
+
+
+        Collections.shuffle(items);
+        Collections.shuffle(rooms);
+
+        while(!items.isEmpty()) {
+            Collections.shuffle(rooms);
+            for(Room room : rooms){
+                if(!items.isEmpty()){
+                    room.addItem(randomItem());
+                }
             }
         }
+
+        System.out.println(items.size());
         return rooms;
     }
 }

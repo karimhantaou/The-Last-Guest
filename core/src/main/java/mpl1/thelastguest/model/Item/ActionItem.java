@@ -6,6 +6,8 @@ public class ActionItem extends Item {
 
     private String action;
 
+    public ActionItem(){super();}
+
     public ActionItem(String name, String action) {
         super(name);
         this.action = action;
