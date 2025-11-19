@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import jdk.internal.icu.lang.UCharacter;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
@@ -26,6 +27,7 @@ public class GameController {
     private final Main game;
     private Player player;
     private List<Character> npcs;
+    private List<Character> allCharacters;
     private Murderer murderer;
     private List<Item> items;
     private GameScreen view;
@@ -41,6 +43,9 @@ public class GameController {
         this.npcs = new ArrayList<>();
         this.npcs.addAll(npcs);
         this.npcs.add(murderer);
+        this.allCharacters = new ArrayList<>();
+        this.allCharacters.addAll(npcs);
+        this.allCharacters.add(player);
 
         Collections.shuffle(npcs);
 
@@ -68,33 +73,27 @@ public class GameController {
         if (currentNpc == this.npcs.size()) {
             return;
         }
-
-        System.out.println(currentNpc);
-        System.out.println(npcs.get(currentNpc).getName());
-
         Character current = npcs.get(currentNpc);
         if (!current.isAlive()) {
             currentNpc++;
-            System.out.println("++");
-
             return;
         }
-
-        System.out.println(current.getStartAp());
-
-
+        if (!playerTurn) {
+            view.getNotificationManager().addNotification(new Notification("Round of " + current.getName()));
+            playerTurn = true;
+        }
         current.setAp(current.getStartAp());
         while(current.getNbPath() == 0 && !current.getIsEnd()) {
             int x = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
             int y = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
             current.moveToPoint(current.getX() + x, current.getY() + y);
-            System.out.println("move");
-
         }
         if (current.getIsEnd()) {
+            current.getItem(board.findRoom(current.getRoom()).getItems());
+            current.kill(this.allCharacters);
             current.setIsEnd(false);
             currentNpc++;
-            System.out.println("getisend");
+            playerTurn = false;
         }
     }
 
@@ -118,9 +117,6 @@ public class GameController {
                     view.displayActionMenu(mousePosition);
                 }
                 if(!leftClicked && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-
-                    System.out.println("Left click");
-
                     leftClicked = true;
 
                     int tileX = (int)((Gdx.input.getX() / board.getStep()) - 11);
@@ -213,12 +209,6 @@ public class GameController {
         }
 
         view.getNotificationManager().addNotification(notification);
-    }
-
-    public void kill(Item weapon, Npc npc){
-        if(!npcs.get(currentNpc).kill(npc, weapon)){
-            view.getNotificationManager().addNotification(new Notification("You can't kill."));
-        }
     }
 
     public void inspect(Npc npc){

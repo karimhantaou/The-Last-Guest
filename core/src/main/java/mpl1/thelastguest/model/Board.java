@@ -85,8 +85,9 @@ public class Board {
     public void displayAllSprites(Batch batch) {
         batch.begin();
         for  (Character character : this.characters) {
-            Sprite sprite = character.getSprite();
-            sprite.draw(batch);
+                Sprite sprite = character.getSprite();
+            if (player.isPerceptible(character.getX(), character.getY()))
+                sprite.draw(batch);
         }
         Sprite sprite = player.getSprite();
         sprite.draw(batch);

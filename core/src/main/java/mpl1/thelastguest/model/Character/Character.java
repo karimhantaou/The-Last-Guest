@@ -246,6 +246,9 @@ public abstract class Character implements Movable {
         return this.items;
     }
 
+    public void getItem(List<Item> items) {
+    }
+
     public int countItems() {
         return this.items.size();
     }
@@ -353,7 +356,7 @@ public abstract class Character implements Movable {
         }
     }
 
-    public boolean kill(Npc npc, Item weapon){
+    public boolean kill(List <Character> npcs){
         return false;
     }
 
@@ -493,7 +496,6 @@ public abstract class Character implements Movable {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
         int tiled = murInt.getCell(this.x,this.y).getTile().getId();
-        System.out.println("tiled: " + tiled);
         if (tiled == 1593)
             return "Kitchen";
         else if (tiled == 1484)
@@ -512,5 +514,7 @@ public abstract class Character implements Movable {
             return "Laundry room";
         return "Hall";
     }
-
+    public boolean isPerceptible(int posX, int posY) {
+        return false;
+    }
 }
