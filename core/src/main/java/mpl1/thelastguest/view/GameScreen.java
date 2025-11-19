@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import mpl1.thelastguest.model.Board;
+import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -92,7 +93,7 @@ public class GameScreen implements Screen {
         itemActionMenu = new ItemActionMenu(controller, player);
         itemActionMenuOpen = false;
 
-        guessMenu = new GuessMenu(controller, npcs, murderer);
+        guessMenu = new GuessMenu(controller);
         guessMenuOpen = false;
 
         playerMenu = new PlayerMenu(controller, player);
@@ -247,9 +248,9 @@ public class GameScreen implements Screen {
 
     // GUESS MENU
 
-    public void displayGuessMenu(){
+    public void displayGuessMenu() {
         this.guessMenuOpen = true;
-        guessMenu.display();
+        guessMenu.display(controller.getNpcs(), murderer);
     }
 
     public void closeGuessMenu(){

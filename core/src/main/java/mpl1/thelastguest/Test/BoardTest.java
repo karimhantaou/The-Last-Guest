@@ -52,7 +52,8 @@ class BoardTest {
         items.add(new StatItem("Nike Air Max", createStats(0,0,0,2,0)));
         items.add(new StatItem("Backpack", createStats(0,0,0,0,1)));
 
-        board = new Board(step, npcs, player, items);
+        board = null;
+        //board = new Board(step, npcs, player, items);
     }
 
     @AfterEach

@@ -353,12 +353,8 @@ public abstract class Character implements Movable {
         }
     }
 
-    public void kill(Npc npc, Item weapon){
-        npc.addClues(this, weapon);
-        npc.setAlive(false);
-        if(this.getClass() == Murderer.class){
-            ((Murderer) this).addKillNbr();
-        }
+    public boolean kill(Npc npc, Item weapon){
+        return false;
     }
 
     // La méthode qui sera utilisée pour afficher les actions. On mettra un objet en paramètre pour savoir ce qu'il peut faire.

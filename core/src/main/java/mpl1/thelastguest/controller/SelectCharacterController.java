@@ -123,6 +123,7 @@ public class SelectCharacterController {
         // Tueur aléatoire
         int randomMurdererIndex = (int)(Math.random() * characters.size() - 1);
         this.murderer = new Murderer(characters.get(randomMurdererIndex));
+        this.murderer.setStartAp(characters.get(randomMurdererIndex).getAp());
         this.characters.remove(characters.get(randomMurdererIndex));
 
         // Choisit l'arme du crime et rajoute l'empreinte du tueur.

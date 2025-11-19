@@ -1,6 +1,7 @@
 package mpl1.thelastguest.model.Character;
 
 import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Item.Item;
 
 import java.util.Map;
 
@@ -18,5 +19,15 @@ public class Murderer extends Character{
 
     public void addKillNbr(){
         this.killNbr++;
+    }
+
+    @Override
+    public boolean kill(Npc npc, Item weapon) {
+        npc.addClues(this, weapon);
+        npc.setAlive(false);
+        if (this.getClass() == Murderer.class) {
+            ((Murderer) this).addKillNbr();
+        }
+        return true;
     }
 }

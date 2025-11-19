@@ -18,12 +18,14 @@ import mpl1.thelastguest.view.GameScreen;
 import mpl1.thelastguest.view.MenuScreen;
 import mpl1.thelastguest.view.ui.notification.Notification;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameController {
     private final Main game;
     private Player player;
-    private List<Npc> npcs;
+    private List<Character> npcs;
     private Murderer murderer;
     private List<Item> items;
     private GameScreen view;
@@ -36,13 +38,21 @@ public class GameController {
         this.game = game;
         this.view = view;
         this.player = player;
-        this.npcs = npcs;
+        this.npcs = new ArrayList<>();
+        this.npcs.addAll(npcs);
+        this.npcs.add(murderer);
+
+        Collections.shuffle(npcs);
+
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
+
+
+        System.out.println("murderer ap: " + murderer.getAp());
     }
 
-    public List<Npc> getNpcs() {
+    public List<Character> getNpcs() {
         return this.npcs;
     }
 
@@ -58,25 +68,38 @@ public class GameController {
         if (currentNpc == this.npcs.size()) {
             return;
         }
-        Npc current = npcs.get(currentNpc);
+
+        System.out.println(currentNpc);
+        System.out.println(npcs.get(currentNpc).getName());
+
+        Character current = npcs.get(currentNpc);
         if (!current.isAlive()) {
             currentNpc++;
+            System.out.println("++");
+
             return;
         }
+
+        System.out.println(current.getStartAp());
+
+
         current.setAp(current.getStartAp());
         while(current.getNbPath() == 0 && !current.getIsEnd()) {
             int x = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
             int y = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
             current.moveToPoint(current.getX() + x, current.getY() + y);
+            System.out.println("move");
+
         }
         if (current.getIsEnd()) {
             current.setIsEnd(false);
             currentNpc++;
+            System.out.println("getisend");
         }
     }
 
     public void update(float delta) {
-        if (currentNpc == this.npcs.size() ) {
+        if (currentNpc == this.npcs.size()) {
             if (!playerTurn) {
                 view.getNotificationManager().addNotification(new Notification("your turn!"));
                 playerTurn = true;
@@ -105,7 +128,7 @@ public class GameController {
 
                     boolean tileIsEmpty = true;
 
-                    for (Npc npc : npcs) {
+                    for (Character npc : npcs) {
                         if(npc.getX() == tileX && npc.getY() == tileY) {
                             tileIsEmpty = false;
                         }
@@ -193,7 +216,9 @@ public class GameController {
     }
 
     public void kill(Item weapon, Npc npc){
-        player.kill(npc, weapon);
+        if(!npcs.get(currentNpc).kill(npc, weapon)){
+            view.getNotificationManager().addNotification(new Notification("You can't kill."));
+        }
     }
 
     public void inspect(Npc npc){

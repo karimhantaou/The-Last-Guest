@@ -21,14 +21,14 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Board {
-    private final List<Npc> characters; //List of characters
+    private final List<Character> characters; //List of characters
     private Integer step; // Step (size of tiled when display)
     private ShapeRenderer tiledGrey; //Shape for select tiled with mousse
     private final List<Room> rooms;
     private Player player;
     private List<Item> items;
 
-    public Board(Integer step, List<Npc> characters, Player player, List<Item> items, boolean test) {
+    public Board(Integer step, List<Character> characters, Player player, List<Item> items, boolean test) {
         this.characters = characters;
         this.player = player;
         this.items = items;
@@ -42,7 +42,7 @@ public class Board {
         this.rooms = createAllRoom();
     }
 
-    public Board(Integer step, List<Npc> characters, Player player, List<Item> items) {
+    public Board(Integer step, List<Character> characters, Player player, List<Item> items) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
         this.characters = characters;

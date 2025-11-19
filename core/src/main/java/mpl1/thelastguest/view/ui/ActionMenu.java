@@ -125,6 +125,7 @@ public class ActionMenu {
             TextButton btnKill = new TextButton("Kill", skin);
             btnKill.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
+                    
                 }
             });
             root.add(btnKill).row();

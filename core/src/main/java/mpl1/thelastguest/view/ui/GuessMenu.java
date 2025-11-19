@@ -31,19 +31,12 @@ public class GuessMenu {
     private Skin skin;
     private GameController controller;
 
-    private List<Npc> npcs;
-    private Murderer murderer;
-
-    public GuessMenu(GameController controller, List<Npc> npcs, Murderer murderer) {
+    public GuessMenu(GameController controller) {
         this.controller = controller;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
-        this.npcs = npcs;
-        this.murderer = murderer;
-
     }
 
-    public void display() {
+    public void display(List<Character> npcs, Murderer murderer) {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -71,14 +64,9 @@ public class GuessMenu {
 
         // BUTTONS
 
-        List<Character> characters = new ArrayList<>();
+        Collections.shuffle(npcs);
 
-        characters.add(murderer);
-        characters.addAll(npcs);
-
-        Collections.shuffle(characters);
-
-        for (Character character : characters) {
+        for (Character character : npcs) {
             if(character.isAlive()){
                 TextButton charBtn = new TextButton(character.getName(), skin);
                 charBtn.addListener(new ClickListener() {
