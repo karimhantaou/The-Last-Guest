@@ -81,4 +81,8 @@ public class Player extends Character {
         this.nbPath = path.size();
         return true;
     }
+
+    public boolean isPerceptible(int posX, int posY) {
+        return posX >= getX() - getPer() && posX <= getX() + getPer() && posY >= getY() - getPer() && posY <= getY() + getPer();
+    }
 }

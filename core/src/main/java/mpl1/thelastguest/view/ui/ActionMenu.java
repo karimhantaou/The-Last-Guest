@@ -41,7 +41,7 @@ public class ActionMenu {
         Character target = null;
 
         for (Character npc : npcs) {
-            if(npc.getX() == tileX && npc.getY() == tileY) {
+            if(npc.getX() == tileX && npc.getY() == tileY && player.isClose(npc)) {
                 target = npc;
             }
         }

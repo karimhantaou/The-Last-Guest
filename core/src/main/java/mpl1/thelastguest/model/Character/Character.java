@@ -517,4 +517,8 @@ public abstract class Character implements Movable {
     public boolean isPerceptible(int posX, int posY) {
         return false;
     }
+
+    public boolean isClose(Character character){
+        return character.getX() >= getX() - 1 && character.getX() <= getX() + 1 && character.getY() >= getY() - 1 && character.getY() <= getY() + 1;
+    }
 }
