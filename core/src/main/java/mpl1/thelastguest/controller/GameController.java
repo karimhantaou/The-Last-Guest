@@ -1,23 +1,18 @@
 package mpl1.thelastguest.controller;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import jdk.internal.icu.lang.UCharacter;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Character.Character;
-import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
-import mpl1.thelastguest.view.MenuScreen;
 import mpl1.thelastguest.view.ui.notification.Notification;
 
 import java.util.ArrayList;
@@ -91,14 +86,25 @@ public class GameController {
         if (current.getIsEnd()) {
             current.getItem(board.findRoom(current.getRoom()).getItems());
             if (current.kill(this.allCharacters))
-                view.getNotificationManager().addNotification(new Notification("one people is dead!"));
+                view.getNotificationManager().addNotification(new Notification("A new person has been killed !", 5));
             current.setIsEnd(false);
             currentNpc++;
             playerTurn = false;
         }
     }
 
+    public int remainingNpc(List<Character> npcs) {
+        int result = 0;
+        for (Character npc : npcs) {
+            if (npc.isAlive()) result++;
+        }
+        return result;
+    }
+
     public void update(float delta) {
+        if(!player.isAlive()){
+            game.screenManager.showEnd(murderer, player);
+        }
         if (currentNpc == this.npcs.size()) {
             if (!playerTurn) {
                 view.getNotificationManager().addNotification(new Notification("your turn!"));
@@ -294,10 +300,19 @@ public class GameController {
 
         if(character == murderer){
             view.getNotificationManager().addNotification(new Notification("You found the murderer !"));
-            game.screenManager.showEnd(murderer);
+            game.screenManager.showEnd(murderer, player);
         } else{
-            view.getNotificationManager().addNotification(new Notification(character.getName() + " is innocent."));
-            startRound();
+            view.getNotificationManager().addNotification(new Notification(character.getName() + " was an innocent."));
+            character.setAlive(false);
+            if(remainingNpc(npcs) == 1){
+                player.setAlive(false);
+                murderer.addKillNbr();
+                game.screenManager.showEnd(murderer, player);
+            } else if (remainingNpc(npcs) == 2){
+                displayGuessMenu();
+            } else{
+                startRound();
+            }
         }
     }
 

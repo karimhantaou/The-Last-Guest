@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.EndController;
 import mpl1.thelastguest.model.Character.Murderer;
+import mpl1.thelastguest.model.Character.Player;
 
 public class EndScreen implements Screen {
     private final BitmapFont font;
@@ -24,12 +25,14 @@ public class EndScreen implements Screen {
     private Stage stage;
     private Skin skin;
     private Murderer murderer;
+    private Player player;
 
     // Constructeur de salopard
-    public EndScreen(Main game, Murderer murderer) {
+    public EndScreen(Main game, Murderer murderer, Player player) {
         this.font = new BitmapFont();
         this.controller = new EndController(game, this);
         this.murderer = murderer;
+        this.player = player;
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -67,7 +70,11 @@ public class EndScreen implements Screen {
         stage.addActor(table); // Ajout de la table au stage
 
         // Label
-        Label title = new Label("You found the murderer !", style);
+
+        String titleText = "You found the murderer !";
+        if (!player.isAlive()) titleText = "GAME OVER ! You died !";
+
+        Label title = new Label(titleText, style);
         Label name = new Label("It was " + murderer.getName(), style);
         Label killNbr = new Label(murderer.getKillNbr() + " kills have been made...", style);
 
