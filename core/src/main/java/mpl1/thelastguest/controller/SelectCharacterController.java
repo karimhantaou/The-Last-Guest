@@ -93,6 +93,7 @@ public class SelectCharacterController {
             System.out.println(e.getMessage());
             return null;
         }
+
         return items;
     }
 

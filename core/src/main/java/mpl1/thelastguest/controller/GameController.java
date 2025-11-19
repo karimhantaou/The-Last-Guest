@@ -13,6 +13,7 @@ import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Character.Character;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
@@ -48,13 +49,9 @@ public class GameController {
         this.allCharacters.add(player);
 
         Collections.shuffle(npcs);
-
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
-
-
-        System.out.println("murderer ap: " + murderer.getAp());
     }
 
     public List<Character> getNpcs() {
@@ -112,6 +109,7 @@ public class GameController {
                     && !view.isItemActionMenuOpen()
                     && !view.isGuessMenuOpen()
                     && !view.isPlayerMenuOpen()
+                    && !view.isPauseMenuOpen()
             ){
 
                 if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
@@ -147,12 +145,15 @@ public class GameController {
                 player.setAp(player.getStartAp());
                 displayGuessMenu();
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-                displayPlayerMenu();
-            }
         }
         if(!view.isGuessMenuOpen()){
             startRound();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            displayPauseMenu();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            displayPlayerMenu();
         }
     }
     public void closeActionMenu(){
@@ -201,7 +202,7 @@ public class GameController {
 
         view.getNotificationManager().addNotification(notification);    }
 
-    public void scanClueFingerprints(Npc npc){
+    public void scanClueFingerprints(Character npc){
         Notification notification;
 
         if(npc.getFingerprint() != null){
@@ -213,7 +214,7 @@ public class GameController {
         view.getNotificationManager().addNotification(notification);
     }
 
-    public void inspect(Npc npc){
+    public void inspect(Character npc){
         view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
     }
     // ROOM SEARCH
@@ -289,8 +290,7 @@ public class GameController {
 
         if(character == murderer){
             view.getNotificationManager().addNotification(new Notification("You found the murderer !"));
-            ScreenManager screenManager = new ScreenManager(game);
-            screenManager.showEnd(murderer);
+            game.screenManager.showEnd(murderer);
         } else{
             view.getNotificationManager().addNotification(new Notification(character.getName() + " is innocent."));
             startRound();
@@ -305,6 +305,34 @@ public class GameController {
     public void closePlayerMenu(){
         view.closePlayerMenu();
         view.getPlayerInventory().rebuild();
+    }
+
+    // PAUSE MENU
+
+    public void displayPauseMenu(){
+        view.displayPauseMenu();
+    }
+
+    public void closePauseMenu(){
+        view.closePauseMenu();
+        view.getPlayerInventory().rebuild();
+    }
+
+    public void restartGame(){
+        game.screenManager.showCharacterSelection();
+    }
+
+    public void godMode(){
+        player.setStr(999);
+        player.setStartAp(999);
+        player.setAp(player.getStartAp());
+        player.setPer(999);
+        player.setLck(999);
+        player.setInv(999);
+    }
+
+    public void exitGame(){
+        Gdx.app.exit();
     }
 
     // PLAYER AP

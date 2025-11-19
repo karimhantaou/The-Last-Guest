@@ -12,10 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Board;
+import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Player;
-import mpl1.thelastguest.model.Character.Npc;
+import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Item.Item;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ActionMenu {
 
@@ -30,14 +33,14 @@ public class ActionMenu {
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
-    public void display(Vector2 mousePosition, List<Npc> npcs, Board board) {
+    public void display(Vector2 mousePosition, List<Character> npcs, Board board) {
         Vector3 worldPos = controller.getView().getCamera().unproject(new Vector3(mousePosition.x, mousePosition.y, 0));
         int tileX = (int)((worldPos.x / 32));
         int tileY =  (int)(worldPos.y / 32);
 
-        Npc target = null;
+        Character target = null;
 
-        for (Npc npc : npcs) {
+        for (Character npc : npcs) {
             if(npc.getX() == tileX && npc.getY() == tileY) {
                 target = npc;
             }
@@ -80,7 +83,6 @@ public class ActionMenu {
             TextButton btnSearch = new TextButton("Search", skin);
             btnSearch.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
-                    System.out.println(player.getAp());
                     controller.search();
                     close();
                 }
@@ -90,7 +92,7 @@ public class ActionMenu {
 
         if(player.canDoAction("inspect") && target != null) {
             TextButton btnInspect = new TextButton("Inspect", skin);
-            Npc finalTarget = target;
+            Character finalTarget = target;
             btnInspect.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
                     controller.inspect(finalTarget);
@@ -101,7 +103,7 @@ public class ActionMenu {
 
         if(player.canDoAction("scan_fingerprints") &&  target != null) {
             TextButton scan = new TextButton("Scan fingerprints", skin);
-            Npc finalTarget = target;
+            Character finalTarget = target;
             scan.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
                     controller.scanFingerprints(finalTarget);
@@ -112,23 +114,13 @@ public class ActionMenu {
 
         if(player.canDoAction("scan_fingerprints") &&  target != null && !target.isAlive()) {
             TextButton scan = new TextButton("Scan clues fingerprints", skin);
-            Npc finalTarget = target;
+            Character finalTarget = target;
             scan.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
                     controller.scanClueFingerprints(finalTarget);
                 }
             });
             root.add(scan).row();
-        }
-
-        if(player.canDoAction("kill") &&  target != null) {
-            TextButton btnKill = new TextButton("Kill", skin);
-            btnKill.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    
-                }
-            });
-            root.add(btnKill).row();
         }
 
         TextButton btnClose = new TextButton("Close", skin);
