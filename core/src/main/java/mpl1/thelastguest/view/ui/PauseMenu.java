@@ -54,7 +54,7 @@ public class PauseMenu {
         // HEADER
 
         Label header = new Label("Pause", skin);
-        root.add(header).padTop(10).padBottom(10).row();
+        root.add(header).pad(10).row();
 
         // BUTTONS
 

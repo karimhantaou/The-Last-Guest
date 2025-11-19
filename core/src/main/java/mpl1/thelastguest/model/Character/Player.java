@@ -82,6 +82,7 @@ public class Player extends Character {
         return true;
     }
 
+    @Override
     public boolean isPerceptible(int posX, int posY) {
         return posX >= getX() - getPer() && posX <= getX() + getPer() && posY >= getY() - getPer() && posY <= getY() + getPer();
     }

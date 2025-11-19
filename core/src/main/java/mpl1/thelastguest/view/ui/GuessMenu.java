@@ -60,7 +60,7 @@ public class GuessMenu {
         // HEADER
 
         Label header = new Label("Did you find the murderer ?", skin);
-        root.add(header).padTop(10).padBottom(10).row();
+        root.add(header).pad(10).row();
 
         // BUTTONS
 

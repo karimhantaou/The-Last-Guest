@@ -62,7 +62,7 @@ public class PlayerMenu {
         // HEADER
 
         Label header = new Label("Your character", skin);
-        root.add(header).padTop(10).padBottom(10).row();
+        root.add(header).pad(10).row();
 
         // STATS
 

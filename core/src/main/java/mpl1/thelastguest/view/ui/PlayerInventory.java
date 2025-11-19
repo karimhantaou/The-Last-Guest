@@ -68,10 +68,10 @@ public class PlayerInventory {
         String maxAp = String.valueOf(player.getStartAp());
 
         Label ap = new Label("Action points: " + actualAp + "/" + maxAp, skin);
-        root.add(ap).padTop(10).padBottom(10).row();
+        root.add(ap).pad(10).row();
 
         Label header = new Label("Inventory " + count + "/" + max, skin);
-        root.add(header).padTop(10).padBottom(10).row();
+        root.add(header).pad(10).row();
 
         for (Item item : player.getItems()) {
             StringBuilder name = new StringBuilder(item.getName());

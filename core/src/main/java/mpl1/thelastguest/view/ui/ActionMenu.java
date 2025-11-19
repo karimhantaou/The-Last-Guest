@@ -1,6 +1,9 @@
 package mpl1.thelastguest.view.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Character;
@@ -52,6 +56,17 @@ public class ActionMenu {
         Table root = new Table();
         stage.addActor(root);
 
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f); // R,G,B,A
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        root.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
+
+
         float x = mousePosition.x;
         float y = Gdx.graphics.getHeight() - mousePosition.y;
         float width = 200;
@@ -63,8 +78,17 @@ public class ActionMenu {
         // HEADER
 
         if(target != null) {
-            Label header = new Label(target.getName(), skin);
-            root.add(header).row();
+
+            String lifeStatus;
+
+            if(target.isAlive()){
+                lifeStatus = ": Alive";
+            }else{
+                lifeStatus = ": Dead";
+            }
+
+            Label header = new Label(target.getName() + lifeStatus, skin);
+            root.add(header).pad(10).row();
         }
 
         // BUTTONS

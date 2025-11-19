@@ -59,7 +59,7 @@ public class RoomInventory {
         // HEADER
 
         Label header = new Label(room.getName(), skin);
-        root.add(header).padTop(10).padBottom(10).row();
+        root.add(header).pad(10).row();
 
         // BUTTONS
 

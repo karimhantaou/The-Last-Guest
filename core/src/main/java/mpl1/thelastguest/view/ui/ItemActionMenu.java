@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -41,6 +42,9 @@ public class ItemActionMenu {
         root.setWidth(width);
         root.setPosition(x, y);
         root.defaults().width(width).fillX();
+
+        Label header = new Label(item.getName(), skin);
+        root.add(header).pad(10).row();
 
         // BUTTONS
 

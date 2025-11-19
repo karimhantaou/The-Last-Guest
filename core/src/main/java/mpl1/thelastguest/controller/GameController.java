@@ -52,6 +52,8 @@ public class GameController {
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
+
+        System.out.println(murderer.getName());
     }
 
     public List<Character> getNpcs() {
