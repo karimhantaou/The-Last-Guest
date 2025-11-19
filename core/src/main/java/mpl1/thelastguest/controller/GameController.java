@@ -105,15 +105,7 @@ public class GameController {
                 playerTurn = true;
             }
             // PLAYERS ACTION
-            if(
-                !view.isActionMenuOpen()
-                    && !view.isRoomInventoryOpen()
-                    && !view.isItemActionMenuOpen()
-                    && !view.isGuessMenuOpen()
-                    && !view.isPlayerMenuOpen()
-                    && !view.isPauseMenuOpen()
-            ){
-
+            if(!isMenuOpen()){
                 if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
                     Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
                     view.displayActionMenu(mousePosition);
@@ -139,8 +131,7 @@ public class GameController {
                     leftClicked = false;
                 }
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                //displayGuessMenu();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !isMenuOpen()) {
                 player.setIsEnd(false);
                 playerTurn = false;
                 currentNpc = 0;
@@ -151,13 +142,24 @@ public class GameController {
         if(!view.isGuessMenuOpen()){
             startRound();
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !isMenuOpen()) {
             displayPauseMenu();
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C) && !isMenuOpen()) {
             displayPlayerMenu();
         }
     }
+
+    public boolean isMenuOpen(){
+        return
+            view.isActionMenuOpen()
+            || view.isRoomInventoryOpen()
+            || view.isItemActionMenuOpen()
+            || view.isGuessMenuOpen()
+            || view.isPlayerMenuOpen()
+            || view.isPauseMenuOpen();
+    }
+
     public void closeActionMenu(){
         view.closeActionMenu();
         if (!view.isRoomInventoryOpen()) view.getPlayerInventory().rebuild();
