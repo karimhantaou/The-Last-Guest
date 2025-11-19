@@ -81,4 +81,5 @@ public class Player extends Character {
         this.nbPath = path.size();
         return true;
     }
+
 }

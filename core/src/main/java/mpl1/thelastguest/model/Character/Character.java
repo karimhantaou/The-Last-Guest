@@ -353,7 +353,7 @@ public abstract class Character implements Movable {
         }
     }
 
-    public boolean kill(Npc npc, Item weapon){
+    public boolean kill(Character npc, Item weapon){
         return false;
     }
 

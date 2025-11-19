@@ -205,7 +205,7 @@ public class GameScreen implements Screen {
     // ACTION MENU
     public void displayActionMenu(Vector2 position) {
         this.actionMenuOpen = true;
-        actionMenu.display(position, npcs, board);
+        actionMenu.display(position, controller.getNpcs(), board);
     }
 
     public void closeActionMenu() {

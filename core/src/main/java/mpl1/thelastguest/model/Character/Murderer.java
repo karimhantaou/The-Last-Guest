@@ -22,12 +22,10 @@ public class Murderer extends Character{
     }
 
     @Override
-    public boolean kill(Npc npc, Item weapon) {
+    public boolean kill(Character npc, Item weapon) {
         npc.addClues(this, weapon);
         npc.setAlive(false);
-        if (this.getClass() == Murderer.class) {
-            ((Murderer) this).addKillNbr();
-        }
+        addKillNbr();
         return true;
     }
 }

@@ -12,6 +12,7 @@ import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Character.Character;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
@@ -49,7 +50,8 @@ public class GameController {
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
 
 
-        System.out.println("murderer ap: " + murderer.getAp());
+        ActionItem weap = new ActionItem("ak47", "kill", "bullet");
+        player.pickItem(weap);
     }
 
     public List<Character> getNpcs() {
@@ -203,7 +205,7 @@ public class GameController {
 
         view.getNotificationManager().addNotification(notification);    }
 
-    public void scanClueFingerprints(Npc npc){
+    public void scanClueFingerprints(Character npc){
         Notification notification;
 
         if(npc.getFingerprint() != null){
@@ -215,13 +217,19 @@ public class GameController {
         view.getNotificationManager().addNotification(notification);
     }
 
-    public void kill(Item weapon, Npc npc){
-        if(!npcs.get(currentNpc).kill(npc, weapon)){
-            view.getNotificationManager().addNotification(new Notification("You can't kill."));
+    public void kill(Item weapon, Character npc){
+        if(currentNpc == npcs.size()){
+            if(!player.kill(npc, weapon)){
+                view.getNotificationManager().addNotification(new Notification("You can't kill."));
+            } else{
+                view.getNotificationManager().addNotification(new Notification("You killed " + npc.getName()));
+            }
+        } else{
+            npcs.get(currentNpc).kill(npc, weapon);
         }
     }
 
-    public void inspect(Npc npc){
+    public void inspect(Character npc){
         view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
     }
     // ROOM SEARCH

@@ -11,6 +11,12 @@ public class ActionItem extends Item {
         this.action = action;
     }
 
+    public ActionItem(String name, String action, String woundType) {
+        super(name);
+        this.action = action;
+        this.woundType = woundType;
+    }
+
     // GETTER
 
     @Override
@@ -20,4 +26,9 @@ public class ActionItem extends Item {
 
     @Override
     public Map<String, Integer> getStats(){return null;}
+
+    @Override
+    public String getWoundType() {
+        return woundType;
+    }
 }

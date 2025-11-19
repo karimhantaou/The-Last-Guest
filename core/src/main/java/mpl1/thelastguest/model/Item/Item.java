@@ -6,7 +6,7 @@ public abstract class Item {
 
     private String name;
     private String fingerprint;
-    private String woundType = null;
+    protected String woundType = null;
 
     public Item(String name){
         this.name = name;
