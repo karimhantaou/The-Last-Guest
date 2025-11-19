@@ -31,7 +31,7 @@ public class ScreenManager {
         game.setScreen(new SelectCharacterScreen(game));
     }
 
-    public void showEnd(Murderer murderer){
-        game.setScreen(new EndScreen(game, murderer));
+    public void showEnd(Murderer murderer, Player player) {
+        game.setScreen(new EndScreen(game, murderer, player));
     }
 }
