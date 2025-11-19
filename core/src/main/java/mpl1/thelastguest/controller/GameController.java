@@ -66,32 +66,21 @@ public class GameController {
             return;
         }
 
-        System.out.println(currentNpc);
-        System.out.println(npcs.get(currentNpc).getName());
-
         Character current = npcs.get(currentNpc);
         if (!current.isAlive()) {
             currentNpc++;
-            System.out.println("++");
-
             return;
         }
-
-        System.out.println(current.getStartAp());
-
 
         current.setAp(current.getStartAp());
         while(current.getNbPath() == 0 && !current.getIsEnd()) {
             int x = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
             int y = (int) (Math.random() * (current.getStartAp() + 1)) - current.getStartAp() / 2;
             current.moveToPoint(current.getX() + x, current.getY() + y);
-            System.out.println("move");
-
         }
         if (current.getIsEnd()) {
             current.setIsEnd(false);
             currentNpc++;
-            System.out.println("getisend");
         }
     }
 
@@ -116,8 +105,6 @@ public class GameController {
                     view.displayActionMenu(mousePosition);
                 }
                 if(!leftClicked && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-
-                    System.out.println("Left click");
 
                     leftClicked = true;
 
@@ -328,13 +315,11 @@ public class GameController {
     }
 
     public void closePauseMenu(){
-        System.out.println("resume");
         view.closePauseMenu();
         view.getPlayerInventory().rebuild();
     }
 
     public void restartGame(){
-        System.out.println("Restart");
         game.screenManager.showCharacterSelection();
     }
 
