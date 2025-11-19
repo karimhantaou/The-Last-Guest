@@ -64,6 +64,8 @@ public class GameScreen implements Screen {
     private PlayerMenu playerMenu;
     private boolean playerMenuOpen;
 
+    private PauseMenu pauseMenu;
+    private boolean pauseMenuOpen;
 
     // Constructeur de salopard
     public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
@@ -98,6 +100,9 @@ public class GameScreen implements Screen {
 
         playerMenu = new PlayerMenu(controller, player);
         playerMenuOpen = false;
+
+        pauseMenu = new PauseMenu(controller);
+        pauseMenuOpen = false;
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -147,6 +152,11 @@ public class GameScreen implements Screen {
         if(isPlayerMenuOpen() && playerMenu.getStage() != null) {
             playerMenu.getStage().act(delta);
             playerMenu.getStage().draw();
+        }
+
+        if(isPauseMenuOpen() && pauseMenu.getStage() != null) {
+            pauseMenu.getStage().act(delta);
+            pauseMenu.getStage().draw();
         }
     }
 
@@ -280,6 +290,21 @@ public class GameScreen implements Screen {
 
     public boolean isPlayerMenuOpen() {
         return this.playerMenuOpen;
+    }
+
+    // PAUSE MENU
+
+    public void displayPauseMenu(){
+        this.pauseMenuOpen = true;
+        pauseMenu.display();
+    }
+
+    public void closePauseMenu(){
+        this.pauseMenuOpen = false;
+    }
+
+    public boolean isPauseMenuOpen() {
+        return this.pauseMenuOpen;
     }
 
     public OrthographicCamera getCamera() {

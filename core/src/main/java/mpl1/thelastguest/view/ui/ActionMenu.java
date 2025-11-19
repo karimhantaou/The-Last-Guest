@@ -125,7 +125,7 @@ public class ActionMenu {
         }
 
         for(Item item: player.getItems()){
-            if(item.getClass() == ActionItem.class && Objects.equals(((ActionItem) item).getAction(), "kill")){
+            if(item.getClass() == ActionItem.class && Objects.equals(((ActionItem) item).getAction(), "kill") && target != null ) {
                 TextButton btnKill = new TextButton("Kill with " + item.getName(), skin);
                 Character finalTarget = target;
                 btnKill.addListener(new ClickListener() {

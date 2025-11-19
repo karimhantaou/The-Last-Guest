@@ -42,16 +42,11 @@ public class GameController {
         this.npcs = new ArrayList<>();
         this.npcs.addAll(npcs);
         this.npcs.add(murderer);
-
         Collections.shuffle(npcs);
-
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
 
-
-        ActionItem weap = new ActionItem("ak47", "kill", "bullet");
-        player.pickItem(weap);
     }
 
     public List<Character> getNpcs() {
@@ -113,6 +108,7 @@ public class GameController {
                     && !view.isItemActionMenuOpen()
                     && !view.isGuessMenuOpen()
                     && !view.isPlayerMenuOpen()
+                    && !view.isPauseMenuOpen()
             ){
 
                 if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
@@ -150,6 +146,9 @@ public class GameController {
                 currentNpc = 0;
                 player.setAp(player.getStartAp());
                 displayGuessMenu();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                displayPauseMenu();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
                 displayPlayerMenu();
@@ -305,8 +304,7 @@ public class GameController {
 
         if(character == murderer){
             view.getNotificationManager().addNotification(new Notification("You found the murderer !"));
-            ScreenManager screenManager = new ScreenManager(game);
-            screenManager.showEnd(murderer);
+            game.screenManager.showEnd(murderer);
         } else{
             view.getNotificationManager().addNotification(new Notification(character.getName() + " is innocent."));
             startRound();
@@ -321,6 +319,36 @@ public class GameController {
     public void closePlayerMenu(){
         view.closePlayerMenu();
         view.getPlayerInventory().rebuild();
+    }
+
+    // PAUSE MENU
+
+    public void displayPauseMenu(){
+        view.displayPauseMenu();
+    }
+
+    public void closePauseMenu(){
+        System.out.println("resume");
+        view.closePauseMenu();
+        view.getPlayerInventory().rebuild();
+    }
+
+    public void restartGame(){
+        System.out.println("Restart");
+        game.screenManager.showCharacterSelection();
+    }
+
+    public void godMode(){
+        player.setStr(999);
+        player.setStartAp(999);
+        player.setAp(player.getStartAp());
+        player.setPer(999);
+        player.setLck(999);
+        player.setInv(999);
+    }
+
+    public void exitGame(){
+        Gdx.app.exit();
     }
 
     // PLAYER AP
