@@ -310,4 +310,9 @@ public class GameScreen implements Screen {
     public OrthographicCamera getCamera() {
         return this.camera;
     }
+
+    public int getTiledSize() {
+
+        return this.map.getProperties().get("tilewidth", Integer.class);
+    }
 }

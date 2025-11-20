@@ -46,7 +46,7 @@ public class GameController {
         Collections.shuffle(npcs);
         this.murderer = murderer;
         this.items = items;
-        this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
+        this.board = new Board(1600 / 50, this.npcs, this.player, this.items, view.getTiledSize());
     }
 
     public List<Character> getNpcs() {
@@ -171,7 +171,7 @@ public class GameController {
 
     public void move(float x, float y){
         Vector3 worldPos = view.getCamera().unproject(new Vector3(x, y, 0));
-        if(!board.moveToPoint((int) (worldPos.x /32), (int) (worldPos.y /32))){
+        if(!board.moveToPoint((int) (worldPos.x /view.getTiledSize()), (int) (worldPos.y /view.getTiledSize()))){
             view.getNotificationManager().addNotification(new Notification("Not enough action points."));
         } else{
             view.getPlayerInventory().rebuild();

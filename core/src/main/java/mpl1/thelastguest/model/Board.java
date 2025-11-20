@@ -24,8 +24,9 @@ public class Board {
     private final List<Room> rooms;
     public Player player;
     private List<Item> items;
+    private int tiledSize;
 
-    public Board(Integer step, List<Character> characters, Player player, List<Item> items) {
+    public Board(Integer step, List<Character> characters, Player player, List<Item> items, int tiledSize) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
         this.characters = characters;
@@ -48,7 +49,7 @@ public class Board {
         player.setPosition(25, 25);
         this.tiledGrey = new ShapeRenderer();
         this.rooms = createAllRoom();
-
+        this.tiledSize = tiledSize;
     }
 
     //GETTER
@@ -80,8 +81,8 @@ public class Board {
     public void drawTileSelection(OrthographicCamera camera) {
         this.tiledGrey.setProjectionMatrix(camera.combined);
         Vector3 worldPos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-        int tileX = (int)(worldPos.x / 32);
-        int tileY = (int)(worldPos.y / 32);
+        int tileX = (int)(worldPos.x / tiledSize);
+        int tileY = (int)(worldPos.y / tiledSize);
 
         this.tiledGrey.begin(ShapeRenderer.ShapeType.Line);
         this.tiledGrey.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
