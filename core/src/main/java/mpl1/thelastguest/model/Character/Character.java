@@ -141,7 +141,6 @@ public abstract class Character {
     //SPRITE
     public Sprite getSprite() {
         int[] pos = getPath();
-        System.out.println("pos: " + Arrays.toString(pos));
         if (pos != null) {
             setPosition(pos[0], pos[1]);
             hiddenPassage();
