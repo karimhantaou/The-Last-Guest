@@ -1,9 +1,7 @@
 package mpl1.thelastguest.model.Character;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -11,11 +9,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
-import mpl1.thelastguest.model.Movable;
 
 import java.util.*;
 
-public abstract class Character implements Movable {
+public abstract class Character {
     // Nom du personnage
     private final String name; //name of character
 
@@ -176,12 +173,6 @@ public abstract class Character implements Movable {
         this.y = y;
         this.sprite.setPosition(x * this.step, y * this.step);
         hiddenPassage();
-    }
-
-    public void setPosition(Integer x, Integer y, boolean test) {
-        this.x = x;
-        this.y = y;
-        hiddenPassage(true);
     }
 
     // STATS
@@ -370,40 +361,7 @@ public abstract class Character implements Movable {
         }
     }
 
-    //Movable
-    public void moveRight() {
-        setPosition((getX() + 1), getY());
-    }
-
-    public void moveLeft() {
-        setPosition((getX() - 1), getY());
-    }
-
-    public void moveUp() {
-        setPosition(getX(), (getY() + 1));
-    }
-
-    public void moveDown() {
-        setPosition(getX(), (getY() - 1));
-    }
-
-    public void moveRight(boolean test) {
-        setPosition((getX() + 1), getY(), test);
-    }
-
-    public void moveLeft(boolean test) {
-        setPosition((getX() - 1), getY(), test);
-    }
-
-    public void moveUp(boolean test) {
-        setPosition(getX(), (getY() + 1), test);
-    }
-
-    public void moveDown(boolean test) {
-        setPosition(getX(), (getY() - 1), test);
-    }
-
-        //Movable the player to select point (implement BFS algo)
+    //Movable the player to select point (implement BFS algo)
     public boolean moveToPoint(int posX, int posY) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
@@ -477,19 +435,6 @@ public abstract class Character implements Movable {
             setPosition(40, 45);
         if (getY() == 46 && (getX() == 40 || getX() == 41))
             setPosition(8, 30);
-    }
-
-    public void hiddenPassage(boolean test) {
-        if (getY() == 42 || getY() == 43)
-            if (getX() == 14 || getX() == 15)
-                setPosition(32, 6, test);
-        if (getY() == 6 || getY() == 5)
-            if (getX() == 33 || getX() == 34)
-                setPosition(17, 41, test);
-        if (getX() == 7 && (getY() == 30 || getY() == 31))
-            setPosition(40, 45, test);
-        if (getY() == 46 && (getX() == 40 || getX() == 41))
-            setPosition(8, 30, test);
     }
 
     public String getRoom() {

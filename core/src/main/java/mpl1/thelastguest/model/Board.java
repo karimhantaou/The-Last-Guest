@@ -25,20 +25,6 @@ public class Board {
     private Player player;
     private List<Item> items;
 
-    public Board(Integer step, List<Character> characters, Player player, List<Item> items, boolean test) {
-        this.characters = characters;
-        this.player = player;
-        this.items = items;
-        this.step = step;
-        for (Character character : this.characters) {
-            int x = (int) (Math.random() * 50);
-            int y = (int) (Math.random() * 50);
-            character.setPosition(x, y, test);
-        }
-        player.setPosition(25, 25, test);
-        this.rooms = createAllRoom();
-    }
-
     public Board(Integer step, List<Character> characters, Player player, List<Item> items) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
@@ -106,43 +92,6 @@ public class Board {
     //Movable
     public boolean moveToPoint(Integer posX, Integer posY) {
         return this.player.moveToPoint(posX, posY);
-    }
-
-        //Movable with collision
-    public void playerMoveUp(TiledMap map) {
-        TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
-        TiledMapTileLayer murExt = (TiledMapTileLayer) map.getLayers().get("mur exterieur");
-
-        if (murInt.getCell(this.player.getX(), this.player.getY() + 1) == null
-        && murExt.getCell(this.player.getX(), this.player.getY() + 1) == null)
-            this.player.moveUp();
-    }
-
-    public void playerMoveDown(TiledMap map) {
-        TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
-        TiledMapTileLayer murExt = (TiledMapTileLayer) map.getLayers().get("mur exterieur");
-
-        if (murInt.getCell(this.player.getX(), this.player.getY() - 1) == null
-        && murExt.getCell(this.player.getX(), this.player.getY() -1) == null)
-            this.player.moveDown();
-    }
-
-    public void playerMoveLeft(TiledMap map) {
-        TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
-        TiledMapTileLayer murExt = (TiledMapTileLayer) map.getLayers().get("mur exterieur");
-
-        if (murInt.getCell(this.player.getX() - 1, this.player.getY()) == null
-        && murExt.getCell(this.player.getX() - 1, this.player.getY()) == null)
-            this.player.moveLeft();
-    }
-
-    public void playerMoveRight(TiledMap map) {
-        TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
-        TiledMapTileLayer murExt = (TiledMapTileLayer) map.getLayers().get("mur exterieur");
-
-        if (murInt.getCell(this.player.getX() + 1, this.player.getY()) == null
-        && murExt.getCell(this.player.getX() + 1, this.player.getY()) == null)
-            this.player.moveRight();
     }
 
     public Room findRoom(String roomName) {

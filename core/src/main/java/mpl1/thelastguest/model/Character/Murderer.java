@@ -5,10 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
-import mpl1.thelastguest.model.Item.StatItem;
-
 import java.util.*;
-
 import static java.lang.Math.random;
 
 public class Murderer extends Character{
