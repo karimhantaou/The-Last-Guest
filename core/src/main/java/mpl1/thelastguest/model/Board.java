@@ -22,7 +22,7 @@ public class Board {
     private Integer step; // Step (size of tiled when display)
     private ShapeRenderer tiledGrey; //Shape for select tiled with mousse
     private final List<Room> rooms;
-    private Player player;
+    public Player player;
     private List<Item> items;
 
     public Board(Integer step, List<Character> characters, Player player, List<Item> items) {

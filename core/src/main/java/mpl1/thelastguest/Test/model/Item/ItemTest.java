@@ -1,6 +1,7 @@
 package mpl1.thelastguest.Test.model.Item;
 
 import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,8 @@ class ItemTest {
 
     @BeforeEach
     void setUp(){
-
+        ActionItem newActionItem = new ActionItem();
+        StatItem newStatItem = new StatItem();
         //Action Item
         actionItem = new ActionItem(actionName, action);
 
@@ -66,7 +68,7 @@ class ItemTest {
 
     @Test
     void getWoundType() {
-        assertNull(actionItem.getWoundType());
+        assertNull(statItem.getWoundType());
         assertNull(actionItem.getWoundType());
     }
 }

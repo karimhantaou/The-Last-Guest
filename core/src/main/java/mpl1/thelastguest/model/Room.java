@@ -9,7 +9,7 @@ public class Room {
     private String name;
     private List<Item> items;
 
-    Room(String name){
+    public Room(String name){
         this.name = name;
         this.items = new ArrayList<>();
     }

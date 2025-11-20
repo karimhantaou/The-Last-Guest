@@ -9,8 +9,9 @@ class ActionItemTest {
 
     String name = "item_name";
     String action = "item_action";
+    String wound = "item_wound";
     ActionItem actionItem = new ActionItem(name, action);
-
+    ActionItem actionItemWithWound = new ActionItem(name, action, wound);
 
     @Test
     void getName() {
@@ -25,5 +26,10 @@ class ActionItemTest {
     @Test
     void getStats() {
         assertNull(actionItem.getStats());
+    }
+
+    @Test
+    void getWound() {
+        assertEquals(wound, actionItemWithWound.getWoundType());
     }
 }

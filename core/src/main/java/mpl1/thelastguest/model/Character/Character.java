@@ -81,7 +81,6 @@ public abstract class Character {
         }
         String[] fingerprints = {"A", "L", "W"};
 
-
         this.name = name;
         this.stats = stats;
         this.x = posX;
@@ -94,6 +93,7 @@ public abstract class Character {
     public String getTexturePath() {
         return texturePath;
     }
+
     public void buildSprite(){
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
@@ -128,6 +128,9 @@ public abstract class Character {
         return this.nbPath;
     }
 
+    public void  setNbPath(int nbPath){
+        this.nbPath = nbPath;
+    }
     public boolean getIsEnd() {
         return this.isEnd;
     }
@@ -138,6 +141,7 @@ public abstract class Character {
     //SPRITE
     public Sprite getSprite() {
         int[] pos = getPath();
+        System.out.println("pos: " + Arrays.toString(pos));
         if (pos != null) {
             setPosition(pos[0], pos[1]);
             hiddenPassage();
@@ -171,7 +175,8 @@ public abstract class Character {
     public void setPosition(Integer x, Integer y) {
         this.x = x;
         this.y = y;
-        this.sprite.setPosition(x * this.step, y * this.step);
+        if (this.sprite != null)
+            this.sprite.setPosition(x * this.step, y * this.step);
         hiddenPassage();
     }
 
@@ -433,7 +438,7 @@ public abstract class Character {
                 setPosition(17, 41);
         if (getX() == 7 && (getY() == 30 || getY() == 31))
             setPosition(40, 45);
-        if (getY() == 46 && (getX() == 40 || getX() == 41))
+        if ((getX() == 40 || getX() == 41) && getY() == 46)
             setPosition(8, 30);
     }
 
