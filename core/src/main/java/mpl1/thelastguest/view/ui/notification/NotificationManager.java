@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import mpl1.thelastguest.controller.GameController;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
@@ -34,9 +35,8 @@ public class NotificationManager {
 
         stage.addActor(root);
 
-        root.setWidth(200);
-        root.left();
-        root.defaults().width(200).fillX();
+        root.bottom().right();
+        root.defaults().fillX();
     }
 
     public Stage getStage() {
@@ -48,7 +48,8 @@ public class NotificationManager {
 
         for (Notification n : notifications) {
             Label notif = new Label(n.getText(), skin);
-            root.add(notif).row();
+            notif.setAlignment(Align.right);          // text inside the label
+            root.add(notif).align(Align.right).pad(10).row(); // cell aligned right
         }
 
         reposition();
@@ -71,14 +72,15 @@ public class NotificationManager {
             })
         ));
 
-        root.add(notif).pad(10).row();
+        notif.setAlignment(Align.right);          // text inside the label
+        root.add(notif).align(Align.right).pad(10).row(); // cell aligned right
         reposition();
     }
 
     private void reposition() {
         root.pack();
-        float x = Gdx.graphics.getWidth() - root.getWidth();
-        float y = 0;
+        float x = Gdx.graphics.getWidth() - root.getWidth() - 10;
+        float y = 10;
         root.setPosition(x, y);
     }
 

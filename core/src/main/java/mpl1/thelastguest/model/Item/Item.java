@@ -6,7 +6,9 @@ public abstract class Item {
 
     private String name;
     private String fingerprint;
+    private String description;
     protected String woundType = null;
+
 
     public Item(String name){
         this.name = name;
@@ -33,4 +35,7 @@ public abstract class Item {
     abstract Map<String, Integer> getStats();
     abstract String getAction();
 
+    public String getDescription() {
+        return description;
+    }
 }

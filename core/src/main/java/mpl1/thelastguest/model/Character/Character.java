@@ -237,6 +237,24 @@ public abstract class Character {
         return this.items;
     }
 
+    public Item getItem(String itemName) {
+        for (Item item : this.items) {
+            if (item.getName().equals(itemName)) {
+                return  item;
+            }
+        }
+        return null;
+    }
+
+    public Item getItemByAction(String action) {
+        for (Item item : this.items) {
+            if (item.getClass() == ActionItem.class && ((ActionItem) item).getAction().equals(action)) {
+                return  item;
+            }
+        }
+        return null;
+    }
+
     public void getItem(List<Item> items) {
     }
 

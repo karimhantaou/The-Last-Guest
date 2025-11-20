@@ -47,8 +47,6 @@ public class GameController {
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
-
-        System.out.println(murderer.getName());
     }
 
     public List<Character> getNpcs() {
@@ -67,6 +65,7 @@ public class GameController {
         if (currentNpc == this.npcs.size()) {
             return;
         }
+
         Character current = npcs.get(currentNpc);
         if (!current.isAlive()) {
             this.allCharacters.remove(current);
@@ -86,7 +85,9 @@ public class GameController {
         if (current.getIsEnd()) {
             current.getItem(board.findRoom(current.getRoom()).getItems());
             if (current.kill(this.allCharacters))
-                view.getNotificationManager().addNotification(new Notification("A new person has been killed !", 5));
+            {
+                skullDead();
+            }
             current.setIsEnd(false);
             currentNpc++;
             playerTurn = false;
@@ -103,11 +104,12 @@ public class GameController {
 
     public void update(float delta) {
         if(!player.isAlive()){
-            game.screenManager.showEnd(murderer, player);
+            if(!isSaved()) game.screenManager.showEnd(murderer, player);
         }
         if (currentNpc == this.npcs.size()) {
             if (!playerTurn) {
                 view.getNotificationManager().addNotification(new Notification("your turn!"));
+                skullCloseMurderer();
                 playerTurn = true;
             }
             // PLAYERS ACTION
@@ -273,14 +275,18 @@ public class GameController {
         if(player.dropItem(item)){
             Room actualRoom = board.findRoom(player.getRoom());
             actualRoom.addItem(item);
-            view.getNotificationManager().addNotification(new Notification(item.getName() + " droped"));
+            view.getNotificationManager().addNotification(new Notification(item.getName() + " dropped"));
         }
     }
 
     public void destroyItem(Item item){
         player.dropItem(item);
-        view.getNotificationManager().addNotification(new Notification(item.getName() + " out of use        "));
+        view.getNotificationManager().addNotification(new Notification(item.getName() + " out of use"));
+        view.getPlayerInventory().rebuild();
+    }
 
+    public void displayDescription(Item item){
+        view.getNotificationManager().addNotification(new Notification(item.getDescription(), 5f));
     }
 
     // GUESS MENU
@@ -363,6 +369,44 @@ public class GameController {
         } else{
             view.getNotificationManager().addNotification(new Notification("Not enough action points."));
             return false;
+        }
+    }
+
+    public boolean isSaved(){
+        if(player.canDoAction("save")) {
+            player.setAlive(true);
+            Item item = player.getItemByAction("save");
+            destroyItem(item);
+            view.getNotificationManager().addNotification(new Notification("You have been saved by " + item.getName()));
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    // SKULL ACTION
+
+    public void skullVibrate(){
+        view.getNotificationManager().addNotification(new Notification("The skull vibrated..."));
+    }
+
+    public boolean isSkull(){
+        return player.canDoAction("skull");
+    }
+
+    public void skullDead(){
+        if(isSkull()) skullVibrate();
+    }
+
+    public void skullCloseMurderer(){
+        if(
+            isSkull()
+            && murderer.getX() >= player.getX() - 10
+            && murderer.getX() <= player.getX() + 10
+            && murderer.getY() >= player.getY() - 10
+            && murderer.getY() <= player.getY() + 10
+        ){
+            skullVibrate();
         }
     }
 

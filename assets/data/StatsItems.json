@@ -1,15 +1,5 @@
 [
   {
-    "name": "Steroids",
-    "stats": {
-      "str": 2,
-      "per": 0,
-      "lck": 0,
-      "ap": 0,
-      "inv": 0
-    }
-  },
-  {
     "name": "Glasses",
     "stats": {
       "str": 0,
@@ -17,7 +7,8 @@
       "lck": 0,
       "ap": 0,
       "inv": 0
-    }
+    },
+    "description": "Improves your perception and ability to notice details."
   },
   {
     "name": "Lucky charm",
@@ -27,17 +18,19 @@
       "lck": 2,
       "ap": 0,
       "inv": 0
-    }
+    },
+    "description": "A small trinket said to bring good luck in tricky situations."
   },
   {
-    "name": "Nike Air Max",
+    "name": "Running shoes",
     "stats": {
       "str": 0,
       "per": 0,
       "lck": 0,
       "ap": 2,
       "inv": 0
-    }
+    },
+    "description": "Boosts your agility and allows you to move faster."
   },
   {
     "name": "Backpack",
@@ -46,7 +39,52 @@
       "per": 0,
       "lck": 0,
       "ap": 0,
-      "inv": 1
-    }
+      "inv": 2
+    },
+    "description": "Increases your inventory space for carrying more items."
+  },
+  {
+    "name": "Protein Shake",
+    "stats": {
+      "str": 2,
+      "per": 0,
+      "lck": 0,
+      "ap": 0,
+      "inv": 0
+    },
+    "description": "Temporarily boosts your strength and physical performance."
+  },
+  {
+    "name": "Steroids",
+    "stats": {
+      "str": 4,
+      "per": 0,
+      "lck": 0,
+      "ap": 0,
+      "inv": 0
+    },
+    "description": "A powerful boost to your strength, but use with caution."
+  },
+  {
+    "name": "Broken whispering Skull",
+    "stats": {
+      "str": 0,
+      "per": 3,
+      "lck": 2,
+      "ap": 0,
+      "inv": 0
+    },
+    "description": "An eerie artifact that enhances perception and luck."
+  },
+  {
+    "name": "Binoculars",
+    "stats": {
+      "str": 0,
+      "per": 4,
+      "lck": 0,
+      "ap": 0,
+      "inv": 0
+    },
+    "description": "Allows you to see distant objects clearly, improving perception."
   }
 ]

@@ -25,9 +25,11 @@ public class RoomInventory {
     private Stage stage;
     private Skin skin;
     private GameController controller;
+    private Player player;
 
     public RoomInventory(GameController controller, Player player) {
         this.controller = controller;
+        this.player = player;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
@@ -63,14 +65,17 @@ public class RoomInventory {
 
         // BUTTONS
 
+
         for (Item item : items) {
-            TextButton itemBtn = new TextButton(item.getName(), skin);
-            itemBtn.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.pickItem(item);
-                }
-            });
-            root.row(); root.add(itemBtn);
+            if((int)(Math.random() * 11) <= player.getLck()){
+                TextButton itemBtn = new TextButton(item.getName(), skin);
+                itemBtn.addListener(new ClickListener() {
+                    @Override public void clicked(InputEvent ev, float x, float y) {
+                        controller.pickItem(item);
+                    }
+                });
+                root.row(); root.add(itemBtn);
+            }
         }
 
         TextButton btnClose = new TextButton("Close", skin);
