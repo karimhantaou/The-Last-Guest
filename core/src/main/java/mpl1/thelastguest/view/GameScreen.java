@@ -227,9 +227,9 @@ public class GameScreen implements Screen {
 
     // ROOM INVENTORY
 
-    public void displayRoomInventory(Room actualRoom) {
+    public void displayRoomInventory(Room actualRoom, int nbrItems) {
         this.roomInventoryOpen = true;
-        roomInventory.display(actualRoom);
+        roomInventory.display(actualRoom, nbrItems);
     }
 
     public void closeRoomInventory(){

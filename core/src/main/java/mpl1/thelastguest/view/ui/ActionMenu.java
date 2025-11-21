@@ -107,11 +107,25 @@ public class ActionMenu {
             TextButton btnSearch = new TextButton("Search", skin);
             btnSearch.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.search();
+                    controller.search(1);
                     close();
                 }
             });
             root.add(btnSearch).row();
+
+
+            if(player.canDoAction("unlock") && board.findRoom(player.getRoom()).isLocked()) {
+                TextButton unlock = new TextButton("Unlock", skin);
+                Character finalTarget = target;
+                unlock.addListener(new ClickListener() {
+                    @Override public void clicked(InputEvent ev, float x, float y) {
+                        controller.unlock();
+                        controller.search(1);
+                        close();
+                    }
+                });
+                root.add(unlock).row();
+            }
         }
 
         if(player.canDoAction("inspect") && target != null) {

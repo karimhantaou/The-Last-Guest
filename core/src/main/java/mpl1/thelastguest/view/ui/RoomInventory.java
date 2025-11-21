@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -23,15 +22,17 @@ import java.util.List;
 public class RoomInventory {
 
     private Stage stage;
-    private Skin skin;
-    private GameController controller;
+    private final Skin skin;
+    private final GameController controller;
+    private final Player player;
 
     public RoomInventory(GameController controller, Player player) {
         this.controller = controller;
+        this.player = player;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
-    public void display(Room room) {
+    public void display(Room room, int nbrItems) {
 
         List<Item> items = room.getItems();
 
@@ -56,22 +57,55 @@ public class RoomInventory {
         root.setPosition((float) Gdx.graphics.getWidth() /2 - width / 2, (float) Gdx.graphics.getHeight() /2);
         root.defaults().width(width).fillX();
 
+        // STATS TEST
+
+        int luck = player.getLck();
+        int perception = player.getPer();
+        int maxItems = items.size();
+
+        if (luck > 8) {
+            nbrItems += 2;
+        } else if (luck > 5) {
+            nbrItems += 1;
+        }
+
+        nbrItems = Math.min(nbrItems, maxItems);
+
+        String roomItems = "";
+        if (perception >= 6) {
+            roomItems = ": " + nbrItems + "/" + maxItems;
+        }
+
         // HEADER
 
-        Label header = new Label(room.getName(), skin);
+        Label header = new Label(room.getName() + roomItems, skin);
         root.add(header).pad(10).row();
 
-        // BUTTONS
+        for(int i = 0; i < nbrItems; i++){
+         if(i <= items.size() - 1){
+             TextButton itemBtn = new TextButton(items.get(i).getName(), skin);
+             int finalI = i;
+             itemBtn.addListener(new ClickListener() {
+                 @Override public void clicked(InputEvent ev, float x, float y) {
+                     controller.pickItem(items.get(finalI));
+                 }
+             });
+             root.add(itemBtn).row();
+         }
+        }
 
-        for (Item item : items) {
-            TextButton itemBtn = new TextButton(item.getName(), skin);
-            itemBtn.addListener(new ClickListener() {
+        if(nbrItems < items.size()){
+            TextButton searchAgain = new TextButton("Search again", skin);
+            int finalNbrItems = nbrItems;
+            searchAgain.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.pickItem(item);
+                    close();
+                    controller.search(finalNbrItems + 1);
                 }
             });
-            root.row(); root.add(itemBtn);
+            root.add(searchAgain).padTop(10).row();
         }
+
 
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
@@ -79,7 +113,12 @@ public class RoomInventory {
                 close();
             }
         });
-        root.row(); root.add(btnClose);
+
+        if(nbrItems == items.size()){
+            root.add(btnClose).padBottom(5).padTop(10).row();
+        } else{
+            root.add(btnClose).padBottom(5).row();
+        }
 
         root.pack();
     }

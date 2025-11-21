@@ -8,6 +8,7 @@ import java.util.List;
 public class Room {
     private String name;
     private List<Item> items;
+    private boolean locked = false;
 
     public Room(String name){
         this.name = name;
@@ -30,5 +31,11 @@ public class Room {
         return this.items;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
 
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
 }
