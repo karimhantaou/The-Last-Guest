@@ -71,6 +71,11 @@ public class GameScreen implements Screen {
     public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
         this.font = new BitmapFont();
+        this.map = new TmxMapLoader().load("maps/map.tmx");
+        if (this.map == null)
+            Gdx.app.log("MAP", "Erreur : la carte n'a pas été chargée !");
+        else
+            Gdx.app.log("MAP", "Carte chargée avec succès !");
         this.controller = new GameController(game, this, player, npcs, murderer, items);
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
@@ -163,17 +168,11 @@ public class GameScreen implements Screen {
     //C'est ici on initialise les élements
     @Override
     public void show() {
-        this.map = new TmxMapLoader().load("maps/map.tmx");
-        if (this.map == null)
-            Gdx.app.log("MAP", "Erreur : la carte n'a pas été chargée !");
-        else
-            Gdx.app.log("MAP", "Carte chargée avec succès !");
         this.renderer = new OrthogonalTiledMapRenderer(map);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, this.mapSize, this.mapSize);
         this.camera.position.set(this.mapSize / 2f, this.mapSize / 2f, 0);
         this.camera.update();
-
         playerInventory.rebuild();
         notificationManager.rebuild();
     }
@@ -312,7 +311,6 @@ public class GameScreen implements Screen {
     }
 
     public int getTiledSize() {
-
         return this.map.getProperties().get("tilewidth", Integer.class);
     }
 }
