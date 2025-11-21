@@ -60,6 +60,7 @@ public class ItemActionMenu {
         }
 
         // Action item's USE
+        /*
         if(item.getClass() == ActionItem.class) {
             ActionItem actionItem = (ActionItem) item;
             String action = actionItem.getAction();
@@ -78,6 +79,17 @@ public class ItemActionMenu {
                 }
             });
             root.row(); root.add(use);
+        }*/
+
+        // DISPLAY DESCRIPTION IF CAN INSCPECT
+        if(player.canDoAction("inspect")) {
+            TextButton btnScan = new TextButton("Scan", skin);
+            btnScan.addListener(new ClickListener() {
+                @Override public void clicked(InputEvent ev, float x, float y) {
+                    controller.displayDescription(item);
+                }
+            });
+            root.row(); root.add(btnScan);
         }
 
         // Drop item

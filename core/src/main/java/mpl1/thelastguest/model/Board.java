@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import mpl1.thelastguest.model.Character.Character;
-import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Item.Item;
 
@@ -104,9 +103,7 @@ public class Board {
     }
 
     public Item randomItem(){
-        Item item = items.get(new Random().nextInt(items.size()));
-        items.remove(item);
-        return item;
+        return items.get(new Random().nextInt(items.size()));
     }
 
     public List<Room> createAllRoom() {
@@ -121,6 +118,11 @@ public class Board {
         rooms.add(new Room("Laundry room"));
         rooms.add(new Room("Hall"));
 
+
+        // Lock one room
+        int randomRoom = (int)(Math.random() * rooms.size());
+        rooms.get(randomRoom).setLocked(true);
+
         Collections.shuffle(items);
         Collections.shuffle(rooms);
 
@@ -128,7 +130,11 @@ public class Board {
             Collections.shuffle(rooms);
             for(Room room : rooms){
                 if(!items.isEmpty()){
-                    room.addItem(randomItem());
+                    Item newItem = randomItem();
+                    if(!(room.isLocked() && newItem.getName().equals("key"))){
+                        room.addItem(newItem);
+                        items.remove(newItem);
+                    }
                 }
             }
         }

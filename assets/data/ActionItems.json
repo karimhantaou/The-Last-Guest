@@ -2,36 +2,72 @@
   {
     "name": "Knife",
     "action": "kill",
-    "woundType": "cut"
+    "woundType": "cut",
+    "description": "A sharp blade, useful for close combat and precise strikes."
   },
   {
     "name": "Gun",
     "action": "kill",
-    "woundType": "bullet"
+    "woundType": "bullet",
+    "description": "A standard firearm for ranged attacks, effective at a distance."
   },
   {
     "name": "Fork",
     "action": "kill",
-    "woundType": "cut"
+    "woundType": "cut",
+    "description": "A common utensil repurposed as a makeshift stabbing weapon."
+  },
+  {
+    "name": "Revolver",
+    "action": "kill",
+    "woundType": "bullet",
+    "description": "A classic handgun with moderate damage and reliable accuracy."
+  },
+  {
+    "name": "Axe",
+    "action": "kill",
+    "woundType": "cut",
+    "description": "A heavy bladed weapon capable of dealing massive melee damage."
+  },
+  {
+    "name": "Shotgun",
+    "action": "kill",
+    "woundType": "bullet",
+    "description": "A short-range firearm that delivers powerful bursts of damage."
   },
   {
     "name": "Key",
-    "action": "open_door"
+    "action": "unlock",
+    "description": "That's just a key dude..."
   },
   {
     "name": "Magnifying glass",
-    "action": "inspect"
+    "action": "inspect",
+    "description": "Allows detailed inspection of objects and clues."
   },
   {
     "name": "Fingerprint Scanner",
-    "action": "scan_fingerprints"
+    "action": "scan_fingerprints",
+    "description": "Used to detect and record fingerprints for identification."
   },
   {
     "name": "Lies detector",
-    "action": "detect_lie"
+    "action": "detect_lie",
+    "description": "Analyzes statements and behavior to determine honesty."
   },
   {
     "name": "Fingerprints spoofer",
-    "action": "spoof_fingerprints"
+    "action": "spoof_fingerprints",
+    "description": "A tool to forge or bypass fingerprint security systems."
+  },
+  {
+    "name": "Whispering skull",
+    "action": "skull",
+    "description": "An ancient skull that murmurs secrets and hints."
+  },
+  {
+    "name": "Totem of undying",
+    "action": "save",
+    "description": "A mystical totem that protects its holder from fatal harm, preserving life through ancient magic."
   }
 ]
