@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import mpl1.thelastguest.Main;
+import mpl1.thelastguest.model.Character.CharacterFactory;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -117,13 +118,13 @@ public class SelectCharacterController {
 
     public void selectPlayer(){
         // Création du joueur
-        this.player = new Player(getSelectedCharacter());
+        this.player = (Player) CharacterFactory.create("player", getSelectedCharacter());
         this.player.setStartAp(this.player.getAp());
         this.characters.remove(getSelectedCharacter()); // On retire le personnage de la liste des pnjs
 
         // Tueur aléatoire
         int randomMurdererIndex = (int)(Math.random() * characters.size() - 1);
-        this.murderer = new Murderer(characters.get(randomMurdererIndex));
+        this.murderer = (Murderer) CharacterFactory.create("murderer", characters.get(randomMurdererIndex));
         this.murderer.setStartAp(characters.get(randomMurdererIndex).getAp());
         this.characters.remove(characters.get(randomMurdererIndex));
 
