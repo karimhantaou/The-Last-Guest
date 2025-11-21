@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -23,9 +22,9 @@ import java.util.List;
 public class RoomInventory {
 
     private Stage stage;
-    private Skin skin;
-    private GameController controller;
-    private Player player;
+    private final Skin skin;
+    private final GameController controller;
+    private final Player player;
 
     public RoomInventory(GameController controller, Player player) {
         this.controller = controller;
@@ -58,33 +57,29 @@ public class RoomInventory {
         root.setPosition((float) Gdx.graphics.getWidth() /2 - width / 2, (float) Gdx.graphics.getHeight() /2);
         root.defaults().width(width).fillX();
 
-        // HEADER
+        // STATS TEST
+
+        int luck = player.getLck();
+        int perception = player.getPer();
+        int maxItems = items.size();
+
+        if (luck > 8) {
+            nbrItems += 2;
+        } else if (luck > 5) {
+            nbrItems += 1;
+        }
+
+        nbrItems = Math.min(nbrItems, maxItems);
 
         String roomItems = "";
-
-        if(player.getPer() >= 6){
-            if(nbrItems > items.size()) nbrItems = items.size();
-            roomItems = ": " + nbrItems + "/" + String.valueOf(items.size());
+        if (perception >= 6) {
+            roomItems = ": " + nbrItems + "/" + maxItems;
         }
+
+        // HEADER
 
         Label header = new Label(room.getName() + roomItems, skin);
         root.add(header).pad(10).row();
-
-        // BUTTONS
-
-        /* Luck based
-        for (Item item : items) {
-            if((int)(Math.random() * 11) <= player.getLck()){
-                TextButton itemBtn = new TextButton(item.getName(), skin);
-                itemBtn.addListener(new ClickListener() {
-                    @Override public void clicked(InputEvent ev, float x, float y) {
-                        controller.pickItem(item);
-                    }
-                });
-                root.row(); root.add(itemBtn);
-            }
-        }*/
-
 
         for(int i = 0; i < nbrItems; i++){
          if(i <= items.size() - 1){
@@ -95,7 +90,7 @@ public class RoomInventory {
                      controller.pickItem(items.get(finalI));
                  }
              });
-             root.row(); root.add(itemBtn);
+             root.add(itemBtn).row();
          }
         }
 
@@ -108,7 +103,7 @@ public class RoomInventory {
                     controller.search(finalNbrItems + 1);
                 }
             });
-            root.row(); root.add(searchAgain).padTop(10);
+            root.add(searchAgain).padTop(10).row();
         }
 
 
@@ -118,7 +113,12 @@ public class RoomInventory {
                 close();
             }
         });
-        root.row(); root.add(btnClose).padBottom(5).padTop(10);
+
+        if(nbrItems == items.size()){
+            root.add(btnClose).padBottom(5).padTop(10).row();
+        } else{
+            root.add(btnClose).padBottom(5).row();
+        }
 
         root.pack();
     }

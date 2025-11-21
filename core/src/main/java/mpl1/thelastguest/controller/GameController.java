@@ -188,6 +188,9 @@ public class GameController {
     }
 
     public void spoofFingerprints(){
+
+        if(!player.enoughAp(1)) return;
+
         String[] fingerprints = {"A", "L", "W"};
         String fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
         player.setFingerprint(fingerprint);
@@ -197,8 +200,10 @@ public class GameController {
 
 
     public void scanFingerprints(Item item){
-        Notification notification;
 
+        if(!player.enoughAp(1)) return;
+
+        Notification notification;
         if(item.getFingerprint() != null && player.getLck() > 3){
             notification = new Notification("Fingerprints: " + item.getFingerprint(), 5f);
         } else{
@@ -209,6 +214,9 @@ public class GameController {
     }
 
     public void scanFingerprints(Character ch){
+
+        if(!player.enoughAp(1)) return;
+
         Notification notification;
 
         if(player.getStr() > ch.getStr()){
@@ -224,6 +232,9 @@ public class GameController {
     }
 
     public void scanClueFingerprints(Character npc){
+
+        if(!player.enoughAp(2)) return;
+
         Notification notification;
 
         if(npc.getFingerprint() != null && player.getLck() > 5){
@@ -236,7 +247,14 @@ public class GameController {
     }
 
     public void inspect(Character npc){
-        view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
+
+        if(!player.enoughAp(1)) return;
+
+        if(player.getPer() > 5){
+            view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
+        } else{
+            view.getNotificationManager().addNotification(new Notification("No wounds found...", 5f));
+        }
     }
     // ROOM SEARCH
 
@@ -258,6 +276,9 @@ public class GameController {
     }
 
     public void unlock(){
+
+        if(!player.enoughAp(1)) return;
+
         board.findRoom(player.getRoom()).setLocked(false);
         destroyItem(player.getItemByAction("unlock"));
         view.getNotificationManager().addNotification(new Notification("You unlocked the room"));
