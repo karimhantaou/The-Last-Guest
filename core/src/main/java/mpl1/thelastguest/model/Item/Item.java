@@ -6,9 +6,17 @@ public abstract class Item {
 
     private String name;
     private String fingerprint;
+    private boolean fingerPrintFound = false;
     private String description;
     protected String woundType = null;
 
+    public boolean isFingerPrintFound() {
+        return fingerPrintFound;
+    }
+
+    public void setFingerPrintFound(boolean fingerPrintFound) {
+        this.fingerPrintFound = fingerPrintFound;
+    }
 
     public Item(String name){
         this.name = name;

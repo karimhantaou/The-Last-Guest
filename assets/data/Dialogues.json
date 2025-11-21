@@ -1,0 +1,30 @@
+[
+  { "type": "greeting", "message": "What is it ?"},
+  { "type": "greeting", "message": "Hello there."},
+  { "type": "greeting", "message": "Inspector... what do you need ?"},
+  { "type": "greeting", "message": "I'm innocent!"},
+  { "type": "greeting", "message": "Found anything new, Inspector ?"},
+  { "type": "greeting", "message": "How can I help ?"},
+  { "type": "greeting", "message": "Yes ? What’s going on ?"},
+
+  { "type": "refusal", "message": "Never !"},
+  { "type": "refusal", "message": "Noway."},
+  { "type": "refusal", "message": "In your dream."},
+  { "type": "refusal", "message": "Get lost !"},
+  { "type": "refusal", "message": "Sorry but no."},
+  { "type": "refusal", "message": "I must decline..."},
+  { "type": "refusal", "message": "Listen... it's not me."},
+  { "type": "refusal", "message": "Tell me where is Amine first."},
+
+  { "type": "alibi", "message": "I just did some rearranging in the room."},
+  { "type": "alibi", "message": "I brushed it aside by accident." },
+  { "type": "alibi", "message": "I was checking if it was real." },
+  { "type": "alibi", "message": "I borrowed it for a moment." },
+  { "type": "alibi", "message": "I handed it back to its owner earlier." },
+  { "type": "alibi", "message": "It was in my way, so I moved it." },
+  { "type": "alibi", "message": "I inspected it out of curiosity." },
+  { "type": "alibi", "message": "I picked it up without thinking." },
+  { "type": "alibi", "message": "Someone asked me to hold it." },
+  { "type": "alibi", "message": "I was organizing the shelf it was on." },
+  { "type": "alibi", "message": "I set it down after showing it to someone." }
+]

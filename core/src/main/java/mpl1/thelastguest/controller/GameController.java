@@ -10,12 +10,12 @@ import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Character.Character;
-import mpl1.thelastguest.model.Item.ActionItem;
+import mpl1.thelastguest.model.Dialogue;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.EndScreen;
 import mpl1.thelastguest.view.GameScreen;
-import mpl1.thelastguest.view.ui.notification.Notification;
+import mpl1.thelastguest.model.Notification;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +33,7 @@ public class GameController {
     private List<Character> allCharacters;
     private Murderer murderer;
     private List<Item> items;
+    private List<Dialogue> dialogues;
     private GameScreen view;
     private Board board;
     private int currentNpc;
@@ -50,7 +51,7 @@ public class GameController {
      * @param murderer instance of the class murderer (it's the current murderer of the game) {@link Murderer}
      * @param items list of instance of item (it's all items on the game) {@link Item}
      */
-    public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
+    public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items, List<Dialogue> dialogues) {
         this.game = game;
         this.view = view;
         this.player = player;
@@ -64,6 +65,7 @@ public class GameController {
         Collections.shuffle(npcs);
         this.murderer = murderer;
         this.items = items;
+        this.dialogues = dialogues;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items, view.getTiledSize());
     }
 
@@ -216,7 +218,19 @@ public class GameController {
             || view.isItemActionMenuOpen()
             || view.isGuessMenuOpen()
             || view.isPlayerMenuOpen()
-            || view.isPauseMenuOpen();
+            || view.isPauseMenuOpen()
+            || view.isTalkMenuOpen();
+    }
+
+    public void closeAllMenu(){
+        view.closeActionMenu();
+        view.closeGuessMenu();
+        view.closeItemActionMenu();
+        view.closePlayerMenu();
+        view.closeRoomInventory();
+        view.closePauseMenu();
+        view.closeTalkMenu();
+        view.getPlayerInventory().rebuild();
     }
 
     /**
@@ -225,7 +239,7 @@ public class GameController {
      */
     public void closeActionMenu(){
         view.closeActionMenu();
-        if (!view.isRoomInventoryOpen()) view.getPlayerInventory().rebuild();
+        if (!view.isRoomInventoryOpen() && !view.isTalkMenuOpen()) view.getPlayerInventory().rebuild();
     }
 
     /**
@@ -248,7 +262,7 @@ public class GameController {
      */
     public void spoofFingerprints(){
 
-        if(!player.enoughAp(1)) return;
+        if(!enoughAp(1)) return;
 
         String[] fingerprints = {"A", "L", "W"};
         String fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
@@ -266,11 +280,12 @@ public class GameController {
      */
     public void scanFingerprints(Item item){
 
-        if(!player.enoughAp(1)) return;
+        if(!enoughAp(1)) return;
 
         Notification notification;
         if(item.getFingerprint() != null && player.getLck() > 3){
             notification = new Notification("Fingerprints: " + item.getFingerprint(), 5f);
+            item.setFingerPrintFound(true);
         } else{
             notification = new Notification("No fingerprints found");
         }
@@ -287,13 +302,14 @@ public class GameController {
      */
     public void scanFingerprints(Character ch){
 
-        if(!player.enoughAp(1)) return;
+        if(!enoughAp(1)) return;
 
         Notification notification;
 
         if(player.getStr() > ch.getStr()){
             if(ch.getFingerprint() != null){
                 notification = new Notification("Fingerprints: " + ch.getFingerprint(), 5f);
+                ch.setFingerPrintFound(true);
             } else{
                 notification = new Notification("No fingerprints found");
             }
@@ -312,11 +328,11 @@ public class GameController {
      */
     public void scanClueFingerprints(Character npc){
 
-        if(!player.enoughAp(2)) return;
+        if(!enoughAp(2)) return;
 
         Notification notification;
 
-        if(npc.getFingerprint() != null && player.getLck() > 5){
+        if(npc.getFingerprint() != null && player.getLck() > 8 && player.getPer() > 8){
             notification = new Notification("Fingerprints: " + npc.getClueFingerprint(), 5f);
         } else{
             notification = new Notification("No fingerprints found");
@@ -334,7 +350,7 @@ public class GameController {
      */
     public void inspect(Character npc){
 
-        if(!player.enoughAp(1)) return;
+        if(!enoughAp(1)) return;
 
         if(player.getPer() > 5){
             view.getNotificationManager().addNotification(new Notification("Wound type: " + npc.getClueWound(), 5f));
@@ -342,6 +358,34 @@ public class GameController {
             view.getNotificationManager().addNotification(new Notification("No wounds found...", 5f));
         }
     }
+
+    public void displayTalkMenu(Character npc, String answer){
+        closeActionMenu();
+        view.displayTalkMenu(npc, answer);
+    }
+
+    public void closeTalkMenu(){
+        view.closeTalkMenu();
+        view.getPlayerInventory().rebuild();
+    }
+
+    public void askForFingerprint(Character npc){
+        if(!enoughAp(1)) return;
+
+        view.closeTalkMenu();
+        view.displayTalkMenu(npc, "alibi");
+        if(player.canDoAction("detect_lie")){
+             int randomNbr = (int) Math.floor(Math.random() * 11);
+
+             // Sucess -> Tell if npc is murderer, Failure -> Tell npc is murderer even if he is not.
+             if(
+                 randomNbr <= player.getLck() && npc.getClass() == Murderer.class
+                 || randomNbr > player.getLck() && npc.getClass() != Murderer.class){
+                 view.getNotificationManager().addNotification(new Notification("Lie detector: bip bip bip"));
+             }
+        }
+    }
+
     // ROOM SEARCH
 
     /**
@@ -375,7 +419,7 @@ public class GameController {
      */
     public void unlock(){
 
-        if(!player.enoughAp(1)) return;
+        if(!enoughAp(1)) return;
 
         board.findRoom(player.getRoom()).setLocked(false);
         destroyItem(player.getItemByAction("unlock"));
@@ -391,8 +435,7 @@ public class GameController {
         if(player.pickItem(item)){
             Room actualRoom = board.findRoom(player.getRoom());
             actualRoom.removeItem(item);
-            view.closeRoomInventory();
-            view.getPlayerInventory().rebuild();
+            closeRoomInventory();
             view.getNotificationManager().addNotification(new Notification(item.getName() + " picked"));
         } else{
             view.getNotificationManager().addNotification(new Notification("Not enough space in the inventory."));

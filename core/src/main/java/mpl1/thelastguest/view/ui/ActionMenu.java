@@ -86,6 +86,9 @@ public class ActionMenu {
             }else{
                 lifeStatus = ": Dead";
             }
+            if(target.isFingerPrintFound()){
+                lifeStatus += " " + target.getFingerprint();
+            }
 
             Label header = new Label(target.getName() + lifeStatus, skin);
             root.add(header).pad(10).row();
@@ -128,38 +131,53 @@ public class ActionMenu {
             }
         }
 
-        if(player.canDoAction("inspect") && target != null) {
-            TextButton btnInspect = new TextButton("Inspect", skin);
-            Character finalTarget = target;
-            btnInspect.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.inspect(finalTarget);
-                }
-            });
-           root.add(btnInspect).row();
+        if(target != null){
+
+            if(target.isAlive()) {
+                TextButton talk = new TextButton("Talk", skin);
+                Character finalTarget = target;
+                talk.addListener(new ClickListener() {
+                    @Override public void clicked(InputEvent ev, float x, float y) {
+                        controller.displayTalkMenu(finalTarget, "");
+                    }
+                });
+                root.add(talk).row();
+            }
+
+            if(player.canDoAction("inspect") && !target.isAlive() ) {
+                TextButton btnInspect = new TextButton("Inspect", skin);
+                Character finalTarget = target;
+                btnInspect.addListener(new ClickListener() {
+                    @Override public void clicked(InputEvent ev, float x, float y) {
+                        controller.inspect(finalTarget);
+                    }
+                });
+                root.add(btnInspect).row();
+            }
+
+            if(player.canDoAction("scan_fingerprints") && target.isAlive()) {
+                TextButton scan = new TextButton("Scan fingerprints", skin);
+                Character finalTarget = target;
+                scan.addListener(new ClickListener() {
+                    @Override public void clicked(InputEvent ev, float x, float y) {
+                        controller.scanFingerprints(finalTarget);
+                    }
+                });
+                root.add(scan).row();
+            }
+
+            if(player.canDoAction("scan_fingerprints") && !target.isAlive()) {
+                TextButton scan = new TextButton("Scan clues fingerprints", skin);
+                Character finalTarget = target;
+                scan.addListener(new ClickListener() {
+                    @Override public void clicked(InputEvent ev, float x, float y) {
+                        controller.scanClueFingerprints(finalTarget);
+                    }
+                });
+                root.add(scan).row();
+            }
         }
 
-        if(player.canDoAction("scan_fingerprints") &&  target != null) {
-            TextButton scan = new TextButton("Scan fingerprints", skin);
-            Character finalTarget = target;
-            scan.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.scanFingerprints(finalTarget);
-                }
-            });
-            root.add(scan).row();
-        }
-
-        if(player.canDoAction("scan_fingerprints") &&  target != null && !target.isAlive()) {
-            TextButton scan = new TextButton("Scan clues fingerprints", skin);
-            Character finalTarget = target;
-            scan.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    controller.scanClueFingerprints(finalTarget);
-                }
-            });
-            root.add(scan).row();
-        }
 
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {

@@ -8,6 +8,7 @@ import mpl1.thelastguest.model.Character.CharacterFactory;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Dialogue;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
@@ -28,6 +29,7 @@ public class SelectCharacterController {
     private Player player;
 
     private List<Item> items;
+    private List<Dialogue> dialogues;
 
     public SelectCharacterController(Main game, SelectCharacterScreen view) {
         this.game = game;
@@ -38,6 +40,7 @@ public class SelectCharacterController {
             npc.setStartAp(npc.getAp());
         }
         npcBuildSprite();
+        this.dialogues = createDialogues();
     }
 
     public void update(float delta) {
@@ -98,6 +101,20 @@ public class SelectCharacterController {
         return items;
     }
 
+    public List<Dialogue> createDialogues(){
+        try{
+            Gson gson = new Gson();
+
+            FileHandle file = Gdx.files.internal("data/dialogues.json");
+            String json = file.readString();
+
+            return gson.fromJson(json, new TypeToken<List<Dialogue>>(){}.getType());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public Npc getSelectedCharacter(){
         return characters.get(selectedCharacter);
     }
@@ -155,7 +172,7 @@ public class SelectCharacterController {
     }
 
     public void playGame(){
-        game.screenManager.showGame(this.player, this.characters, this.murderer, this.items);
+        game.screenManager.showGame(this.player, this.characters, this.murderer, this.items, this.dialogues);
     }
 
     public List<Npc> getNpcs() {
