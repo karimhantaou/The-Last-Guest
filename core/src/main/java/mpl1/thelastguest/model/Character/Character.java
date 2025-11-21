@@ -291,6 +291,10 @@ public abstract class Character {
         }
     }
 
+    public boolean enoughInventory(){
+        return this.items.size() < this.getInv();
+    }
+
     public boolean dropItem(Item item){
         if(this.items.contains(item)){
             if(item.getClass() == StatItem.class){
@@ -302,6 +306,10 @@ public abstract class Character {
         } else{
             return false;
         }
+    }
+
+    public boolean enoughAp(int ap){
+        return this.getAp() >= ap;
     }
 
     // FINGERPRINT

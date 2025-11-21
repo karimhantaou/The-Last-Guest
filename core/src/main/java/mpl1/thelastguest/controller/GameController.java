@@ -10,6 +10,7 @@ import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 import mpl1.thelastguest.model.Character.Character;
+import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.GameScreen;
@@ -31,6 +32,7 @@ public class GameController {
     private int currentNpc;
     private boolean playerTurn = false;
     private boolean leftClicked = false;
+    private boolean deadRound = false;
 
     public GameController(Main game, GameScreen view, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -47,6 +49,7 @@ public class GameController {
         this.murderer = murderer;
         this.items = items;
         this.board = new Board(1600 / 50, this.npcs, this.player, this.items);
+
     }
 
     public List<Character> getNpcs() {
@@ -86,7 +89,7 @@ public class GameController {
             current.getItem(board.findRoom(current.getRoom()).getItems());
             if (current.kill(this.allCharacters))
             {
-                skullDead();
+                deadRound = true;
             }
             current.setIsEnd(false);
             currentNpc++;
@@ -111,6 +114,8 @@ public class GameController {
                 view.getNotificationManager().addNotification(new Notification("your turn!"));
                 skullCloseMurderer();
                 playerTurn = true;
+                if(deadRound) {skullDead();}
+                deadRound = false;
             }
             // PLAYERS ACTION
             if(!isMenuOpen()){
@@ -194,7 +199,7 @@ public class GameController {
     public void scanFingerprints(Item item){
         Notification notification;
 
-        if(item.getFingerprint() != null){
+        if(item.getFingerprint() != null && player.getLck() > 3){
             notification = new Notification("Fingerprints: " + item.getFingerprint(), 5f);
         } else{
             notification = new Notification("No fingerprints found");
@@ -206,18 +211,22 @@ public class GameController {
     public void scanFingerprints(Character ch){
         Notification notification;
 
-        if(ch.getFingerprint() != null){
-            notification = new Notification("Fingerprints: " + ch.getFingerprint(), 5f);
+        if(player.getStr() > ch.getStr()){
+            if(ch.getFingerprint() != null){
+                notification = new Notification("Fingerprints: " + ch.getFingerprint(), 5f);
+            } else{
+                notification = new Notification("No fingerprints found");
+            }
         } else{
-            notification = new Notification("No fingerprints found");
+            notification = new Notification(ch.getName() + " won't let you scan him without fighting back");
         }
-
-        view.getNotificationManager().addNotification(notification);    }
+        view.getNotificationManager().addNotification(notification);
+    }
 
     public void scanClueFingerprints(Character npc){
         Notification notification;
 
-        if(npc.getFingerprint() != null){
+        if(npc.getFingerprint() != null && player.getLck() > 5){
             notification = new Notification("Fingerprints: " + npc.getClueFingerprint(), 5f);
         } else{
             notification = new Notification("No fingerprints found");
@@ -231,26 +240,38 @@ public class GameController {
     }
     // ROOM SEARCH
 
-    public void search(){
+    public void search(int nbrItems){
+        if(!enoughAp(1)) return;
+
+        view.getPlayerInventory().rebuild();
+
         Room actualRoom = board.findRoom(player.getRoom());
+        if(actualRoom.isLocked()){
+            view.getNotificationManager().addNotification(new Notification("The room is locked"));
+            return;
+        }
         if(!actualRoom.getItems().isEmpty()){
-            view.displayRoomInventory(actualRoom);
+            view.displayRoomInventory(actualRoom, nbrItems);
         } else{
             view.getNotificationManager().addNotification(new Notification("Nothing in the room"));
         }
     }
 
+    public void unlock(){
+        board.findRoom(player.getRoom()).setLocked(false);
+        destroyItem(player.getItemByAction("unlock"));
+        view.getNotificationManager().addNotification(new Notification("You unlocked the room"));
+    }
+
     public void pickItem(Item item){
-        if(playerAp()){
-            if(player.pickItem(item)){
-                Room actualRoom = board.findRoom(player.getRoom());
-                actualRoom.removeItem(item);
-                view.closeRoomInventory();
-                view.getPlayerInventory().rebuild();
-                view.getNotificationManager().addNotification(new Notification(item.getName() + " picked"));
-            } else{
-                view.getNotificationManager().addNotification(new Notification("No more space in the inventory"));
-            }
+        if(player.pickItem(item)){
+            Room actualRoom = board.findRoom(player.getRoom());
+            actualRoom.removeItem(item);
+            view.closeRoomInventory();
+            view.getPlayerInventory().rebuild();
+            view.getNotificationManager().addNotification(new Notification(item.getName() + " picked"));
+        } else{
+            view.getNotificationManager().addNotification(new Notification("Not enough space in the inventory."));
         }
     }
 
@@ -362,9 +383,9 @@ public class GameController {
 
     // PLAYER AP
 
-    public boolean playerAp(){
-        if(player.getAp() > 0){
-            player.setAp(player.getAp() - 1);
+    public boolean enoughAp(int ap){
+        if(player.enoughAp(ap)){
+            player.setAp(player.getAp() - ap);
             return true;
         } else{
             view.getNotificationManager().addNotification(new Notification("Not enough action points."));
@@ -386,27 +407,33 @@ public class GameController {
 
     // SKULL ACTION
 
-    public void skullVibrate(){
-        view.getNotificationManager().addNotification(new Notification("The skull vibrated..."));
-    }
-
     public boolean isSkull(){
         return player.canDoAction("skull");
     }
 
+    public boolean skullStats(int per){
+        if(player.getPer() >= per){
+            return true;
+        } else{
+            view.getNotificationManager().addNotification(new Notification("The skull stay silent..."));
+            return false;
+        }
+    }
+
     public void skullDead(){
-        if(isSkull()) skullVibrate();
+        if(isSkull() && skullStats(5)) view.getNotificationManager().addNotification(new Notification("The skull vibrated... someone's perished"));
     }
 
     public void skullCloseMurderer(){
         if(
             isSkull()
+            && skullStats(8)
             && murderer.getX() >= player.getX() - 10
             && murderer.getX() <= player.getX() + 10
             && murderer.getY() >= player.getY() - 10
             && murderer.getY() <= player.getY() + 10
         ){
-            skullVibrate();
+            view.getNotificationManager().addNotification(new Notification("The skull vibrated... a dark presence is near"));
         }
     }
 

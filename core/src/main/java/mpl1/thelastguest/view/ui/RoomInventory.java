@@ -33,7 +33,7 @@ public class RoomInventory {
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
-    public void display(Room room) {
+    public void display(Room room, int nbrItems) {
 
         List<Item> items = room.getItems();
 
@@ -60,12 +60,19 @@ public class RoomInventory {
 
         // HEADER
 
-        Label header = new Label(room.getName(), skin);
+        String roomItems = "";
+
+        if(player.getPer() >= 6){
+            if(nbrItems > items.size()) nbrItems = items.size();
+            roomItems = ": " + nbrItems + "/" + String.valueOf(items.size());
+        }
+
+        Label header = new Label(room.getName() + roomItems, skin);
         root.add(header).pad(10).row();
 
         // BUTTONS
 
-
+        /* Luck based
         for (Item item : items) {
             if((int)(Math.random() * 11) <= player.getLck()){
                 TextButton itemBtn = new TextButton(item.getName(), skin);
@@ -76,7 +83,34 @@ public class RoomInventory {
                 });
                 root.row(); root.add(itemBtn);
             }
+        }*/
+
+
+        for(int i = 0; i < nbrItems; i++){
+         if(i <= items.size() - 1){
+             TextButton itemBtn = new TextButton(items.get(i).getName(), skin);
+             int finalI = i;
+             itemBtn.addListener(new ClickListener() {
+                 @Override public void clicked(InputEvent ev, float x, float y) {
+                     controller.pickItem(items.get(finalI));
+                 }
+             });
+             root.row(); root.add(itemBtn);
+         }
         }
+
+        if(nbrItems < items.size()){
+            TextButton searchAgain = new TextButton("Search again", skin);
+            int finalNbrItems = nbrItems;
+            searchAgain.addListener(new ClickListener() {
+                @Override public void clicked(InputEvent ev, float x, float y) {
+                    close();
+                    controller.search(finalNbrItems + 1);
+                }
+            });
+            root.row(); root.add(searchAgain).padTop(10);
+        }
+
 
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
@@ -84,7 +118,7 @@ public class RoomInventory {
                 close();
             }
         });
-        root.row(); root.add(btnClose);
+        root.row(); root.add(btnClose).padBottom(5).padTop(10);
 
         root.pack();
     }

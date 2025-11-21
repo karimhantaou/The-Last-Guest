@@ -60,15 +60,5 @@
       "ap": 4,
       "inv": 5
     }
-  },
-  {
-    "name": "Robert la malice",
-    "stats": {
-      "str": 0,
-      "per": 10,
-      "lck": 100,
-      "ap": 100,
-      "inv": 100
-    }
   }
 ]

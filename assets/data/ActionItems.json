@@ -37,8 +37,8 @@
   },
   {
     "name": "Key",
-    "action": "open_door",
-    "description": "A small tool used to unlock doors or containers."
+    "action": "unlock",
+    "description": "That's just a key dude..."
   },
   {
     "name": "Magnifying glass",
@@ -61,14 +61,13 @@
     "description": "A tool to forge or bypass fingerprint security systems."
   },
   {
-    "name": "Whispering Skull",
+    "name": "Whispering skull",
     "action": "skull",
-    "description": "An ancient skull that murmurs secrets and hints in a cryptic, ritualistic tone."
+    "description": "An ancient skull that murmurs secrets and hints."
   },
   {
-    "name": "Totem of Undying",
+    "name": "Totem of undying",
     "action": "save",
     "description": "A mystical totem that protects its holder from fatal harm, preserving life through ancient magic."
   }
-
 ]
