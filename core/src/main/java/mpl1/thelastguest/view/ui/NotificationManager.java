@@ -1,23 +1,16 @@
-package mpl1.thelastguest.view.ui.notification;
+package mpl1.thelastguest.view.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import mpl1.thelastguest.controller.GameController;
-import mpl1.thelastguest.model.Character.Player;
-import mpl1.thelastguest.model.Item.Item;
-import mpl1.thelastguest.model.Item.StatItem;
+import mpl1.thelastguest.model.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class NotificationManager {
 

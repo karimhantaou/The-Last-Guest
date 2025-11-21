@@ -28,6 +28,7 @@ public abstract class Character {
 
     // Empreintes du personnages
     private String fingerprint;
+    private boolean fingerPrintFound = false;
 
     // Empreintes du personnages
     private Map<String,String> clues = new HashMap<>(); // fingerprint,
@@ -253,6 +254,24 @@ public abstract class Character {
             }
         }
         return null;
+    }
+
+    public List<Item> getWeapons(){
+        List<Item> weapons = new ArrayList<>();
+        for (Item item : this.items) {
+            if(item.getClass() == ActionItem.class && ((ActionItem) item).getAction().equals("kill")){
+                weapons.add(item);
+            }
+        }
+        return weapons;
+    }
+
+    public boolean isFingerPrintFound() {
+        return fingerPrintFound;
+    }
+
+    public void setFingerPrintFound(boolean fingerPrintFound) {
+        this.fingerPrintFound = fingerPrintFound;
     }
 
     public void getItem(List<Item> items) {

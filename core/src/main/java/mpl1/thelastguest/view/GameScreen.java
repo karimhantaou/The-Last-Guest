@@ -20,10 +20,11 @@ import mpl1.thelastguest.model.Board;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Dialogue;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.ui.*;
-import mpl1.thelastguest.view.ui.notification.NotificationManager;
+import mpl1.thelastguest.view.ui.NotificationManager;
 import mpl1.thelastguest.model.Character.Character;
 
 import java.util.ArrayList;
@@ -71,10 +72,10 @@ public class GameScreen implements Screen {
     private boolean talkMenuOpen;
 
     // Constructeur de salopard
-    public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
+    public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items, List<Dialogue> dialogues) {
         this.game = game;
         this.font = new BitmapFont();
-        this.controller = new GameController(game, this, player, npcs, murderer, items);
+        this.controller = new GameController(game, this, player, npcs, murderer, items, dialogues);
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
 
@@ -107,7 +108,7 @@ public class GameScreen implements Screen {
         pauseMenu = new PauseMenu(controller);
         pauseMenuOpen = false;
 
-        talkMenu = new TalkMenu(controller, player);
+        talkMenu = new TalkMenu(controller, player, dialogues);
         talkMenuOpen = false;
     }
 
@@ -165,6 +166,10 @@ public class GameScreen implements Screen {
             pauseMenu.getStage().draw();
         }
 
+        if(isTalkMenuOpen() && talkMenu.getStage() != null) {
+            talkMenu.getStage().act(delta);
+            talkMenu.getStage().draw();
+        }
     }
 
     //C'est ici on initialise les élements
@@ -316,9 +321,9 @@ public class GameScreen implements Screen {
 
     // TALK MENU
 
-    public void displayTalkMenu(Character npc){
+    public void displayTalkMenu(Character npc, String answer){
         this.talkMenuOpen = true;
-        this.talkMenu.display(npc);
+        this.talkMenu.display(npc, answer);
     }
 
     public void closeTalkMenu(){

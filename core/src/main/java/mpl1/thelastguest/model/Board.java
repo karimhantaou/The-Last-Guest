@@ -130,7 +130,7 @@ public class Board {
             for(Room room : rooms){
                 if(!items.isEmpty()){
                     Item newItem = randomItem();
-                    if(!(room.isLocked() && newItem.getName().equals("key"))){
+                    if(!(room.isLocked() && newItem.getName().equals("Key"))){
                         room.addItem(newItem);
                         items.remove(newItem);
                     }

@@ -1,4 +1,4 @@
-package mpl1.thelastguest.view.ui.notification;
+package mpl1.thelastguest.model;
 
 public class Notification {
     private String text;

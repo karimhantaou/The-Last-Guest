@@ -86,6 +86,9 @@ public class ActionMenu {
             }else{
                 lifeStatus = ": Dead";
             }
+            if(target.isFingerPrintFound()){
+                lifeStatus += " " + target.getFingerprint();
+            }
 
             Label header = new Label(target.getName() + lifeStatus, skin);
             root.add(header).pad(10).row();
@@ -135,7 +138,7 @@ public class ActionMenu {
                 Character finalTarget = target;
                 talk.addListener(new ClickListener() {
                     @Override public void clicked(InputEvent ev, float x, float y) {
-                        controller.talk(finalTarget);
+                        controller.displayTalkMenu(finalTarget, "");
                     }
                 });
                 root.add(talk).row();
@@ -152,7 +155,7 @@ public class ActionMenu {
                 root.add(btnInspect).row();
             }
 
-            if(player.canDoAction("scan_fingerprints")) {
+            if(player.canDoAction("scan_fingerprints") && target.isAlive()) {
                 TextButton scan = new TextButton("Scan fingerprints", skin);
                 Character finalTarget = target;
                 scan.addListener(new ClickListener() {
