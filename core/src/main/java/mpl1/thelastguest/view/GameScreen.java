@@ -17,7 +17,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import mpl1.thelastguest.model.Board;
-import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
@@ -25,6 +24,7 @@ import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.ui.*;
 import mpl1.thelastguest.view.ui.notification.NotificationManager;
+import mpl1.thelastguest.model.Character.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +67,9 @@ public class GameScreen implements Screen {
     private PauseMenu pauseMenu;
     private boolean pauseMenuOpen;
 
+    private TalkMenu talkMenu;
+    private boolean talkMenuOpen;
+
     // Constructeur de salopard
     public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
         this.game = game;
@@ -103,6 +106,9 @@ public class GameScreen implements Screen {
 
         pauseMenu = new PauseMenu(controller);
         pauseMenuOpen = false;
+
+        talkMenu = new TalkMenu(controller, player);
+        talkMenuOpen = false;
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -158,6 +164,7 @@ public class GameScreen implements Screen {
             pauseMenu.getStage().act(delta);
             pauseMenu.getStage().draw();
         }
+
     }
 
     //C'est ici on initialise les élements
@@ -305,6 +312,21 @@ public class GameScreen implements Screen {
 
     public boolean isPauseMenuOpen() {
         return this.pauseMenuOpen;
+    }
+
+    // TALK MENU
+
+    public void displayTalkMenu(Character npc){
+        this.talkMenuOpen = true;
+        this.talkMenu.display(npc);
+    }
+
+    public void closeTalkMenu(){
+        this.talkMenuOpen = false;
+    }
+
+    public boolean isTalkMenuOpen() {
+        return this.talkMenuOpen;
     }
 
     public OrthographicCamera getCamera() {

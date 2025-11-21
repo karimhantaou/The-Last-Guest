@@ -256,6 +256,10 @@ public class GameController {
             view.getNotificationManager().addNotification(new Notification("No wounds found...", 5f));
         }
     }
+
+    public void talk(Character npc){
+        view.displayTalkMenu(npc);
+    }
     // ROOM SEARCH
 
     public void search(int nbrItems){
