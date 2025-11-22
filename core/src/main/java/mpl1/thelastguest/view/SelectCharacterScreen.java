@@ -75,6 +75,7 @@ public class SelectCharacterScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         table.center();
+
         stage.addActor(table);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -97,33 +98,50 @@ public class SelectCharacterScreen implements Screen {
         charImage = new Image(charTexture);
         table.add(charImage).size(128, 128).pad(10).row();
 
+        Table statTable = new Table();
+
         // Character stats
         charStats.clear();
         for (Map.Entry<String, Integer> entry : character.getStats().entrySet()) {
             Label statLabel = new Label(formatStatName(entry.getKey()) + ": " + entry.getValue(), labelStyle);
             charStats.add(statLabel);
-            table.add(statLabel).pad(50);
+            statTable.add(statLabel).pad(50);
         }
 
-        table.row();
+        table.add(statTable).row();
 
-        // Navigation buttons
-        addButton(table, "Previous", controller::previousCharacter);
-        addButton(table, "Next", controller::nextCharacter);
-        addButton(table, "Select Character", controller::selectPlayer);
-    }
+        Table buttonRow = new Table();
+        buttonRow.center();
+        buttonRow.setFillParent(true);
+        buttonRow.bottom();
 
-    private void addButton(Table table, String text, Runnable action) {
-        TextButton button = new TextButton(text, skin);
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                action.run();
+        TextButton prev = new TextButton("Previous", skin);
+        TextButton next = new TextButton("Next", skin);
+        TextButton select = new TextButton("Select Character", skin);
+
+        // Add listeners
+        prev.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                controller.previousCharacter();
             }
         });
-        table.add(button).pad(50).size(250, 50);
-    }
+        next.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                controller.nextCharacter();
+            }
+        });
+        select.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                controller.selectPlayer();
+            }
+        });
 
+        buttonRow.add(prev).size(250, 50).pad(50);
+        buttonRow.add(select).size(250, 50).pad(50);
+        buttonRow.add(next).size(250, 50).pad(50);
+
+        table.add(buttonRow).center().expandX().fill();
+    }
     private void updateCharacterUI() {
         charName.setText(character.getName());
 
