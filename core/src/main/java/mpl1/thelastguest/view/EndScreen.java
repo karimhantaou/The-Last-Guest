@@ -5,12 +5,15 @@ package mpl1.thelastguest.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.EndController;
 import mpl1.thelastguest.model.Character.Murderer;
@@ -71,6 +74,15 @@ public class EndScreen implements Screen {
         table.setFillParent(true); // Table fait tout le stage
         stage.addActor(table); // Ajout de la table au stage
 
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f); // R,G,B,A
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
+
         // Label
 
         String titleText = "You found the murderer !";
@@ -78,8 +90,14 @@ public class EndScreen implements Screen {
 
         Label title = new Label(titleText, style);
         Label name = new Label("It was " + murderer.getName(), style);
-        Label killNbr = new Label(murderer.getKillNbr() + " kills have been made...", style);
 
+        String killStr = murderer.getKillNbr() + " kill have been made...";
+
+        if(murderer.getKillNbr() > 1){
+            killStr = murderer.getKillNbr() + " kills have been made...";
+        }
+
+        Label killNbr = new Label(killStr, style);
 
         // Bouton avec du text
         TextButton play = new TextButton("Play again",skin);
@@ -90,12 +108,21 @@ public class EndScreen implements Screen {
             }
         });
 
+        TextButton menu = new TextButton("Menu",skin);
+        menu.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.menu();
+            }
+        });
+
         // Ajout du bouton à la table
         table.center(); // Centre les élements
         table.add(title).pad(10).row(); // Row -> passe à la ligne
         table.add(name).pad(10).row();
         table.add(killNbr).pad(10).row();
         table.add(play).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
+        table.add(menu).size(200, 50).pad(10).row();
     }
 
     // Permet de gérer le comportement du jeu lors du resize
