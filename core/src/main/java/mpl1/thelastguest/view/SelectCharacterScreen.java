@@ -3,6 +3,7 @@ package mpl1.thelastguest.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -76,6 +77,15 @@ public class SelectCharacterScreen implements Screen {
         table.center();
         stage.addActor(table);
 
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f); // R,G,B,A
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
+
         // Character name label
         Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
         labelStyle.font.getData().setScale(2f);
@@ -92,8 +102,10 @@ public class SelectCharacterScreen implements Screen {
         for (Map.Entry<String, Integer> entry : character.getStats().entrySet()) {
             Label statLabel = new Label(formatStatName(entry.getKey()) + ": " + entry.getValue(), labelStyle);
             charStats.add(statLabel);
-            table.add(statLabel).pad(5).row();
+            table.add(statLabel).pad(50);
         }
+
+        table.row();
 
         // Navigation buttons
         addButton(table, "Previous", controller::previousCharacter);
@@ -109,7 +121,7 @@ public class SelectCharacterScreen implements Screen {
                 action.run();
             }
         });
-        table.add(button).pad(10).row();
+        table.add(button).pad(50).size(250, 50);
     }
 
     private void updateCharacterUI() {
