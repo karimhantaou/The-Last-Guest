@@ -1,7 +1,8 @@
 package mpl1.thelastguest.view;
 
 // Import des composants du jeu
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.MenuController;
 
@@ -12,9 +13,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen implements Screen {
@@ -51,6 +49,8 @@ public class MenuScreen implements Screen {
         bigFont.getData().setScale(2f);
 
         // Font pour le titre
+
+
         Label.LabelStyle style = skin.get("default", Label.LabelStyle.class);
         style.font.getData().setScale(2f);
 
@@ -58,6 +58,10 @@ public class MenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage); // Gère les cliques sur le stage
 
+        Texture bgTexture = new Texture(Gdx.files.internal("assets/backgrounds/StartMenu.jpg"));
+        Image bg = new Image(bgTexture);
+        bg.setFillParent(true);
+        stage.addActor(bg);
 
         // Création d'une table pour pouvoir placer les élements dans une grid
         Table table = new Table();
@@ -76,10 +80,29 @@ public class MenuScreen implements Screen {
             }
         });
 
+        TextButton rules = new TextButton("Rules",skin);
+        rules.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        TextButton quit = new TextButton("Quit",skin);
+        quit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.quit();
+            }
+        });
+
         // Ajout du bouton à la table
         table.center(); // Centre les élements
         table.add(title).pad(10).row(); // Row -> passe à la ligne
-        table.add(play).size(100, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
+        table.add(play).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
+        table.add(rules).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
+        table.add(quit).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
+
     }
 
     // Permet de gérer le comportement du jeu lors du resize

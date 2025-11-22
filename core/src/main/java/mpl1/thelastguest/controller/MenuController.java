@@ -1,5 +1,6 @@
 package mpl1.thelastguest.controller;
 
+import com.badlogic.gdx.Gdx;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.view.MenuScreen;
 
@@ -12,6 +13,10 @@ public class MenuController {
 
     public void play(){
         game.screenManager.showCharacterSelection();
+    }
+
+    public void quit(){
+        Gdx.app.exit();
     }
 
 }

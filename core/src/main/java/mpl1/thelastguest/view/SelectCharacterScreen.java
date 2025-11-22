@@ -66,6 +66,11 @@ public class SelectCharacterScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
+        Texture bgTexture = new Texture(Gdx.files.internal("assets/backgrounds/SelectMenu.jpg"));
+        Image bg = new Image(bgTexture);
+        bg.setFillParent(true);
+        stage.addActor(bg);
+
         Table table = new Table();
         table.setFillParent(true);
         table.center();
