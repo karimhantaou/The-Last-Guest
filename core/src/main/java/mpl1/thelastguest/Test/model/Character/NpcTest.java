@@ -40,9 +40,9 @@ class NpcTest {
         stats2.put("inv", 0);
         List<Item> items = new ArrayList<>();
         statItem = new StatItem("stats", stats2);
-        npc = new Npc("npc", stats, null);
+        npc = new Npc("npc", "", stats, null);
         npc.getItem(items);
-        npc2 = new Npc("npc", stats, 10, 10, null, 14);
+        npc2 = new Npc("npc", "", stats, 10, 10, null, 14);
     }
 
     @Test

@@ -15,6 +15,7 @@ import java.util.*;
 public abstract class Character {
     // Nom du personnage
     private final String name; //name of character
+    private final String description;
 
     // Statistiques du personnage
     private Map<String, Integer> stats = new HashMap<>(); //str, per, lck, ap, inv
@@ -51,13 +52,18 @@ public abstract class Character {
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = "placeholder";
+        this.description = "No description";
         this.x = 0;
         this.y = 0;
         this.texturePath = "placeholder.png";
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
-    public Character(String name, Map<String, Integer> stats, String texturePath) {
+    public String getDescription() {
+        return description;
+    }
+
+    public Character(String name, String description, Map<String, Integer> stats, String texturePath) {
         if (texturePath != null) {
             Texture texture = new Texture(Gdx.files.internal(texturePath));
             this.sprite = new Sprite(texture);
@@ -65,6 +71,7 @@ public abstract class Character {
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = name;
+        this.description = description;
         this.stats = stats;
         this.x = 0;
         this.y = 0;
@@ -74,7 +81,7 @@ public abstract class Character {
     }
 
     // Constructeur pour le joueur et le tueur
-    public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
+    public Character(String name, String description, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
         if (spriteName != null) {
             Texture texture = new Texture(Gdx.files.internal(spriteName));
             this.sprite = new Sprite(texture);
@@ -83,6 +90,7 @@ public abstract class Character {
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = name;
+        this.description = description;
         this.stats = stats;
         this.x = posX;
         this.y = posY;

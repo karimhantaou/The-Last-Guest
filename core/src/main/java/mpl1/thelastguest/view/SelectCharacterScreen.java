@@ -32,6 +32,7 @@ public class SelectCharacterScreen implements Screen {
     private Texture charTexture;
     private Image charImage;
     private Label charName;
+    private Label charDesc;
     private final List<Label> charStats = new ArrayList<>();
 
     public SelectCharacterScreen(Main game) {
@@ -110,6 +111,9 @@ public class SelectCharacterScreen implements Screen {
 
         table.add(statTable).row();
 
+        charDesc = new Label(character.getDescription(), labelStyle);
+        table.add(charDesc).pad(20).row();
+
         Table buttonRow = new Table();
         buttonRow.center();
         buttonRow.setFillParent(true);
@@ -144,6 +148,7 @@ public class SelectCharacterScreen implements Screen {
     }
     private void updateCharacterUI() {
         charName.setText(character.getName());
+        charDesc.setText(character.getDescription());
 
         // Update character image
         Texture newTexture = new  Texture(Gdx.files.internal(character.getTexturePath()));

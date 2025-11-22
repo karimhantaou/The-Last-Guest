@@ -162,7 +162,7 @@ public class SelectCharacterController {
         items.get(randomIndex).setFingerprint(murderer.getFingerprint());
 
         // Première victime
-        Npc victim = new Npc("Victim", null, 0, 0, "placeholder.png", 1600 / 50);
+        Npc victim = new Npc("Victim", "", null, 0, 0, "placeholder.png", 1600 / 50);
         victim.addClues(murderer, items.get(randomIndex));
         victim.setAlive(false);
         this.characters.add(victim);
