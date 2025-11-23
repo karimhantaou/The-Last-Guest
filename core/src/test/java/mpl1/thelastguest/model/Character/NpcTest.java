@@ -1,4 +1,4 @@
-package mpl1.thelastguest.Test.model.Character;
+package mpl1.thelastguest.model.Character;
 
 import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Murderer;
@@ -40,9 +40,10 @@ class NpcTest {
         stats2.put("inv", 0);
         List<Item> items = new ArrayList<>();
         statItem = new StatItem("stats", stats2);
-        npc = new Npc("npc", "", stats, null);
+        npc = new Npc("npc","coucou", stats, null);
         npc.getItem(items);
-        npc2 = new Npc("npc", "", stats, 10, 10, null, 14);
+        assertEquals("coucou", npc.getDescription());
+        npc2 = new Npc("npc","", stats, 10, 10, null, 14);
     }
 
     @Test
@@ -259,6 +260,35 @@ class NpcTest {
     @Test
     void isPerceptible() {
         assertFalse(npc.isPerceptible(12, 12));
+    }
+
+    @Test
+    void getItemTest() {
+        Item item = new ActionItem("action", "Open door");
+        npc.pickItem(item);
+        npc.getItem("action");
+        assertEquals(item, npc.getItem("action"));
+        assertNull(npc.getItem("actn"));
+    }
+
+    @Test
+    void isFingerPrintFoundTest() {
+        assertFalse(npc.isFingerPrintFound());
+        npc.setFingerPrintFound(true);
+        assertTrue(npc.isFingerPrintFound());
+    }
+
+    @Test
+    void enoughInventoryTest() {
+        assertTrue(npc.enoughInventory());
+        npc.setInv(-1);
+        assertFalse(npc.enoughInventory());
+    }
+
+    @Test
+    void enoughApTest() {
+        assertTrue(npc.enoughAp(0));
+        assertFalse(npc.enoughAp(10000));
     }
     @AfterEach
     void tearDown() {

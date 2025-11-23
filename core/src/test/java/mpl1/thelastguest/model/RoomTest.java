@@ -1,4 +1,4 @@
-package mpl1.thelastguest.Test.model;
+package mpl1.thelastguest.model;
 
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
@@ -19,7 +19,7 @@ class RoomTest {
 
     @BeforeEach
     void setUp() {
-       room = new Room(name);
+        room = new Room(name);
     }
 
     @AfterEach
