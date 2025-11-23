@@ -140,7 +140,7 @@ public class SelectCharacterController {
         try{
             Gson gson = new Gson();
 
-            FileHandle file = Gdx.files.internal("assets/data/dialogues.json");
+            FileHandle file = Gdx.files.internal("assets/data/Dialogues.json");
             String json = file.readString();
 
             return gson.fromJson(json, new TypeToken<List<Dialogue>>(){}.getType());
