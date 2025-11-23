@@ -14,7 +14,7 @@ public class Player extends Character {
     private boolean inspector = true;
 
     public Player(Npc npc){
-        super(npc.getName(), npc.getStats(), npc.getX(), npc.getY(), npc.getTexturePath(), npc.getStep());
+        super(npc.getName(), npc.getDescription() ,npc.getStats(), npc.getX(), npc.getY(), npc.getTexturePath(), npc.getStep());
     }
 
     public Player(String hero, HashMap<Object, Object> objectObjectHashMap, int i, int i1, Object o, int i2) {

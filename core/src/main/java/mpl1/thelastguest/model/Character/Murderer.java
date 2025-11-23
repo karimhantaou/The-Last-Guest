@@ -12,7 +12,7 @@ public class Murderer extends Character{
     private Item currentWeapon;
 
     public Murderer(Npc npc) {
-        super(npc.getName(), npc.getStats(), npc.getX(),  npc.getY(), npc.getTexturePath(), npc.getStep());
+        super(npc.getName(), npc.getDescription() ,npc.getStats(), npc.getX(),  npc.getY(), npc.getTexturePath(), npc.getStep());
     }
 
     public int getKillNbr(){

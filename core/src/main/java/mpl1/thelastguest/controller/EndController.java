@@ -27,4 +27,8 @@ public class EndController {
         game.screenManager.showCharacterSelection();
     }
 
+    public void menu(){
+        game.screenManager.showMenu();
+    }
+
 }

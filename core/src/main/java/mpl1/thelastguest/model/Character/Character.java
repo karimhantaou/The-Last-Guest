@@ -12,9 +12,25 @@ import mpl1.thelastguest.model.Item.StatItem;
 
 import java.util.*;
 
+/**
+ * Abstract representation of a game character (NPC, Player, Murderer).
+ * <p>
+ * A character has:
+ * <ul>
+ *     <li>A name and description</li>
+ *     <li>Base statistics (Strength, Perception, Luck, Action Points, Inventory size)</li>
+ *     <li>Position on the tile map</li>
+ *     <li>Items and clues</li>
+ *     <li>A sprite and texture</li>
+ *     <li>A fingerprint used for investigations</li>
+ * </ul>
+ * This class also handles movement using BFS pathfinding, hidden passages,
+ * inventory management, and basic action validation.
+ */
 public abstract class Character {
     // Nom du personnage
     private final String name; //name of character
+    private final String description;
 
     // Statistiques du personnage
     private Map<String, Integer> stats = new HashMap<>(); //str, per, lck, ap, inv
@@ -28,6 +44,7 @@ public abstract class Character {
 
     // Empreintes du personnages
     private String fingerprint;
+    private boolean fingerPrintFound = false;
 
     // Empreintes du personnages
     private Map<String,String> clues = new HashMap<>(); // fingerprint,
@@ -44,19 +61,38 @@ public abstract class Character {
     protected Integer nbPath = 0;
     protected boolean isEnd = false;
 
-    // Constructeur pour les pnj
+    /**
+     * Default constructor for NPC generation without predefined data.
+     * Creates a placeholder NPC with a random fingerprint.
+     */
     public Character() {
         Texture texture = new Texture(Gdx.files.internal("placeholder.png"));
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = "placeholder";
+        this.description = "No description";
         this.x = 0;
         this.y = 0;
         this.texturePath = "placeholder.png";
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
-    public Character(String name, Map<String, Integer> stats, String texturePath) {
+    /**
+     * @return Character description.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Constructor for predefined NPCs loaded from JSON.
+     *
+     * @param name Character name
+     * @param description Character description
+     * @param stats Character statistics map
+     * @param texturePath Sprite texture path
+     */
+    public Character(String name, String description, Map<String, Integer> stats, String texturePath) {
         if (texturePath != null) {
             Texture texture = new Texture(Gdx.files.internal(texturePath));
             this.sprite = new Sprite(texture);
@@ -64,6 +100,7 @@ public abstract class Character {
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = name;
+        this.description = description;
         this.stats = stats;
         this.x = 0;
         this.y = 0;
@@ -72,8 +109,18 @@ public abstract class Character {
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
-    // Constructeur pour le joueur et le tueur
-    public Character(String name, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
+    /**
+     * Constructor used for Player and Murderer characters.
+     *
+     * @param name Character name
+     * @param description Character description
+     * @param stats Character statistics
+     * @param posX Initial X position
+     * @param posY Initial Y position
+     * @param spriteName Sprite texture file
+     * @param step Tile step size
+     */
+    public Character(String name, String description, Map<String, Integer> stats, Integer posX, Integer posY, String spriteName, Integer step) {
         if (spriteName != null) {
             Texture texture = new Texture(Gdx.files.internal(spriteName));
             this.sprite = new Sprite(texture);
@@ -82,6 +129,7 @@ public abstract class Character {
         String[] fingerprints = {"A", "L", "W"};
 
         this.name = name;
+        this.description = description;
         this.stats = stats;
         this.x = posX;
         this.y = posY;
@@ -90,15 +138,27 @@ public abstract class Character {
         this.fingerprint =  fingerprints[(int)(Math.random() * fingerprints.length)];
     }
 
+    /**
+     * @return Path to the texture file.
+     */
     public String getTexturePath() {
         return texturePath;
     }
 
+    /**
+     * Builds the sprite using the texture path.
+     */
     public void buildSprite(){
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
     }
 
+    /**
+     * Returns the sprite, updating its position for all path.
+     * Includes a small delay to visually animate tile by tile movement.
+     *
+     * @return Character sprite
+     */
     public Sprite getSprite() {
         int[] pos = getPath();
         if (pos != null) {
@@ -113,19 +173,36 @@ public abstract class Character {
         }
         return this.sprite;
     }
-    // NAME
+
+    /**
+     * @return Character name.
+     */
     public String getName() {
         return this.name;
     }
 
-    //STEP
+    /**
+     * @return Tile step size.
+     */
     public int getStep() {
         return this.step;
     }
+
+    /**
+     * Sets tile step size.
+     *
+     * @param step step value
+     */
     public void setStep(int step) {
         this.step = step;
     }
-    //Path
+
+    /**
+     * Gets the next tile in the movement path.
+     * Remove one tile from the path each time it's called.
+     *
+     * @return Next coordinate [x,y] or null if path is empty.
+     */
     public int[] getPath(){
         int[] tmp;
 
@@ -138,40 +215,78 @@ public abstract class Character {
             isEnd = true;
         return tmp;
     }
-
+    /**
+     * @return Number of tiles left in the movement path.
+     */
     public int getNbPath(){
         return this.nbPath;
     }
 
+    /**
+     * Sets number of current steps to point.
+     *
+     * @param nbPath number of tiles
+     */
     public void  setNbPath(int nbPath){
         this.nbPath = nbPath;
     }
+
+    /**
+     * @return True if the character has reached the end of its path.
+     */
     public boolean getIsEnd() {
         return this.isEnd;
     }
 
+    /**
+     * Sets movement state.
+     *
+     * @param isEnd true if end
+     */
     public void setIsEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
 
     // position
 
+    /**
+     * @return X tile position.
+     */
     public Integer getX() {
         return this.x;
     }
 
+    /**
+     * @return Y tile position.
+     */
     public Integer getY() {
         return this.y;
     }
 
+    /**
+     * Sets Y coordinate.
+     *
+     * @param y new Y position
+     */
     public void setY(int y){
         this.y = y;
     }
 
+    /**
+     * Sets X coordinate.
+     *
+     * @param x new X position
+     */
     public void setX(int x){
         this.x = x;
     }
 
+    /**
+     * Updates character and sprite position.
+     *
+     * @param x new X position
+     * @param y new Y position
+     */
     public void setPosition(Integer x, Integer y) {
         this.x = x;
         this.y = y;
@@ -180,67 +295,133 @@ public abstract class Character {
         hiddenPassage();
     }
 
-    // STATS
+    /**
+     * @return Stats map.
+     */
     public Map<String, Integer> getStats() {
         return this.stats;
     }
 
+    /**
+     * @return Strength stat.
+     */
     public int getStr(){
         return this.stats.get("str");
     }
 
+    /**
+     * @return Perception stat.
+     */
     public int getPer(){
         return this.stats.get("per");
     }
 
+    /**
+     * @return Luck stat.
+     */
     public int getLck(){
         return this.stats.get("lck");
     }
 
+    /**
+     * @return Action Point stat.
+     */
     public int getAp(){
         return this.stats.get("ap");
     }
 
+    /**
+     * @return Inventory size stat.
+     */
     public int getInv(){
         return this.stats.get("inv");
     }
 
+    /**
+     * @return Start Action Point stat.
+     */
     public int getStartAp(){
         return this.startAp;
     }
 
+    /**
+     * Sets starting Action Point.
+     *
+     * @param startAp initial Action Point
+     */
     public void  setStartAp(int startAp){
         this.startAp = startAp;
     }
+
+    /**
+     * Sets Stats map.
+     *
+     * @param stats Stats map.
+     */
     public void setStats(Map<String, Integer> stats) {
         this.stats = stats;
     }
 
+    /**
+     * Sets Strength stat.
+     *
+     * @param str Strength stat.
+     */
     public void setStr(int str) {
         this.stats.put("str", str);
     }
 
+    /**
+     * Sets perception stat.
+     *
+     * @param per perception stat.
+     */
     public void setPer(int per) {
         this.stats.put("per", per);
     }
 
+    /**
+     * Sets luck stat.
+     *
+     * @param lck luck stat.
+     */
     public void setLck(int lck){
         this.stats.put("lck", lck);
     }
 
+    /**
+     * Sets Action point stat.
+     *
+     * @param ap Action point stat.
+     */
     public void setAp(int ap){
         this.stats.put("ap", ap);
     }
 
+    /**
+     * Sets inventory size stat.
+     *
+     * @param inv inventory size stat.
+     */
     public void setInv(int inv){
         this.stats.put("inv", inv);
     }
 
     // ITEMS
 
+    /**
+     * @return List of items in inventory.
+     */
     public List<Item> getItems() {
         return this.items;
     }
+
+    /**
+     * Searches item by name.
+     *
+     * @param itemName item name
+     * @return Item or null
+     */
 
     public Item getItem(String itemName) {
         for (Item item : this.items) {
@@ -251,6 +432,12 @@ public abstract class Character {
         return null;
     }
 
+    /**
+     * Searches an item based on its action type.
+     *
+     * @param action action string
+     * @return Item or null
+     */
     public Item getItemByAction(String action) {
         for (Item item : this.items) {
             if (item.getClass() == ActionItem.class && ((ActionItem) item).getAction().equals(action)) {
@@ -260,13 +447,53 @@ public abstract class Character {
         return null;
     }
 
+    /**
+     * @return All weapons ("kill" action) in inventory.
+     */
+    public List<Item> getWeapons(){
+        List<Item> weapons = new ArrayList<>();
+        for (Item item : this.items) {
+            if(item.getClass() == ActionItem.class && ((ActionItem) item).getAction().equals("kill")){
+                weapons.add(item);
+            }
+        }
+        return weapons;
+    }
+
+    /**
+     * @return True if fingerprint was already found.
+     */
+    public boolean isFingerPrintFound() {
+        return fingerPrintFound;
+    }
+
+    /**
+     * Sets fingerprint discovery state.
+     *
+     * @param fingerPrintFound whether found
+     */
+    public void setFingerPrintFound(boolean fingerPrintFound) {
+        this.fingerPrintFound = fingerPrintFound;
+    }
+
+    /**
+     * @param items list of Item.
+     */
     public void getItem(List<Item> items) {
     }
 
+    /**
+     * @return number of items in inventory.
+     */
     public int countItems() {
         return this.items.size();
     }
 
+    /**
+     * Adds stats from a StatItem.
+     *
+     * @param item stat item
+     */
     private void addStats(StatItem item){
         this.setStr(this.getStr() + item.getStr());
         this.setPer(this.getPer() + item.getPer());
@@ -275,6 +502,11 @@ public abstract class Character {
         this.setInv(this.getInv() + item.getInv());
     }
 
+    /**
+     * Remove stats from a StatItem.
+     *
+     * @param item stat item
+     */
     private void removeStats(StatItem item){
         this.setStr(this.getStr() - item.getStr());
         this.setPer(this.getPer() - item.getPer());
@@ -283,6 +515,12 @@ public abstract class Character {
         this.setInv(this.getInv() - item.getInv());
     }
 
+    /**
+     * try to pick up an item.
+     *
+     * @param item item to pick
+     * @return True if successful, false if you don't have enough space
+     */
     public boolean pickItem(Item item){
         if(countItems() < getInv()){
             if(item.getClass() == StatItem.class){
@@ -296,10 +534,19 @@ public abstract class Character {
         }
     }
 
+    /**
+     * @return True if inventory has free space.
+     */
     public boolean enoughInventory(){
         return this.items.size() < this.getInv();
     }
 
+    /**
+     * Drops an item and removes its stats of character.
+     *
+     * @param item item to drop
+     * @return True if removed
+     */
     public boolean dropItem(Item item){
         if(this.items.contains(item)){
             if(item.getClass() == StatItem.class){
@@ -313,53 +560,87 @@ public abstract class Character {
         }
     }
 
+    /**
+     * Checks if the character has enough Action point for action.
+     *
+     * @param ap required AP
+     * @return true if enough
+     */
     public boolean enoughAp(int ap){
         return this.getAp() >= ap;
     }
 
-    // FINGERPRINT
-
+    /**
+     * @return Character fingerprint.
+     */
     public String getFingerprint() {
         return this.fingerprint;
     }
 
+    /**
+     * Sets fingerprint.
+     *
+     * @param fingerprint value
+     */
     public void setFingerprint(String fingerprint) {
         this.fingerprint = fingerprint;
     }
 
 
-    // CLUES
+    /**
+     * @return Map of collected clues.
+     */
     public Map<String, String> getClues(){
         return this.clues;
     }
 
+    /**
+     * @return Wound clue.
+     */
     public String getClueWound(){
         return this.clues.get("wound");
     }
 
+    /**
+     * @return fingerprint clue.
+     */
     public String getClueFingerprint(){
         return this.clues.get("fingerprint");
     }
 
+    /**
+     * Adds clues to this character based on murder weapon and murderer.
+     *
+     * @param murderer murderer character
+     * @param weapon   weapon used
+     */
     public void addClues(Character murderer, Item weapon){
         this.clues.put("fingerprint", murderer.getFingerprint());
         this.clues.put("wound", weapon.getWoundType());
     }
 
-    // ALIVE
-
+    /**
+     * @return True if character is alive.
+     */
     public boolean isAlive() {
         return this.alive;
     }
 
+    /**
+     * Sets if character is alive or not.
+     *
+     * @param alive state
+     */
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
 
-    // ACTIONS
-
-    // Permet de savoir si un item permet de faire une action spécial
-    public boolean canDoAction(String action){
+    /**
+     * Checks whether one of the character's items allows performing a given action.
+     *
+     * @param action action string
+     * @return true if allowed
+     */    public boolean canDoAction(String action){
         List<Item> items = getItems();
         for(Item item : items){
             if(item.getClass() == ActionItem.class){
@@ -372,18 +653,27 @@ public abstract class Character {
         return false;
     }
 
-    // Exemple d'actions
+    /**
+     * do action open door
+     */
     public void openDoor(){
         if(canDoAction("Open door")){
         }
     }
 
+    /**
+     * Attempts to kill a character.
+     *
+     * @param npcs list of characters
+     * @return true if Character is murderer and kill succeeded
+     */
     public boolean kill(List <Character> npcs){
         return false;
     }
 
-    // La méthode qui sera utilisée pour afficher les actions. On mettra un objet en paramètre pour savoir ce qu'il peut faire.
-    // Pour l'instant ça print juste mais à therme afficher des boutons différents. (dans la vue surement)
+    /**
+     * Displays available actions
+     */
     public void displayActions(){
         for(Item item : this.items){
             if(item.getClass() == ActionItem.class){
@@ -392,7 +682,13 @@ public abstract class Character {
         }
     }
 
-    //Movable the player to select point (implement BFS algo)
+    /**
+     * Moves the character to the specified tile using BFS pathfinding.
+     *
+     * @param posX target X tile
+     * @param posY target Y tile
+     * @return True if movement is possible
+     */
     public boolean moveToPoint(int posX, int posY) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("mur interrieur");
@@ -455,6 +751,9 @@ public abstract class Character {
         return true;
     }
 
+    /**
+     * Teleports the character when reaching special tiles containing hidden passages.
+     */
     public void hiddenPassage(){
         if (getY() == 42 || getY() == 43)
             if (getX() == 14 || getX() == 15)
@@ -468,6 +767,11 @@ public abstract class Character {
             setPosition(8, 30);
     }
 
+    /**
+     * Detects the room the character is currently standing in based on the map tile ID.
+     *
+     * @return Room name (Kitchen, Bedroom, Hall, ...)
+     */
     public String getRoom() {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");

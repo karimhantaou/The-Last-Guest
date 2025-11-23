@@ -1,17 +1,17 @@
 [
   {
-    "name": "Red",
+    "name": "Wally West",
     "stats": {
-      "str": 8,
+      "str": 6,
       "per": 6,
       "lck": 4,
-      "ap": 9,
+      "ap": 8,
       "inv": 2
     },
-    "texturePath": "pawns/redPawn.png"
+    "texturePath": "pawns/red.png"
   },
   {
-    "name": "Blue",
+    "name": "Jonathan Osterman",
     "stats": {
       "str": 5,
       "per": 9,
@@ -19,46 +19,52 @@
       "ap": 4,
       "inv": 2
     },
-    "texturePath": "pawns/bluePawn.png"
+    "texturePath": "pawns/blue.png"
+
   },
   {
-    "name": "Green",
+    "name": "Mr Frog",
     "stats": {
-      "str": 6,
-      "per": 7,
+      "str": 8,
+      "per": 6,
       "lck": 5,
       "ap": 6,
-      "inv": 3
-    }
+      "inv": 2
+    },
+    "texturePath": "pawns/green.png"
   },
   {
-    "name": "Yellow",
+    "name": "Just a random guy",
     "stats": {
       "str": 4,
-      "per": 8,
-      "lck": 6,
+      "per": 4,
+      "lck": 9,
       "ap": 5,
-      "inv": 4
-    }
+      "inv": 2
+    },
+    "texturePath": "pawns/yellow.png"
   },
   {
-    "name": "Purple",
+    "name": "Capitaine Ginyû",
     "stats": {
-      "str": 7,
-      "per": 5,
-      "lck": 3,
-      "ap": 8,
-      "inv": 6
-    }
+      "str": 6,
+      "per": 9,
+      "lck": 2,
+      "ap": 5,
+      "inv": 3
+    },
+    "texturePath": "pawns/purple.png"
   },
   {
-    "name": "Orange",
+    "name": "Robert La Sacoche",
     "stats": {
       "str": 5,
-      "per": 6,
-      "lck": 7,
+      "per": 5,
+      "lck": 5,
       "ap": 4,
-      "inv": 5
-    }
+      "inv": 8
+    },
+    "description": "A french man always carrying utility bags with him. He's arrogant but he doesn't talk much, and it's better like that.",
+    "texturePath": "pawns/white.png"
   }
 ]

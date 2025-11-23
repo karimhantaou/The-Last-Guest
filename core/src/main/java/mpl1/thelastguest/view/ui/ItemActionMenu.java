@@ -59,31 +59,9 @@ public class ItemActionMenu {
             root.row(); root.add(btnScan);
         }
 
-        // Action item's USE
-        /*
-        if(item.getClass() == ActionItem.class) {
-            ActionItem actionItem = (ActionItem) item;
-            String action = actionItem.getAction();
-
-            TextButton use = new TextButton("Use", skin);
-            use.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
-                    switch (action) {
-                        case "kill": break;
-                        case "spoof_fingerprints":
-                            controller.spoofFingerprints();
-                            controller.destroyItem(item);
-                            break;
-                    }
-                    close();
-                }
-            });
-            root.row(); root.add(use);
-        }*/
-
         // DISPLAY DESCRIPTION IF CAN INSCPECT
         if(player.canDoAction("inspect")) {
-            TextButton btnScan = new TextButton("Scan", skin);
+            TextButton btnScan = new TextButton("Inspect", skin);
             btnScan.addListener(new ClickListener() {
                 @Override public void clicked(InputEvent ev, float x, float y) {
                     controller.displayDescription(item);

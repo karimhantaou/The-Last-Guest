@@ -3,6 +3,7 @@ package mpl1.thelastguest.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -31,6 +32,7 @@ public class SelectCharacterScreen implements Screen {
     private Texture charTexture;
     private Image charImage;
     private Label charName;
+    private Label charDesc;
     private final List<Label> charStats = new ArrayList<>();
 
     public SelectCharacterScreen(Main game) {
@@ -66,10 +68,25 @@ public class SelectCharacterScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
+        Texture bgTexture = new Texture(Gdx.files.internal("assets/backgrounds/SelectMenu.jpg"));
+        Image bg = new Image(bgTexture);
+        bg.setFillParent(true);
+        stage.addActor(bg);
+
         Table table = new Table();
         table.setFillParent(true);
         table.center();
+
         stage.addActor(table);
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f); // R,G,B,A
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
 
         // Character name label
         Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
@@ -82,33 +99,56 @@ public class SelectCharacterScreen implements Screen {
         charImage = new Image(charTexture);
         table.add(charImage).size(128, 128).pad(10).row();
 
+        Table statTable = new Table();
+
         // Character stats
         charStats.clear();
         for (Map.Entry<String, Integer> entry : character.getStats().entrySet()) {
             Label statLabel = new Label(formatStatName(entry.getKey()) + ": " + entry.getValue(), labelStyle);
             charStats.add(statLabel);
-            table.add(statLabel).pad(5).row();
+            statTable.add(statLabel).pad(50);
         }
 
-        // Navigation buttons
-        addButton(table, "Previous", controller::previousCharacter);
-        addButton(table, "Next", controller::nextCharacter);
-        addButton(table, "Select Character", controller::selectPlayer);
-    }
+        table.add(statTable).row();
 
-    private void addButton(Table table, String text, Runnable action) {
-        TextButton button = new TextButton(text, skin);
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                action.run();
+        charDesc = new Label(character.getDescription(), labelStyle);
+        table.add(charDesc).pad(20).row();
+
+        Table buttonRow = new Table();
+        buttonRow.center();
+        buttonRow.setFillParent(true);
+        buttonRow.bottom();
+
+        TextButton prev = new TextButton("Previous", skin);
+        TextButton next = new TextButton("Next", skin);
+        TextButton select = new TextButton("Select Character", skin);
+
+        // Add listeners
+        prev.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                controller.previousCharacter();
             }
         });
-        table.add(button).pad(10).row();
-    }
+        next.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                controller.nextCharacter();
+            }
+        });
+        select.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                controller.selectPlayer();
+            }
+        });
 
+        buttonRow.add(prev).size(250, 50).pad(50);
+        buttonRow.add(select).size(250, 50).pad(50);
+        buttonRow.add(next).size(250, 50).pad(50);
+
+        table.add(buttonRow).center().expandX().fill();
+    }
     private void updateCharacterUI() {
         charName.setText(character.getName());
+        charDesc.setText(character.getDescription());
 
         // Update character image
         Texture newTexture = new  Texture(Gdx.files.internal(character.getTexturePath()));

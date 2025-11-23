@@ -8,16 +8,23 @@ import mpl1.thelastguest.model.Character.CharacterFactory;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Dialogue;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Item.StatItem;
+import mpl1.thelastguest.view.EndScreen;
 import mpl1.thelastguest.view.SelectCharacterScreen;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.*;
 
-
+/**
+ * Controller for display select character menu (start game)
+ * <p>
+ * This class interact with this view {@link SelectCharacterScreen} and the principal game {@link Main}
+ * Its objective is to trigger the action leading to select character.
+ */
 public class SelectCharacterController {
     private final Main game;
 
@@ -28,7 +35,13 @@ public class SelectCharacterController {
     private Player player;
 
     private List<Item> items;
+    private List<Dialogue> dialogues;
 
+    /**
+     * It's the construtor of the class
+     *
+     * @param game instance of the principal game {@link Main}
+     */
     public SelectCharacterController(Main game, SelectCharacterScreen view) {
         this.game = game;
         this.characters = createCharacters();
@@ -38,8 +51,14 @@ public class SelectCharacterController {
             npc.setStartAp(npc.getAp());
         }
         npcBuildSprite();
+        this.dialogues = createDialogues();
     }
 
+    /**
+     * Updates the controller logic depending on user input.
+     *
+     * @param delta Time elapsed since last frame.
+     */
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             previousCharacter();
@@ -49,6 +68,11 @@ public class SelectCharacterController {
         }
     }
 
+    /**
+     * Loads the list of NPC characters from a JSON file.
+     *
+     * @return The list of loaded NPCs.
+     */
     public List<Npc> createCharacters(){
         try{
             Gson gson = new Gson();
@@ -62,11 +86,20 @@ public class SelectCharacterController {
             return null;
         }
     }
+    /**
+     * Builds the sprites for all NPCs.
+     */
     public void npcBuildSprite(){
         for(Npc npc : this.characters){
             npc.buildSprite();
         }
     }
+
+    /**
+     * Loads all items (stat items and action items) from JSON files.
+     *
+     * @return The list of loaded items.
+     */
     public List<Item> createItems(){
         List<Item> items =  new ArrayList<>();
         try{
@@ -98,10 +131,35 @@ public class SelectCharacterController {
         return items;
     }
 
+    /**
+     * Loads all dialogues from a JSON file.
+     *
+     * @return The list of loaded dialogues.
+     */
+    public List<Dialogue> createDialogues(){
+        try{
+            Gson gson = new Gson();
+
+            FileHandle file = Gdx.files.internal("data/dialogues.json");
+            String json = file.readString();
+
+            return gson.fromJson(json, new TypeToken<List<Dialogue>>(){}.getType());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * @return The current NPC.
+     */
     public Npc getSelectedCharacter(){
         return characters.get(selectedCharacter);
     }
 
+    /**
+     * Moves the selection to the next character.
+     */
     public void nextCharacter(){
         this.selectedCharacter++;
         if(this.selectedCharacter == characters.size()){
@@ -109,6 +167,9 @@ public class SelectCharacterController {
         }
     }
 
+    /**
+     * Moves the selection to the previous character.
+     */
     public void previousCharacter(){
         this.selectedCharacter--;
         if(this.selectedCharacter < 0){
@@ -116,6 +177,13 @@ public class SelectCharacterController {
         }
     }
 
+    /**
+     * Creates the player from the selected NPC
+     * chooses a random murderer among the NPCs
+     * selects a murder weapon and add fingerprint
+     * creates the first victim
+     * starts the game
+     */
     public void selectPlayer(){
         // Création du joueur
         this.player = (Player) CharacterFactory.create("player", getSelectedCharacter());
@@ -145,7 +213,7 @@ public class SelectCharacterController {
         items.get(randomIndex).setFingerprint(murderer.getFingerprint());
 
         // Première victime
-        Npc victim = new Npc("Victim", null, 0, 0, "placeholder.png", 1600 / 50);
+        Npc victim = new Npc("Victim", "", null, 0, 0, "placeholder.png", 1600 / 50);
         victim.addClues(murderer, items.get(randomIndex));
         victim.setAlive(false);
         this.characters.add(victim);
@@ -154,14 +222,23 @@ public class SelectCharacterController {
         playGame();
     }
 
+    /**
+     * Launches the game screen.
+     */
     public void playGame(){
-        game.screenManager.showGame(this.player, this.characters, this.murderer, this.items);
+        game.screenManager.showGame(this.player, this.characters, this.murderer, this.items, this.dialogues);
     }
 
+    /**
+     * @return The list of NPCs.
+     */
     public List<Npc> getNpcs() {
         return characters;
     }
 
+    /**
+     * @return The murderer.
+     */
     public Murderer getMurderer() {
         return murderer;
     }

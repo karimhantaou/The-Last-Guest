@@ -17,14 +17,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import mpl1.thelastguest.model.Board;
-import mpl1.thelastguest.model.Character.Character;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
+import mpl1.thelastguest.model.Dialogue;
 import mpl1.thelastguest.model.Item.Item;
 import mpl1.thelastguest.model.Room;
 import mpl1.thelastguest.view.ui.*;
-import mpl1.thelastguest.view.ui.notification.NotificationManager;
+import mpl1.thelastguest.view.ui.NotificationManager;
+import mpl1.thelastguest.model.Character.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +68,11 @@ public class GameScreen implements Screen {
     private PauseMenu pauseMenu;
     private boolean pauseMenuOpen;
 
+    private TalkMenu talkMenu;
+    private boolean talkMenuOpen;
+
     // Constructeur de salopard
-    public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items) {
+    public GameScreen(Main game, Player player, List<Npc> npcs, Murderer murderer, List<Item> items, List<Dialogue> dialogues) {
         this.game = game;
         this.font = new BitmapFont();
         this.map = new TmxMapLoader().load("maps/map.tmx");
@@ -76,7 +80,7 @@ public class GameScreen implements Screen {
             Gdx.app.log("MAP", "Erreur : la carte n'a pas été chargée !");
         else
             Gdx.app.log("MAP", "Carte chargée avec succès !");
-        this.controller = new GameController(game, this, player, npcs, murderer, items);
+        this.controller = new GameController(game, this, player, npcs, murderer, items, dialogues);
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
 
@@ -108,6 +112,9 @@ public class GameScreen implements Screen {
 
         pauseMenu = new PauseMenu(controller);
         pauseMenuOpen = false;
+
+        talkMenu = new TalkMenu(controller, player, dialogues);
+        talkMenuOpen = false;
     }
 
     // Boucle principal de la vue (pour afficher les élements)
@@ -162,6 +169,11 @@ public class GameScreen implements Screen {
         if(isPauseMenuOpen() && pauseMenu.getStage() != null) {
             pauseMenu.getStage().act(delta);
             pauseMenu.getStage().draw();
+        }
+
+        if(isTalkMenuOpen() && talkMenu.getStage() != null) {
+            talkMenu.getStage().act(delta);
+            talkMenu.getStage().draw();
         }
     }
 
@@ -304,6 +316,21 @@ public class GameScreen implements Screen {
 
     public boolean isPauseMenuOpen() {
         return this.pauseMenuOpen;
+    }
+
+    // TALK MENU
+
+    public void displayTalkMenu(Character npc, String answer){
+        this.talkMenuOpen = true;
+        this.talkMenu.display(npc, answer);
+    }
+
+    public void closeTalkMenu(){
+        this.talkMenuOpen = false;
+    }
+
+    public boolean isTalkMenuOpen() {
+        return this.talkMenuOpen;
     }
 
     public OrthographicCamera getCamera() {
