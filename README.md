@@ -1,33 +1,81 @@
 # The Last Guest
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+## The game
+The Last Guest is a 2D, turn-based game with a top-down view of a board.  
+The goal is to discover the identity of the murderer among the other characters living in a mansion, before the killer eliminates everyone.  
+The player controls one of six characters, taking on the role of an inspector. Each character has unique stats.  
+At the end of each turn, the inspector can choose various actions depending on the situation.  
 
-## Platforms
+## How to Play
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+1. **Pick Your Character**
 
-## Gradle
+    * Each character has a unique story and special perks.
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+2. **Controls**
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+    * **Right Click**: Open the action menu.
+    * **Space**: Skip your turn and make a guess on who the murderer is.
+    * **Escape**: Open the pause menu, where you can:
+
+        * Restart the game
+        * Change the music volume
+        * Activate God Mode
+        * Exit the game
+    * **C**: Show your character's sheet
+
+
+3. **Inventory**
+
+    * Click on the items in your inventory (located on the left side) to use or interact with them.
+
+## Installation and Running
+
+### Requirements
+
+* Java Development Kit (JDK) 11 or higher
+* [Gradle](https://gradle.org/) (optional if using Gradle Wrapper)
+* LibGDX libraries (included in the project if using standard setup)
+
+### Steps
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/EpitechMscProPromo2028/T-JAV-501-MPL_1.git
+   cd T-JAV-501-MPL_1.git
+   ```
+
+2. **Build the Project**
+
+    * If using Gradle:
+
+      ```bash
+      ./gradlew build
+      ```
+    * If using an IDE (IntelliJ IDEA, Eclipse, etc.), import the project as a Gradle project.
+
+3. **Run the Game**
+
+    * Using Gradle:
+
+      ```bash
+      ./gradlew run
+      ```
+    * Using IDE:
+
+        * Open `DesktopLauncher.java` in the `desktop` module.
+        * Run the `main` method.
+
+4. **Pre-built Version**
+
+    * A build version of the game is available as a `.jar` file. You can run it directly with:
+
+      ```bash
+      java -jar YourGame.jar
+      ```
+    * You can also access the latest pre-built version at the [Releases page](https://github.com/EpitechMscProPromo2028/T-JAV-501-MPL_1/releases/).
+
+5. **Enjoy the Game!**

@@ -128,7 +128,7 @@ public class MenuScreen implements Screen {
         table.center();
         table.add(title).pad(10).row();
         table.add(play).size(200, 50).pad(10).row();
-        //table.add(rules).size(200, 50).pad(10).row();
+        //&table.add(rules).size(200, 50).pad(10).row();
         table.add(quit).size(200, 50).pad(10).row();
         table.pack();
     }
