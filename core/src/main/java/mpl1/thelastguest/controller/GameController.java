@@ -699,6 +699,10 @@ public class GameController {
     }
 
 
+    /**
+     * set volume to value
+     * @param volume value of volume
+     */
     public void setVolume(float volume){
         view.setMusicVolume(volume);
     }
