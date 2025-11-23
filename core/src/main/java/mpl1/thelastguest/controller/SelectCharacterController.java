@@ -77,7 +77,7 @@ public class SelectCharacterController {
         try{
             Gson gson = new Gson();
 
-            FileHandle file = Gdx.files.internal("data/Characters.json");
+            FileHandle file = Gdx.files.internal("assets/data/Characters.json");
             String json = file.readString();
 
             return gson.fromJson(json, new TypeToken<List<Npc>>(){}.getType());
@@ -105,7 +105,7 @@ public class SelectCharacterController {
         try{
             Gson gson = new Gson();
 
-            FileHandle file = Gdx.files.internal("data/StatsItems.json");
+            FileHandle file = Gdx.files.internal("assets/data/StatsItems.json");
             String json = file.readString();
 
             List<Item> statItems = gson.fromJson(json, new TypeToken<List<StatItem>>(){}.getType());
@@ -118,7 +118,7 @@ public class SelectCharacterController {
         try{
             Gson gson = new Gson();
 
-            FileHandle file = Gdx.files.internal("data/ActionItems.json");
+            FileHandle file = Gdx.files.internal("assets/data/ActionItems.json");
             String json = file.readString();
 
             List<Item> actionItems = gson.fromJson(json, new TypeToken<List<ActionItem>>(){}.getType());
@@ -140,7 +140,7 @@ public class SelectCharacterController {
         try{
             Gson gson = new Gson();
 
-            FileHandle file = Gdx.files.internal("data/dialogues.json");
+            FileHandle file = Gdx.files.internal("assets/data/dialogues.json");
             String json = file.readString();
 
             return gson.fromJson(json, new TypeToken<List<Dialogue>>(){}.getType());

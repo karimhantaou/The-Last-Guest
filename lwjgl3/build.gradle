@@ -50,29 +50,6 @@ run {
   if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
 }
 
-jar {
-// sets the name of the .jar file this produces to the name of the game or app, with the version after.
-  archiveFileName.set("${appName}-${projectVersion}.jar")
-// the duplicatesStrategy matters starting in Gradle 7.0; this setting works.
-  duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-  dependsOn configurations.runtimeClasspath
-  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-// these "exclude" lines remove some unnecessary duplicate files in the output JAR.
-  exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
-  dependencies {
-    exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
-  }
-// setting the manifest makes the JAR runnable.
-// enabling native access helps avoid a warning when Java 24 or later runs the JAR.
-  manifest {
-    attributes 'Main-Class': project.mainClassName, 'Enable-Native-Access': 'ALL-UNNAMED'
-  }
-// this last step may help on some OSes that need extra instruction to make runnable JARs.
-  doLast {
-    file(archiveFile).setExecutable(true, false)
-  }
-}
-
 // Builds a JAR that only includes the files needed to run on macOS, not Windows or Linux.
 // The file size for a Mac-only JAR is about 7MB smaller than a cross-platform JAR.
 tasks.register("jarMac") {
@@ -178,4 +155,43 @@ startScripts.classpath = project.tasks.jar.outputs.files
 
 if(enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
+}
+
+jar {
+  // Name of the JAR
+  archiveFileName.set("${appName}-${projectVersion}.jar")
+
+  // Needed for Gradle 7+
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+  // Include all runtime dependencies
+  dependsOn configurations.runtimeClasspath
+  from {
+    configurations.runtimeClasspath.collect {
+      it.isDirectory() ? it : zipTree(it)
+    }
+  }
+
+  // Copy assets from core/assets into the jar
+  from("../core/assets") {
+    into "assets"
+  }
+
+  // Strip duplicate metadata
+  exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+  dependencies {
+    exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
+  }
+
+  // Runnable JAR manifest
+  manifest {
+    attributes(
+      'Main-Class': project.mainClassName,
+      'Enable-Native-Access': 'ALL-UNNAMED'
+    )
+  }
+
+  doLast {
+    file(archiveFile).setExecutable(true, false)
+  }
 }
