@@ -1,9 +1,5 @@
 package mpl1.thelastguest.model.Character;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.sun.org.apache.xml.internal.utils.SystemIDResolver;
 import mpl1.thelastguest.model.Item.ActionItem;
 import mpl1.thelastguest.model.Item.Item;
 import java.util.*;

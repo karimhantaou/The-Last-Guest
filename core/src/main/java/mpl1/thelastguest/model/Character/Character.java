@@ -98,6 +98,21 @@ public abstract class Character {
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
     }
+
+    public Sprite getSprite() {
+        int[] pos = getPath();
+        if (pos != null) {
+            setPosition(pos[0], pos[1]);
+            hiddenPassage();
+            try {
+                Thread.sleep(100); //For display tiled by tiled
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return this.sprite;
+    }
     // NAME
     public String getName() {
         return this.name;
@@ -138,21 +153,7 @@ public abstract class Character {
     public void setIsEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
-    //SPRITE
-    public Sprite getSprite() {
-        int[] pos = getPath();
-        if (pos != null) {
-            setPosition(pos[0], pos[1]);
-            hiddenPassage();
-            try {
-                Thread.sleep(100); //For display tiled by tiled
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return this.sprite;
-    }
+
     // position
 
     public Integer getX() {
