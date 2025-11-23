@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"mpl1.thelastguest.controller"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"mpl1.thelastguest"},{"l":"mpl1.thelastguest.controller"},{"l":"mpl1.thelastguest.model"},{"l":"mpl1.thelastguest.model.Character"},{"l":"mpl1.thelastguest.model.Item"},{"l":"mpl1.thelastguest.view"},{"l":"mpl1.thelastguest.view.ui"}];updateSearchResults();

@@ -1,1 +1,7 @@
+mpl1.thelastguest
 mpl1.thelastguest.controller
+mpl1.thelastguest.model
+mpl1.thelastguest.model.Character
+mpl1.thelastguest.model.Item
+mpl1.thelastguest.view
+mpl1.thelastguest.view.ui
