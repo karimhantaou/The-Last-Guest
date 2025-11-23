@@ -1,6 +1,7 @@
 package mpl1.thelastguest.view;
 
 // Import des composants du jeu
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.GameController;
@@ -40,6 +41,8 @@ public class GameScreen implements Screen {
     private Board board;
     private final Batch batch;
     private final float mapSize = 1600f;
+
+    private final Music backgroundMusic;
 
     private List<Npc> npcs =  new ArrayList<Npc>();
     private Player player;
@@ -89,6 +92,12 @@ public class GameScreen implements Screen {
         this.murderer = murderer;
 
         this.board = controller.getBoard();
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("assets/music/gameMusic.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.5f);
+
+        backgroundMusic.play();
 
         // UI
         playerInventory = new PlayerInventory(controller, player);
@@ -307,7 +316,7 @@ public class GameScreen implements Screen {
 
     public void displayPauseMenu(){
         this.pauseMenuOpen = true;
-        pauseMenu.display();
+        pauseMenu.display(getMusicVolume());
     }
 
     public void closePauseMenu(){
@@ -339,5 +348,13 @@ public class GameScreen implements Screen {
 
     public int getTiledSize() {
         return this.map.getProperties().get("tilewidth", Integer.class);
+    }
+
+    public float getMusicVolume() {
+        return this.backgroundMusic.getVolume();
+    }
+
+    public void setMusicVolume(float volume) {
+        this.backgroundMusic.setVolume(volume);
     }
 }

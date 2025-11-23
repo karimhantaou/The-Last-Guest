@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.controller.GameController;
@@ -30,7 +29,7 @@ public class PauseMenu {
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
-    public void display() {
+    public void display(float volume) {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -81,6 +80,21 @@ public class PauseMenu {
             }
         });
         root.row(); root.add(gm);
+
+        Label music = new Label("Music's volume", skin);
+        root.row(); root.add(music).padTop(10).padLeft(10);
+
+        Slider volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
+        volumeSlider.setValue(volume);
+
+        volumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.setVolume(volumeSlider.getValue());
+            }
+        });
+
+        root.row(); root.add(volumeSlider).padBottom(5);
 
         TextButton exit = new TextButton("Exit game", skin);
         exit.addListener(new ClickListener() {

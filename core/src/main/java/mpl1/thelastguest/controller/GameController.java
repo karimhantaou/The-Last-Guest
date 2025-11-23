@@ -697,4 +697,9 @@ public class GameController {
     public GameScreen getView() {
         return view;
     }
+
+
+    public void setVolume(float volume){
+        view.setMusicVolume(volume);
+    }
 }

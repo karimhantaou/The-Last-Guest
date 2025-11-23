@@ -8,7 +8,8 @@
       "ap": 8,
       "inv": 2
     },
-    "texturePath": "pawns/red.png"
+    "texturePath": "pawns/red.png",
+    "description": "A jittery young man who's always in a hurry, as if outrunning some unseen guilt. His restless energy hides a sharp mind—perhaps too sharp for his own good."
   },
   {
     "name": "Jonathan Osterman",
@@ -19,8 +20,8 @@
       "ap": 4,
       "inv": 2
     },
-    "texturePath": "pawns/blue.png"
-
+    "texturePath": "pawns/blue.png",
+    "description": "An enigmatic physicist with an unsettling calmness. Jonathan speaks rarely, but when he does, his words seem to carry the weight of a hundred secrets."
   },
   {
     "name": "Mr Frog",
@@ -31,7 +32,8 @@
       "ap": 6,
       "inv": 2
     },
-    "texturePath": "pawns/green.png"
+    "texturePath": "pawns/green.png",
+    "description": "A peculiar gentleman of unknown origin, always wearing a damp coat and smelling faintly of the swamp. His unblinking stare makes everyone uneasy—but he insists he's 'just observing.'"
   },
   {
     "name": "Just a random guy",
@@ -42,7 +44,8 @@
       "ap": 5,
       "inv": 2
     },
-    "texturePath": "pawns/yellow.png"
+    "texturePath": "pawns/yellow.png",
+    "description": "He claims to be nobody of importance, yet he always shows up in the wrong place at the right time. People overlook him easily—which might make him the most dangerous person in the room."
   },
   {
     "name": "Capitaine Ginyû",
@@ -53,7 +56,8 @@
       "ap": 5,
       "inv": 3
     },
-    "texturePath": "pawns/purple.png"
+    "texturePath": "pawns/purple.png",
+    "description": "A flamboyant officer obsessed with discipline and dramatic entrances. His attention to detail is unmatched, which makes it unsettling that he noticed the crime scene before anyone called him."
   },
   {
     "name": "Robert La Sacoche",
