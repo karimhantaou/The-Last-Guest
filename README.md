@@ -69,4 +69,13 @@ At the end of each turn, the inspector can choose various actions depending on t
         * Open `DesktopLauncher.java` in the `desktop` module.
         * Run the `main` method.
 
-4. **Enjoy the Game!**
+4. **Pre-built Version**
+
+    * A build version of the game is available as a `.jar` file. You can run it directly with:
+
+      ```bash
+      java -jar YourGame.jar
+      ```
+    * You can also access the latest pre-built version at the [Releases page](https://github.com/EpitechMscProPromo2028/T-JAV-501-MPL_1/releases/).
+
+5. **Enjoy the Game!**
