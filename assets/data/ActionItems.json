@@ -56,11 +56,6 @@
     "description": "Analyzes statements and behavior to determine honesty."
   },
   {
-    "name": "Fingerprints spoofer",
-    "action": "spoof_fingerprints",
-    "description": "A tool to forge or bypass fingerprint security systems."
-  },
-  {
     "name": "Whispering skull",
     "action": "skull",
     "description": "An ancient skull that murmurs secrets and hints."
