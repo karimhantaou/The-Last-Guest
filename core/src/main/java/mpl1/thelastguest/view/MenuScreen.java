@@ -106,6 +106,7 @@ public class MenuScreen implements Screen {
             }
         });
 
+        /*
         TextButton rules = new TextButton("Rules", skin);
         rules.addListener(new ClickListener() {
             @Override
@@ -113,6 +114,7 @@ public class MenuScreen implements Screen {
                 // Rules screen logic can be added here
             }
         });
+         */
 
         TextButton quit = new TextButton("Quit", skin);
         quit.addListener(new ClickListener() {
@@ -126,7 +128,7 @@ public class MenuScreen implements Screen {
         table.center();
         table.add(title).pad(10).row();
         table.add(play).size(200, 50).pad(10).row();
-        table.add(rules).size(200, 50).pad(10).row();
+        //table.add(rules).size(200, 50).pad(10).row();
         table.add(quit).size(200, 50).pad(10).row();
         table.pack();
     }
