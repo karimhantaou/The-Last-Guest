@@ -780,7 +780,7 @@ public abstract class Character {
             return "Kitchen";
         else if (tiled == 1484)
             return "Second bedroom";
-        else if (tiled == 1569)
+        else if (tiled >= 1569 && tiled <= 1579)
             return "First bedroom";
         else if (tiled == 1482)
             return "Laboratory";
@@ -790,7 +790,7 @@ public abstract class Character {
             return "Living room";
         else if (tiled == 1486)
             return "Small diner room";
-        else if (tiled == 1637 || tiled == 1638 || tiled == 1639 || tiled == 1645 || tiled == 1646 || tiled == 1647 || tiled == 1653 || tiled == 1654 || tiled == 1655)
+        else if (tiled >= 1636 && tiled <= 1657)
             return "Laundry room";
         return "Hall";
     }
