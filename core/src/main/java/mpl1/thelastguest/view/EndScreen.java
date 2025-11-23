@@ -1,7 +1,5 @@
 package mpl1.thelastguest.view;
 
-// Import des composants du jeu
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -19,7 +17,15 @@ import mpl1.thelastguest.controller.EndController;
 import mpl1.thelastguest.model.Character.Murderer;
 import mpl1.thelastguest.model.Character.Player;
 
+/**
+ * Screen displayed at the end of the game.
+ * <p>
+ * Shows whether the player found the murderer or died, displays the murderer’s name,
+ * the number of kills, and provides buttons to restart the game or return to the main menu.
+ * </p>
+ */
 public class EndScreen implements Screen {
+
     private final BitmapFont font;
     private final EndController controller;
 
@@ -28,7 +34,13 @@ public class EndScreen implements Screen {
     private Murderer murderer;
     private Player player;
 
-    // Constructeur de salopard
+    /**
+     * Constructs an EndScreen.
+     *
+     * @param game      The main game instance.
+     * @param murderer  The murderer character.
+     * @param player    The player character.
+     */
     public EndScreen(Main game, Murderer murderer, Player player) {
         this.font = new BitmapFont();
         this.controller = new EndController(game, this);
@@ -36,7 +48,12 @@ public class EndScreen implements Screen {
         this.player = player;
     }
 
-    // Boucle principal de la vue (pour afficher les élements)
+    /**
+     * Main render loop.
+     * Clears the screen and updates/draws the stage.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -45,62 +62,57 @@ public class EndScreen implements Screen {
         stage.draw();
     }
 
-    //C'est ici on initialise les élements
+    /**
+     * Initializes the screen and its UI components.
+     * <p>
+     * Creates the stage, background image, table layout, labels for the end message,
+     * murderer’s name, number of kills, and buttons for "Play again" and "Menu".
+     * </p>
+     */
     @Override
     public void show() {
-
-        // Skins de base
+        // Skins and fonts
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
-        // Font
         BitmapFont bigFont = new BitmapFont();
         bigFont.getData().setScale(2f);
 
-        // Font pour le titre
         Label.LabelStyle style = skin.get("default", Label.LabelStyle.class);
         style.font.getData().setScale(2f);
 
-        // Stage
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage); // Gère les cliques sur le stage
+        Gdx.input.setInputProcessor(stage);
 
         Texture bgTexture = new Texture(Gdx.files.internal("assets/backgrounds/EndMenu.jpg"));
         Image bg = new Image(bgTexture);
         bg.setFillParent(true);
         stage.addActor(bg);
 
-        // Création d'une table pour pouvoir placer les élements dans une grid
         Table table = new Table();
-        table.setFillParent(true); // Table fait tout le stage
-        stage.addActor(table); // Ajout de la table au stage
+        table.setFillParent(true);
+        stage.addActor(table);
 
+        // Semi-transparent overlay
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f); // R,G,B,A
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f);
         pixmap.fill();
-
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
-
         table.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
 
-        // Label
-
-        String titleText = "You found the murderer !";
-        if (!player.isAlive()) titleText = "GAME OVER ! You died !";
-
+        // Labels for end messages
+        String titleText = player.isAlive() ? "You found the murderer !" : "GAME OVER ! You died !";
         Label title = new Label(titleText, style);
         Label name = new Label("It was " + murderer.getName(), style);
 
-        String killStr = murderer.getKillNbr() + " kill have been made...";
-
-        if(murderer.getKillNbr() > 1){
-            killStr = murderer.getKillNbr() + " kills have been made...";
+        String killStr = murderer.getKillNbr() + " kill";
+        if (murderer.getKillNbr() > 1) {
+            killStr += "s";
         }
-
+        killStr += " have been made...";
         Label killNbr = new Label(killStr, style);
 
-        // Bouton avec du text
-        TextButton play = new TextButton("Play again",skin);
+        // Buttons
+        TextButton play = new TextButton("Play again", skin);
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -108,7 +120,7 @@ public class EndScreen implements Screen {
             }
         });
 
-        TextButton menu = new TextButton("Menu",skin);
+        TextButton menu = new TextButton("Menu", skin);
         menu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -116,31 +128,49 @@ public class EndScreen implements Screen {
             }
         });
 
-        // Ajout du bouton à la table
-        table.center(); // Centre les élements
-        table.add(title).pad(10).row(); // Row -> passe à la ligne
+        // Layout
+        table.center();
+        table.add(title).pad(10).row();
         table.add(name).pad(10).row();
         table.add(killNbr).pad(10).row();
-        table.add(play).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
+        table.add(play).size(200, 50).pad(10).row();
         table.add(menu).size(200, 50).pad(10).row();
     }
 
-    // Permet de gérer le comportement du jeu lors du resize
-    @Override public void resize(int w, int h) {
+    /**
+     * Handles window resizing.
+     *
+     * @param w New width.
+     * @param h New height.
+     */
+    @Override
+    public void resize(int w, int h) {
         stage.getViewport().update(w, h, true);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
+    @Override
+    public void pause() {}
 
-    // Action quand le screen est changé
-    @Override public void hide() {
+    @Override
+    public void resume() {}
+
+    /**
+     * Called when the screen is no longer visible.
+     * <p>
+     * Disposes of the stage and removes input processor.
+     * </p>
+     */
+    @Override
+    public void hide() {
         Gdx.input.setInputProcessor(null);
         stage.dispose();
     }
 
-    // Garbage collector en gros
-    @Override public void dispose() {
+    /**
+     * Disposes all resources used by this screen.
+     */
+    @Override
+    public void dispose() {
         stage.dispose();
         skin.dispose();
         font.dispose();

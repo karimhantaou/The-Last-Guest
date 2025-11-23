@@ -1,6 +1,5 @@
 package mpl1.thelastguest.view;
 
-// Import des composants du jeu
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.Main;
 import mpl1.thelastguest.controller.MenuController;
 
-// Import des libs gdx
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,20 +16,37 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+/**
+ * Main menu screen of the game "The Last Guest".
+ * <p>
+ * Displays the game title, and main menu buttons: Play, Rules, and Quit.
+ * Handles input processing and delegates actions to {@link MenuController}.
+ * Manages stage, table layout, and background visuals.
+ * </p>
+ */
 public class MenuScreen implements Screen {
+
     private final BitmapFont font;
     private final MenuController controller;
-
     private Stage stage;
     private Skin skin;
 
-    // Constructeur de salopard
+    /**
+     * Constructs the MenuScreen.
+     *
+     * @param game The main game instance.
+     */
     public MenuScreen(Main game) {
         this.font = new BitmapFont();
         this.controller = new MenuController(game, this);
     }
 
-    // Boucle principal de la vue (pour afficher les élements)
+    /**
+     * Renders the menu screen.
+     * Clears the screen and draws all stage actors.
+     *
+     * @param delta Time in seconds since last frame.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -40,52 +55,50 @@ public class MenuScreen implements Screen {
         stage.draw();
     }
 
-    //C'est ici on initialise les élements
+    /**
+     * Initializes UI components when the screen is shown.
+     * Creates the stage, table layout, background, title label, and buttons.
+     * Sets up button click listeners and input processor.
+     */
     @Override
     public void show() {
-
-        // Skins de base
+        // Load UI skin
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-        // Font
+        // Font setup
         BitmapFont bigFont = new BitmapFont();
         bigFont.getData().setScale(2f);
-
-        // Font pour le titre
-
 
         Label.LabelStyle style = skin.get("default", Label.LabelStyle.class);
         style.font.getData().setScale(2f);
 
-        // Stage
+        // Stage setup
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage); // Gère les cliques sur le stage
+        Gdx.input.setInputProcessor(stage);
 
+        // Background
         Texture bgTexture = new Texture(Gdx.files.internal("assets/backgrounds/StartMenu.jpg"));
         Image bg = new Image(bgTexture);
         bg.setFillParent(true);
         stage.addActor(bg);
 
-        // Création d'une table pour pouvoir placer les élements dans une grid
+        // Table for layout
         Table table = new Table();
-        table.setFillParent(true); // Table fait tout le stage
-        //table.setWidth(200);
-        stage.addActor(table); // Ajout de la table au stage
+        table.setFillParent(true);
+        stage.addActor(table);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f); // R,G,B,A
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.5f);
         pixmap.fill();
-
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
-
         table.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
 
-        // Label
+        // Title label
         Label title = new Label("The Last Guest", style);
 
-        // Bouton avec du text
-        TextButton play = new TextButton("Play",skin);
+        // Buttons
+        TextButton play = new TextButton("Play", skin);
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -93,15 +106,15 @@ public class MenuScreen implements Screen {
             }
         });
 
-        TextButton rules = new TextButton("Rules",skin);
+        TextButton rules = new TextButton("Rules", skin);
         rules.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                // Rules screen logic can be added here
             }
         });
 
-        TextButton quit = new TextButton("Quit",skin);
+        TextButton quit = new TextButton("Quit", skin);
         quit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -109,34 +122,46 @@ public class MenuScreen implements Screen {
             }
         });
 
-        // Ajout du bouton à la table
-        table.center(); // Centre les élements
-        table.add(title).pad(10).row(); // Row -> passe à la ligne
-        table.add(play).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
-        table.add(rules).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
-        table.add(quit).size(200, 50).pad(10).row();  // Ajout du bouton, de sa taille etc...
-
+        // Layout table
+        table.center();
+        table.add(title).pad(10).row();
+        table.add(play).size(200, 50).pad(10).row();
+        table.add(rules).size(200, 50).pad(10).row();
+        table.add(quit).size(200, 50).pad(10).row();
         table.pack();
-
-        //table.setPosition((Gdx.graphics.getWidth() - table.getWidth()) / 2, (Gdx.graphics.getHeight() - table.getHeight()) / 2);
     }
 
-    // Permet de gérer le comportement du jeu lors du resize
-    @Override public void resize(int w, int h) {
+    /**
+     * Handles window resizing and updates the stage viewport.
+     *
+     * @param w New window width.
+     * @param h New window height.
+     */
+    @Override
+    public void resize(int w, int h) {
         stage.getViewport().update(w, h, true);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
+    @Override
+    public void pause() {}
+    @Override
+    public void resume() {}
 
-    // Action quand le screen est changé
-    @Override public void hide() {
+    /**
+     * Called when the screen is hidden.
+     * Disposes the stage and removes input processor.
+     */
+    @Override
+    public void hide() {
         Gdx.input.setInputProcessor(null);
         stage.dispose();
     }
 
-    // Garbage collector en gros
-    @Override public void dispose() {
+    /**
+     * Disposes resources used by the menu screen.
+     */
+    @Override
+    public void dispose() {
         stage.dispose();
         skin.dispose();
         font.dispose();

@@ -13,31 +13,42 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import mpl1.thelastguest.controller.GameController;
-import mpl1.thelastguest.model.Character.Character;
-import mpl1.thelastguest.model.Character.Murderer;
-import mpl1.thelastguest.model.Character.Npc;
 import mpl1.thelastguest.model.Character.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * Displays a menu showing the player's character stats and action points.
+ * <p>
+ * Uses a dedicated {@link Stage} and {@link Table} to layout the stats and a close button.
+ * The menu provides an overview of the player's current attributes:
+ * strength, perception, luck, inventory capacity, and action points (AP).
+ * </p>
+ */
 public class PlayerMenu {
 
     private Stage stage;
     private Skin skin;
     private GameController controller;
-
     private Player player;
 
+    /**
+     * Constructs a PlayerMenu for the given player.
+     *
+     * @param controller The game controller used to manage menu closure.
+     * @param player     The player whose stats will be displayed.
+     */
     public PlayerMenu(GameController controller, Player player) {
         this.controller = controller;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
         this.player = player;
-
     }
 
+    /**
+     * Displays the player menu centered on the screen.
+     * <p>
+     * The menu shows the player's stats (strength, perception, luck, inventory, and AP)
+     * and includes a close button to dismiss the menu.
+     * </p>
+     */
     public void display() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -47,43 +58,33 @@ public class PlayerMenu {
 
         float width = 200;
 
+        // Semi-transparent background
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f); // R,G,B,A
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f);
         pixmap.fill();
-
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
-
         root.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
 
         root.setWidth(width);
         root.defaults().width(width).fillX();
 
-        // HEADER
-
+        // Header
         Label header = new Label("Your character", skin);
         root.add(header).pad(10).row();
 
-        // STATS
+        // Stats
+        root.add(new Label("Strength: " + player.getStr(), skin)).pad(5).row();
+        root.add(new Label("Perception: " + player.getPer(), skin)).pad(5).row();
+        root.add(new Label("Luck: " + player.getLck(), skin)).pad(5).row();
+        root.add(new Label("Inventory: " + player.getInv(), skin)).pad(5).row();
+        root.add(new Label("Action points: " + player.getAp(), skin)).pad(5).row();
 
-        Label str = new Label("Strength: " + player.getStr(), skin);
-        root.add(str).pad(5).row();
-
-        Label per = new Label("Perception: " + player.getPer(), skin);
-        root.add(per).pad(5).row();
-
-        Label lck = new Label("Luck: " + player.getLck(), skin);
-        root.add(lck).pad(5).row();
-
-        Label inv = new Label("Strength: " + player.getInv(), skin);
-        root.add(inv).pad(5).row();
-
-        Label ap = new Label("Action points: " + player.getAp(), skin);
-        root.add(ap).pad(5).row();
-
+        // Close button
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
-            @Override public void clicked(InputEvent ev, float x, float y) {
+            @Override
+            public void clicked(InputEvent ev, float x, float y) {
                 close();
             }
         });
@@ -91,21 +92,28 @@ public class PlayerMenu {
 
         root.pack();
 
+        // Center the menu on the screen
         float x = (Gdx.graphics.getWidth() - root.getWidth()) / 2;
-        float y = (Gdx.graphics.getHeight() - root.getHeight()) /2;
-
+        float y = (Gdx.graphics.getHeight() - root.getHeight()) / 2;
         root.setPosition(x, y);
         root.pack();
-
     }
 
+    /**
+     * Returns the stage containing the player menu.
+     *
+     * @return The {@link Stage} used to render the player menu.
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Closes the player menu, disposes its stage, and informs the controller.
+     */
     public void close() {
         controller.closePlayerMenu();
-        if(stage != null) stage.dispose();
+        if (stage != null) stage.dispose();
         stage = null;
     }
 }

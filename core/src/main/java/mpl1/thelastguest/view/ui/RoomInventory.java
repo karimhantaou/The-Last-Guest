@@ -19,6 +19,14 @@ import mpl1.thelastguest.model.Room;
 
 import java.util.List;
 
+/**
+ * Displays the inventory of a room and allows the player to pick items.
+ * <p>
+ * The number of visible items is influenced by the player's luck and perception stats.
+ * Players can pick items or search again if not all items are revealed. The UI is displayed
+ * on a dedicated {@link Stage} and laid out using a {@link Table}.
+ * </p>
+ */
 public class RoomInventory {
 
     private Stage stage;
@@ -26,14 +34,34 @@ public class RoomInventory {
     private final GameController controller;
     private final Player player;
 
+    /**
+     * Constructs a RoomInventory UI for the given player and controller.
+     *
+     * @param controller The game controller handling item actions and menu closure.
+     * @param player     The player inspecting the room.
+     */
     public RoomInventory(GameController controller, Player player) {
         this.controller = controller;
         this.player = player;
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
+    /**
+     * Displays the room inventory UI.
+     * <p>
+     * The UI shows a list of items the player can pick from the room.
+     * The number of items displayed is influenced by the player's luck and perception:
+     * <ul>
+     *     <li>Luck increases the number of items revealed.</li>
+     *     <li>Perception above 6 shows the number of items found.</li>
+     * </ul>
+     * Includes buttons to pick items, search again if not all items are revealed, and close the menu.
+     * </p>
+     *
+     * @param room     The room being searched.
+     * @param nbrItems The number of items currently revealed to the player.
+     */
     public void display(Room room, int nbrItems) {
-
         List<Item> items = room.getItems();
 
         stage = new Stage();
@@ -42,23 +70,20 @@ public class RoomInventory {
         Table root = new Table();
         stage.addActor(root);
 
+        // Semi-transparent background
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f); // R,G,B,A
+        pixmap.setColor(0.1f, 0.1f, 0.1f, 0.8f);
         pixmap.fill();
-
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
-
         root.setBackground(new TextureRegionDrawable(new TextureRegion(texture)));
 
         float width = 200;
-
         root.setWidth(width);
-        root.setPosition((float) Gdx.graphics.getWidth() /2 - width / 2, (float) Gdx.graphics.getHeight() /2);
+        root.setPosition((float) Gdx.graphics.getWidth() / 2 - width / 2, (float) Gdx.graphics.getHeight() / 2);
         root.defaults().width(width).fillX();
 
-        // STATS TEST
-
+        // Calculate effective number of items revealed
         int luck = player.getLck();
         int perception = player.getPer();
         int maxItems = items.size();
@@ -68,7 +93,6 @@ public class RoomInventory {
         } else if (luck > 5) {
             nbrItems += 1;
         }
-
         nbrItems = Math.min(nbrItems, maxItems);
 
         String roomItems = "";
@@ -76,29 +100,30 @@ public class RoomInventory {
             roomItems = ": " + nbrItems + "/" + maxItems;
         }
 
-        // HEADER
-
+        // Header showing room name and number of items found
         Label header = new Label(room.getName() + roomItems, skin);
         root.add(header).pad(10).row();
 
-        for(int i = 0; i < nbrItems; i++){
-         if(i <= items.size() - 1){
-             TextButton itemBtn = new TextButton(items.get(i).getName(), skin);
-             int finalI = i;
-             itemBtn.addListener(new ClickListener() {
-                 @Override public void clicked(InputEvent ev, float x, float y) {
-                     controller.pickItem(items.get(finalI));
-                 }
-             });
-             root.add(itemBtn).row();
-         }
+        // Item buttons
+        for (int i = 0; i < nbrItems && i < items.size(); i++) {
+            TextButton itemBtn = new TextButton(items.get(i).getName(), skin);
+            int finalI = i;
+            itemBtn.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent ev, float x, float y) {
+                    controller.pickItem(items.get(finalI));
+                }
+            });
+            root.add(itemBtn).row();
         }
 
-        if(nbrItems < items.size()){
+        // "Search again" button if not all items revealed
+        if (nbrItems < items.size()) {
             TextButton searchAgain = new TextButton("Search again", skin);
             int finalNbrItems = nbrItems;
             searchAgain.addListener(new ClickListener() {
-                @Override public void clicked(InputEvent ev, float x, float y) {
+                @Override
+                public void clicked(InputEvent ev, float x, float y) {
                     close();
                     controller.search(finalNbrItems + 1);
                 }
@@ -106,30 +131,39 @@ public class RoomInventory {
             root.add(searchAgain).padTop(10).row();
         }
 
-
+        // Close button
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ClickListener() {
-            @Override public void clicked(InputEvent ev, float x, float y) {
+            @Override
+            public void clicked(InputEvent ev, float x, float y) {
                 close();
             }
         });
 
-        if(nbrItems == items.size()){
+        if (nbrItems == items.size()) {
             root.add(btnClose).padBottom(5).padTop(10).row();
-        } else{
+        } else {
             root.add(btnClose).padBottom(5).row();
         }
 
         root.pack();
     }
 
+    /**
+     * Returns the stage containing the room inventory UI.
+     *
+     * @return The {@link Stage} displaying the room inventory.
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Closes the room inventory UI, disposes its stage, and informs the controller.
+     */
     public void close() {
         controller.closeRoomInventory();
-        if(stage != null) stage.dispose();
+        if (stage != null) stage.dispose();
         stage = null;
     }
 }
