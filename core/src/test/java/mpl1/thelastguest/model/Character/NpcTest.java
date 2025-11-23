@@ -26,6 +26,7 @@ class NpcTest {
     StatItem statItem;
     @BeforeEach
     void setUp() {
+        new CharacterFactory();
         stats = new HashMap<>();
         stats.put("str", 1);
         stats.put("per", 1);
@@ -267,6 +268,8 @@ class NpcTest {
         Item item = new ActionItem("action", "Open door");
         npc.pickItem(item);
         npc.getItem("action");
+        npc.getItemByAction("Open door");
+        npc.getItemByAction("Open dor");
         assertEquals(item, npc.getItem("action"));
         assertNull(npc.getItem("actn"));
     }

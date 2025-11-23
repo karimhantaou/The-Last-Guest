@@ -12,7 +12,7 @@ public abstract class Item {
     private String name;
     private String fingerprint;
     private boolean fingerPrintFound = false;
-    private String description;
+    private final String description = null;
     protected String woundType = null;
 
     /**

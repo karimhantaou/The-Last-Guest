@@ -9,6 +9,7 @@ eclipse.project.name = appName + '-core'
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
+
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
@@ -33,5 +34,10 @@ jacocoTestReport {
     csv.required = false
     html.required = true
     html.outputLocation = layout.buildDirectory.dir("reports/jacoco")
+  }
+  afterEvaluate {
+    classDirectories.setFrom(
+      files(classDirectories.files.collect { fileTree(dir: it, include: 'mpl1/thelastguest/model/**') })
+    )
   }
 }

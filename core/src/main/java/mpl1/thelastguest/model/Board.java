@@ -29,7 +29,7 @@ public class Board {
     private final List<Character> characters; //List of characters
     private Integer step; // Step (size of tiled when display)
     private ShapeRenderer tiledGrey; //Shape for select tiled with mousse
-    private final List<Room> rooms;
+    private List<Room> rooms;
     public Player player;
     private List<Item> items;
     private int tiledSize;
@@ -43,6 +43,17 @@ public class Board {
      * @param items all items to distribute into rooms
      * @param tiledSize the pixel size of a tile on the map
      */
+
+    public Board(Integer step, List<Character> characters, Player player, List<Item> items, int tiledSize, boolean test) {
+        this.characters = characters;
+        this.player = player;
+        this.items = items;
+        this.step = step;
+        player.setPosition(25, 25);
+        this.rooms = createAllRoom();
+        this.tiledSize = tiledSize;
+    }
+
     public Board(Integer step, List<Character> characters, Player player, List<Item> items, int tiledSize) {
         TiledMap map = new TmxMapLoader().load("maps/map.tmx");
         TiledMapTileLayer murInt = (TiledMapTileLayer) map.getLayers().get("sol");
@@ -198,5 +209,9 @@ public class Board {
             }
         }
         return rooms;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }

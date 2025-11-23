@@ -55,4 +55,12 @@ class RoomTest {
         assertEquals(1, room.getItems().size());
         assertEquals(item, room.getItems().get(0));
     }
+
+     @Test
+    void isLocked() {
+        room.setLocked(true);
+        assertTrue(room.isLocked());
+        room.setLocked(false);
+        assertFalse(room.isLocked());
+    }
 }

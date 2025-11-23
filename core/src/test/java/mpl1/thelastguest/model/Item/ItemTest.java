@@ -46,6 +46,7 @@ class ItemTest {
     void getName() {
         assertEquals(actionName, actionItem.getName());
         assertEquals(statName, statItem.getName());
+        assertNull(actionItem.getDescription());
     }
 
 
@@ -70,5 +71,13 @@ class ItemTest {
     void getWoundType() {
         assertNull(statItem.getWoundType());
         assertNull(actionItem.getWoundType());
+    }
+
+    @Test
+    void isFingerPrintTest() {
+        actionItem.setFingerPrintFound(false);
+        assertFalse(actionItem.isFingerPrintFound());
+        actionItem.setFingerPrintFound(true);
+        assertTrue(actionItem.isFingerPrintFound());
     }
 }
