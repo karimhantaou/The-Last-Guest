@@ -30,21 +30,17 @@ class BoardTest {
         stats.put("lck", 1);
         stats.put("ap", 1);
         stats.put("inv", 2);
-        // Création d'un joueur
         player = new Player(new Npc("name", "", stats, null));
 
-        // Création de quelques NPC
         npcs = new ArrayList<>();
         npcs.add(new Npc("name1", "", stats, null));
         npcs.add(new Npc("naame2", "", stats, null));
 
-        // Création d'items
         items = new ArrayList<>();
         items.add(new ActionItem("action1", "action2"));
         items.add(new ActionItem("action1", "action2"));
         items.add(new ActionItem("action1", "action2"));
 
-        // Création du board
         board = new Board(32, npcs, player, items, 32, true);
     }
 
