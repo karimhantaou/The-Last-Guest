@@ -196,6 +196,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, mapSize, mapSize);
         camera.position.set(mapSize / 2f, mapSize / 2f, 0);
         camera.update();
+
         playerInventory.rebuild();
         notificationManager.rebuild();
     }
